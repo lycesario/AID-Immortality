@@ -1,0 +1,2839 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Aeternum Prototype Builder">
+<title>数字永生企业中心管理平台 · 企业/渠道/代理/代运营/服务商</title>
+<style>
+/* ============================================================
+   ÆTERNUM · 数字永生工程 · 三平台统一设计系统 v1.0
+   运营中心 / 企业中心 / 个人中心 共用
+   ============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px; --r2:10px;
+}
+/* ---------- 深色主题（运营 / 企业默认） ---------- */
+html[data-theme="dark"]{
+  --bg:#080a11; --bg2:#0b0e16; --panel:#10131d; --panel2:#161a26; --elev:#1c2130;
+  --line:#1d2331; --line2:#272e40;
+  --ink:#e9edf6; --ink2:#98a3b8; --ink3:#5c6880;
+  --brand:#5b6cff; --brand2:#8b5cff; --brand-bg:rgba(91,108,255,.14);
+  --accent:#5b6cff; --accent2:#8b5cff; --accent-bg:rgba(91,108,255,.14);
+  --gold:#f0b90b; --gold-bg:rgba(240,185,11,.11);
+  --ok:#0ecb81; --ok-bg:rgba(14,203,129,.11);
+  --bad:#f6465d; --bad-bg:rgba(246,70,93,.11);
+  --warn:#f0b90b;
+  --shadow:0 16px 48px rgba(0,0,0,.5);
+  --glow:0 0 24px rgba(91,108,255,.22);
+}
+/* ---------- 浅色主题（个人中心默认） ---------- */
+html[data-theme="light"]{
+  --bg:#f5f7fc; --bg2:#eef1f8; --panel:#ffffff; --panel2:#f7f9fd; --elev:#ffffff;
+  --line:#e4e9f2; --line2:#d3dae7;
+  --ink:#151c2c; --ink2:#586279; --ink3:#93a0b6;
+  --brand:#4c5fe0; --brand2:#7a4de0; --brand-bg:rgba(76,95,224,.09);
+  --accent:#4c5fe0; --accent2:#7a4de0; --accent-bg:rgba(76,95,224,.09);
+  --gold:#b8860b; --gold-bg:rgba(240,185,11,.14);
+  --ok:#0aa56a; --ok-bg:rgba(14,203,129,.11);
+  --bad:#e0354d; --bad-bg:rgba(246,70,93,.09);
+  --shadow:0 14px 40px rgba(28,38,66,.13);
+  --glow:0 0 22px rgba(76,95,224,.16);
+}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);font-size:13px;line-height:1.6;-webkit-font-smoothing:antialiased}
+b,strong{font-weight:650}em{font-style:normal}a{color:inherit;text-decoration:none;cursor:pointer}
+.num,.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.2px}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:8px;border:2px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- 布局骨架 ---------- */
+.wb{display:flex;height:100vh;overflow:hidden}
+.side{width:238px;flex:0 0 238px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:30}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+.content{flex:1;overflow-y:auto;padding:22px 26px 70px;position:relative}
+
+/* ---------- 侧栏 ---------- */
+.side-brand{display:flex;align-items:center;gap:11px;padding:16px 16px 12px}
+.brand-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px;flex:0 0 36px;box-shadow:var(--glow)}
+.side-brand b{font-size:14.5px;letter-spacing:.2px;display:block}
+.side-brand em{font-size:10.5px;color:var(--ink3);display:block;margin-top:1px}
+.role-switch{margin:4px 12px 8px;position:relative}
+.role-switch select{width:100%;appearance:none;background:var(--elev);border:1px solid var(--line2);color:var(--ink);border-radius:9px;padding:7px 26px 7px 10px;font-size:12px;font-family:inherit;cursor:pointer}
+.role-switch:after{content:"\25BE";position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--ink3);pointer-events:none;font-size:11px}
+.role-switch .rs-lb{font-size:10px;color:var(--ink3);letter-spacing:1.5px;margin-bottom:5px;text-transform:uppercase}
+.side-nav{flex:1;overflow-y:auto;padding:4px 10px 14px}
+.nav-group{font-size:10px;color:var(--ink3);letter-spacing:1.6px;text-transform:uppercase;padding:14px 8px 5px}
+.nav-group .ng-d{font-size:10px;color:var(--ink3);letter-spacing:.2px;text-transform:none;opacity:.75;font-weight:400;display:block;margin-top:2px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8.5px 10px;border-radius:9px;color:var(--ink2);font-size:13px;cursor:pointer;margin:1px 0;position:relative;transition:background .15s,color .15s}
+.nav-item:hover{background:var(--panel2);color:var(--ink)}
+.nav-item.on{background:var(--accent-bg);color:var(--ink);font-weight:600}
+.nav-item.on:before{content:"";position:absolute;left:-10px;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.nav-item .ni{width:18px;text-align:center;font-size:14px;flex:0 0 18px}
+.nav-item .cnt{margin-left:auto;font-size:10px;background:var(--bad-bg);color:var(--bad);padding:1px 6px;border-radius:8px;font-family:var(--mono)}
+.nav-item.locked{opacity:.38;cursor:not-allowed}
+.nav-item.locked:hover{background:none;color:var(--ink2)}
+.nav-lock-hint{font-size:9.5px;color:var(--ink3);letter-spacing:1.2px;padding:16px 8px 4px;text-transform:uppercase;border-top:1px dashed var(--line);margin-top:10px}
+.side-foot{border-top:1px solid var(--line);padding:10px 14px 12px}
+.env-chip{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--ink3);margin-bottom:9px}
+.env-chip i{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 6px var(--ok)}
+.side-user{display:flex;align-items:center;gap:9px}
+.uav{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:0 0 30px}
+.side-user b{font-size:12.5px;display:block}
+.side-user em{font-size:10.5px;color:var(--ink3);display:block}
+
+/* ---------- 顶栏 ---------- */
+.topbar{height:56px;flex:0 0 56px;border-bottom:1px solid var(--line);background:var(--panel);display:flex;align-items:center;gap:12px;padding:0 16px;z-index:40}
+.topnav{display:flex;align-items:center;gap:1px;overflow-x:auto;flex:1 1 auto;min-width:0;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.topnav::-webkit-scrollbar{display:none}
+.tn-item{position:relative;display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:9px;color:var(--ink2);font-size:12.5px;font-weight:550;cursor:pointer;white-space:nowrap;transition:background .15s,color .15s;flex:0 0 auto}
+.tn-item:hover{color:var(--ink);background:var(--panel2)}
+.tn-item.on{color:var(--accent);background:var(--accent-bg);font-weight:650}
+.tn-item.on:after{content:"";position:absolute;left:13px;right:13px;bottom:-11px;height:2.5px;border-radius:2px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.tn-item.dim{opacity:.42}
+.tn-item .tn-badge{font-style:normal;min-width:16px;height:16px;border-radius:8px;background:var(--bad);color:#fff;font-size:9.5px;font-weight:700;display:grid;place-items:center;padding:0 4px;font-family:var(--mono)}
+.top-search{display:flex;align-items:center;gap:8px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:6px 12px;color:var(--ink3);font-size:12px;cursor:pointer;flex:0 1 auto;width:250px;min-width:0;overflow:hidden}
+.top-search .ph{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-search:hover{border-color:var(--line2)}
+.top-search kbd{font-family:var(--mono);font-size:10px;background:var(--elev);border:1px solid var(--line2);border-radius:5px;padding:1px 5px;color:var(--ink3)}
+.top-acts{display:flex;gap:8px;align-items:center}
+.tb-icon{position:relative;width:32px;height:32px;border:1px solid var(--line);background:var(--panel2);color:var(--ink2);border-radius:9px;font-size:14px;cursor:pointer;display:grid;place-items:center;transition:.15s;font-family:inherit}
+.tb-icon:hover{color:var(--ink);border-color:var(--accent)}
+
+/* ---------- 面包屑 ---------- */
+.subbar{height:38px;flex:0 0 38px;display:flex;align-items:center;gap:10px;padding:0 22px;border-bottom:1px solid var(--line);background:var(--bg2);font-size:12px;color:var(--ink2)}
+.sub-sp{flex:1}
+.crumb{display:flex;align-items:center;gap:7px;font-size:12.5px;min-width:0}
+.crumb .cb-g{color:var(--ink3);font-weight:500;white-space:nowrap}
+.crumb .cb-sep{color:var(--ink3);opacity:.6}
+.crumb b{font-weight:650;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub-right{display:flex;align-items:center;gap:14px;font-size:11px;color:var(--ink3);white-space:nowrap}
+.sub-right .cb-role{display:flex;align-items:center;gap:5px}
+.sub-right .cb-env{background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:10px;letter-spacing:.5px;font-family:var(--mono)}
+
+/* ---------- 通用元件 ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line2);background:var(--elev);color:var(--ink);border-radius:9px;padding:7px 14px;font-size:12.5px;font-family:inherit;cursor:pointer;transition:.15s;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.p{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff}
+.btn.p:hover{filter:brightness(1.1);color:#fff}
+.btn.danger{background:var(--bad-bg);border-color:rgba(246,70,93,.35);color:var(--bad)}
+.btn.warn{background:var(--gold-bg);border-color:rgba(240,185,11,.35);color:var(--gold)}
+.btn.ok{background:var(--ok-bg);border-color:rgba(14,203,129,.35);color:var(--ok)}
+.btn.sm{padding:4px 10px;font-size:11.5px;border-radius:7px}
+.btn.lg{padding:10px 22px;font-size:13.5px}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.gh:hover{background:var(--panel2);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;padding:2px 8px;border-radius:6px;background:var(--panel2);border:1px solid var(--line);color:var(--ink2);white-space:nowrap}
+.tag.b{background:var(--accent-bg);color:var(--accent);border-color:transparent}
+.tag.ok{background:var(--ok-bg);color:var(--ok);border-color:transparent}
+.tag.bad{background:var(--bad-bg);color:var(--bad);border-color:transparent}
+.tag.warn{background:var(--gold-bg);color:var(--gold);border-color:transparent}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}.dot.warn{background:var(--gold)}.dot.idle{background:var(--ink3)}
+.dot.pulse{animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+/* 业务语义色：上升/积极 = 绿，下降/风险 = 红（金融行情场景另遵红涨绿跌） */
+.up{color:var(--ok)}
+.down{color:var(--bad)}
+.ok{color:var(--ok)}
+.bad{color:var(--bad)}
+
+/* 面板 */
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.panel-h{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:650}
+.panel-h .sub{font-size:11px;color:var(--ink3);font-weight:400;margin-left:auto;display:flex;gap:8px;align-items:center}
+.panel-b{padding:16px}
+.panel-b.tight{padding:0}
+.panel-b.pad0{padding:0}
+
+/* KPI */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(196px,1fr));gap:12px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px 16px;position:relative;overflow:hidden}
+.kpi.hl{border-color:var(--accent);box-shadow:var(--glow)}
+.kpi .k-lb{font-size:11px;color:var(--ink3);display:flex;align-items:center;gap:6px}
+.kpi .k-v{font-size:24px;font-weight:750;letter-spacing:-.8px;margin-top:5px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.kpi .k-v small{font-size:13px;font-weight:600;color:var(--ink3);margin-left:2px}
+.kpi .k-foot{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11px;color:var(--ink3);flex-wrap:wrap}
+.kpi .spark{position:absolute;right:10px;bottom:8px;opacity:.9}
+.k-pair{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;color:var(--ink3);border:1px dashed var(--line2);border-radius:5px;padding:1px 6px}
+
+/* 表格 */
+table.dt{width:100%;border-collapse:collapse;font-size:12.3px}
+.dt th{text-align:left;font-size:10.5px;color:var(--ink3);font-weight:600;letter-spacing:.6px;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--panel2);position:sticky;top:0;z-index:2;white-space:nowrap}
+.dt td{padding:9.5px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.dt tbody tr{transition:background .12s}
+.dt tbody tr:hover{background:var(--panel2)}
+.dt tbody tr:last-child td{border-bottom:none}
+.dt .r{text-align:right}
+.dt .c{text-align:center}
+.dt .mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.dt .link{color:var(--accent);cursor:pointer;font-weight:550}
+.dt .link:hover{text-decoration:underline}
+.dt tr.rowlink{cursor:pointer}
+.tbar{display:flex;align-items:center;gap:9px;padding:11px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tbar .sp{flex:1}
+.inp{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:8px;padding:6.5px 11px;font-size:12.3px;font-family:inherit;outline:none;transition:border .15s}
+.inp:focus{border-color:var(--accent)}
+.inp::placeholder{color:var(--ink3)}
+select.inp{cursor:pointer}
+textarea.inp{resize:vertical;min-height:64px;line-height:1.6}
+.fld{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
+.fld>label{font-size:11.5px;color:var(--ink2);font-weight:550}
+.fld .hint{font-size:10.5px;color:var(--ink3)}
+.fld .req:after{content:" *";color:var(--bad)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g2030{display:grid;grid-template-columns:1.35fr 1fr;gap:14px}
+.g3020{display:grid;grid-template-columns:1fr 1.5fr;gap:14px}
+.g4-2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:12px;align-items:center}
+.wrap{flex-wrap:wrap}
+
+/* 分页 */
+.pager{display:flex;align-items:center;gap:6px;padding:11px 14px;font-size:11.5px;color:var(--ink3)}
+.pager .pg{min-width:26px;height:26px;border:1px solid var(--line2);border-radius:7px;display:grid;place-items:center;cursor:pointer;background:var(--elev);font-family:var(--mono)}
+.pager .pg.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);font-weight:650}
+.pager .sp{flex:1}
+
+/* 步骤条 / 时间线 */
+.stepper{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding:6px 0}
+.stepper .stp{display:flex;flex-direction:column;align-items:center;min-width:92px;flex:1;position:relative}
+.stepper .stp:before{content:"";position:absolute;top:11px;left:-50%;right:50%;height:2px;background:var(--line2)}
+.stepper .stp:first-child:before{display:none}
+.stepper .stp.done:before{background:var(--ok)}
+.stepper .stp .si{width:23px;height:23px;border-radius:50%;background:var(--elev);border:2px solid var(--line2);display:grid;place-items:center;font-size:10.5px;font-family:var(--mono);position:relative;z-index:1;color:var(--ink3)}
+.stepper .stp.done .si{background:var(--ok);border-color:var(--ok);color:#fff}
+.stepper .stp.act .si{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-bg)}
+.stepper .stp.bad .si{border-color:var(--bad);color:var(--bad)}
+.stepper .stp span{font-size:10.5px;color:var(--ink3);margin-top:7px;text-align:center;line-height:1.4}
+.stepper .stp.act span{color:var(--ink);font-weight:600}
+.tl{position:relative;padding-left:18px}
+.tl:before{content:"";position:absolute;left:5px;top:4px;bottom:4px;width:1.5px;background:var(--line2)}
+.tl-item{position:relative;padding:0 0 15px 10px}
+.tl-item:before{content:"";position:absolute;left:-17px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--ink3);border:2px solid var(--panel)}
+.tl-item.ok:before{background:var(--ok)}.tl-item.warn:before{background:var(--gold)}
+.tl-item.bad:before{background:var(--bad)}.tl-item.brand:before{background:var(--accent)}
+.tl-item .tl-t{font-size:12px;font-weight:600}
+.tl-item .tl-d{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.65}
+
+/* 提示条 */
+.note{display:flex;gap:9px;border-radius:10px;padding:10px 13px;font-size:12px;line-height:1.7;margin-bottom:12px;border:1px solid}
+.note .ni{font-size:13px;flex:0 0 16px}
+.note.info{background:var(--accent-bg);border-color:rgba(91,108,255,.25)}
+.note.ok{background:var(--ok-bg);border-color:rgba(14,203,129,.25)}
+.note.warn{background:var(--gold-bg);border-color:rgba(240,185,11,.3)}
+.note.bad{background:var(--bad-bg);border-color:rgba(246,70,93,.3)}
+.note b{font-weight:650}
+
+/* 合规标注 */
+.rule-anno{display:none;border:1.5px dashed var(--gold);background:var(--gold-bg);border-radius:10px;padding:9px 13px;font-size:11.5px;line-height:1.7;margin:8px 0}
+.rule-anno b{color:var(--gold)}
+.rule-anno .ra-id{font-family:var(--mono);font-weight:700}
+.wb.rule-on .rule-anno{display:block}
+.wb.rule-on [data-rulechip]{outline:1.5px dashed var(--gold);outline-offset:2px;border-radius:6px}
+
+/* 抽屉 / 模态 / 面板 */
+.drawer-mask,.modal-mask,.pal-mask{position:fixed;inset:0;background:rgba(4,6,12,.62);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .22s;z-index:80}
+.drawer-mask.on,.modal-mask.on,.pal-mask.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:-600px;width:600px;max-width:95vw;height:100vh;background:var(--panel);border-left:1px solid var(--line2);z-index:90;transition:right .28s cubic-bezier(.3,.9,.3,1);display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.drawer.on{right:0}
+.drawer.wide{width:760px}
+.drawer-h{display:flex;align-items:center;gap:10px;padding:15px 20px;border-bottom:1px solid var(--line)}
+.drawer-h b{font-size:14.5px}
+.drawer-h .x{margin-left:auto;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;cursor:pointer;color:var(--ink3);border:1px solid var(--line)}
+.drawer-h .x:hover{color:var(--ink);border-color:var(--line2)}
+.drawer-b{flex:1;overflow-y:auto;padding:18px 20px 30px}
+.drawer-f{border-top:1px solid var(--line);padding:13px 20px;display:flex;gap:9px;background:var(--panel)}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-46%) scale(.97);width:470px;max-width:92vw;background:var(--panel);border:1px solid var(--line2);border-radius:16px;z-index:95;opacity:0;pointer-events:none;transition:.2s;box-shadow:var(--shadow)}
+.modal.on{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.modal-h{padding:16px 20px 0;font-size:15px;font-weight:700}
+.modal-b{padding:14px 20px}
+.modal-f{padding:0 20px 18px;display:flex;gap:9px;justify-content:flex-end}
+.modal.wide{width:640px}
+.palette{position:fixed;left:50%;top:13vh;transform:translateX(-50%) scale(.98);width:580px;max-width:92vw;background:var(--panel);border:1px solid var(--line2);border-radius:16px;z-index:95;opacity:0;pointer-events:none;transition:.18s;box-shadow:var(--shadow);overflow:hidden}
+.palette.on{opacity:1;pointer-events:auto;transform:translateX(-50%) scale(1)}
+.palette .pal-in{width:100%;background:transparent;border:none;outline:none;color:var(--ink);font-size:14.5px;padding:16px 20px;border-bottom:1px solid var(--line);font-family:inherit}
+.pal-list{max-height:46vh;overflow-y:auto;padding:8px}
+.pal-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;cursor:pointer;font-size:12.8px;color:var(--ink2)}
+.pal-item:hover,.pal-item.on{background:var(--accent-bg);color:var(--ink)}
+.pal-item .pi{width:20px;text-align:center}
+.pal-item .pk{margin-left:auto;font-size:10px;color:var(--ink3);font-family:var(--mono)}
+.pal-empty{padding:26px;text-align:center;color:var(--ink3);font-size:12.5px}
+
+/* Toast */
+.toasts{position:fixed;top:16px;right:18px;z-index:120;display:flex;flex-direction:column;gap:9px;max-width:390px}
+.toast{display:flex;gap:9px;align-items:flex-start;background:var(--elev);border:1px solid var(--line2);border-left:3px solid var(--accent);border-radius:11px;padding:11px 15px;font-size:12.5px;box-shadow:var(--shadow);animation:tin .25s ease-out;line-height:1.6}
+.toast.ok{border-left-color:var(--ok)}.toast.bad,.toast.err{border-left-color:var(--bad)}.toast.warn{border-left-color:var(--gold)}
+@keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+
+/* 图表 */
+.chart-box{position:relative}
+.chart-box svg{display:block;width:100%;height:auto;overflow:visible}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--ink3)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;vertical-align:0}
+.heat{display:grid;gap:3px}
+.heat i{aspect-ratio:1;border-radius:3px;background:var(--panel2)}
+.progress{height:6px;border-radius:4px;background:var(--panel2);overflow:hidden}
+.progress i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.progress.thin{height:4px}
+.ring{--p:0;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--panel2) 0);position:relative;flex:0 0 auto}
+.ring:after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--panel)}
+.ring>span{position:relative;z-index:1;font-family:var(--mono);font-size:13px;font-weight:700}
+.switch{width:34px;height:19px;border-radius:12px;background:var(--line2);position:relative;cursor:pointer;transition:.18s;flex:0 0 34px;display:inline-block;vertical-align:middle}
+.switch:after{content:"";position:absolute;left:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:.18s}
+.switch.on{background:var(--ok)}
+.switch.on:after{left:17px}
+.switch-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line)}
+.switch-row:last-child{border-bottom:none}
+.switch-row .sr-t{flex:1}
+.switch-row .sr-t b{font-size:12.5px;display:block;font-weight:600}
+.switch-row .sr-t em{font-size:11px;color:var(--ink3);display:block;margin-top:2px;line-height:1.55}
+.banner-live{display:flex;align-items:center;gap:7px;font-size:10.5px;color:var(--ok)}
+.banner-live i{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse 1.6s infinite}
+
+/* 杂项 */
+.sec-title{display:flex;align-items:baseline;gap:10px;margin:26px 0 12px}
+.sec-title:first-child{margin-top:0}
+.sec-title b{font-size:15px;font-weight:700}
+.sec-title em{font-size:11.5px;color:var(--ink3)}
+.sec-title .sp{flex:1}
+.muted{color:var(--ink3)}
+.small{font-size:11.5px}
+.tiny{font-size:10.5px}
+.divider{height:1px;background:var(--line);margin:14px 0}
+.kv{display:flex;justify-content:space-between;gap:14px;padding:7px 0;font-size:12.3px;border-bottom:1px dashed var(--line)}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--ink3);flex:0 0 auto}
+.kv .v{text-align:right;word-break:break-all}
+.avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;flex:0 0 28px}
+.avatar.lg{width:44px;height:44px;font-size:17px;flex:0 0 44px}
+.avatar.xl{width:68px;height:68px;font-size:26px;flex:0 0 68px;border-radius:20px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11px;padding:3px 10px;border-radius:20px;background:var(--panel2);border:1px solid var(--line);color:var(--ink2);cursor:pointer}
+.chip.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent);font-weight:600}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:9px 14px;font-size:12.5px;color:var(--ink2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;font-weight:550}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:650}
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:2px;gap:2px}
+.seg span{padding:4px 11px;border-radius:7px;font-size:11.5px;color:var(--ink2);cursor:pointer}
+.seg span.on{background:var(--elev);color:var(--ink);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.empty{padding:44px 20px;text-align:center;color:var(--ink3)}
+.empty .ei{font-size:30px;opacity:.5;display:block;margin-bottom:10px}
+.hr-dashed{border-top:1px dashed var(--line);margin:12px 0}
+
+/* hero 头图 */
+.hero{position:relative;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(120deg,var(--accent-bg),transparent 62%),var(--panel);padding:20px 22px;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-60px;top:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,var(--accent-bg),transparent 70%)}
+.hero h1{font-size:19px;font-weight:750;letter-spacing:-.3px;display:flex;align-items:center;gap:9px}
+.hero p{font-size:12.5px;color:var(--ink2);margin-top:6px;max-width:760px;line-height:1.7;position:relative}
+.hero .hero-meta{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap;position:relative}
+.hero .hm{font-size:11px;color:var(--ink3)}
+.hero .hm b{display:block;font-size:15px;color:var(--ink);font-family:var(--mono);margin-top:2px}
+
+/* 价格卡 */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.price-card{border:1px solid var(--line);border-radius:var(--r);background:var(--panel);padding:18px;position:relative;display:flex;flex-direction:column;gap:10px}
+.price-card.hl{border-color:var(--accent);box-shadow:var(--glow)}
+.price-card .pc-name{font-size:14px;font-weight:700}
+.price-card .pc-en{font-size:10px;color:var(--ink3);letter-spacing:1.2px;text-transform:uppercase}
+.price-card .pc-amt{font-size:26px;font-weight:750;font-family:var(--mono);letter-spacing:-1px}
+.price-card .pc-amt small{font-size:11.5px;color:var(--ink3);font-family:var(--font);font-weight:500}
+.price-card ul{list-style:none;display:flex;flex-direction:column;gap:7px;font-size:12px;color:var(--ink2)}
+.price-card ul li{display:flex;gap:7px;align-items:flex-start;line-height:1.55}
+.price-card ul li:before{content:"\2713";color:var(--ok);font-weight:700;flex:0 0 auto}
+.price-card .pc-badge{position:absolute;top:-9px;right:14px;font-size:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:2px 9px;border-radius:8px;font-weight:600}
+
+/* 对话气泡 */
+.chat{display:flex;flex-direction:column;gap:14px;padding:4px 0}
+.bubble{max-width:78%;padding:11px 14px;border-radius:14px;font-size:12.6px;line-height:1.7;position:relative}
+.bubble.them{background:var(--panel2);border:1px solid var(--line);border-bottom-left-radius:4px;align-self:flex-start}
+.bubble.me{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.bubble .b-meta{font-size:10px;opacity:.62;margin-top:7px;display:flex;gap:8px;align-items:center}
+.bubble .b-tag{font-size:9.5px;padding:1px 6px;border-radius:6px;background:var(--gold-bg);color:var(--gold);font-weight:600}
+
+/* 设备卡 */
+.device{display:flex;gap:14px;align-items:center;border:1px solid var(--line);border-radius:var(--r2);padding:13px 15px;background:var(--panel)}
+.device .dv-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px;background:var(--accent-bg);flex:0 0 44px}
+
+/* 组织树 */
+.otree{font-size:12.5px}
+.otree .ot-node{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer}
+.otree .ot-node:hover{background:var(--panel2)}
+.otree .ot-node.on{background:var(--accent-bg);color:var(--accent);font-weight:600}
+.otree .ot-children{padding-left:20px;border-left:1px dashed var(--line2);margin-left:12px}
+
+/* 证书 / 凭据卡 */
+.cert{border:1px solid var(--line2);border-radius:var(--r2);padding:16px;background:linear-gradient(135deg,var(--accent-bg),transparent 70%),var(--panel);position:relative;overflow:hidden}
+.cert .cert-no{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:1px}
+.cert .cert-t{font-size:14px;font-weight:700;margin:6px 0 3px}
+.cert .cert-s{font-size:11.5px;color:var(--ink3)}
+.cert .cert-seal{position:absolute;right:14px;top:14px;width:52px;height:52px;border-radius:50%;border:1.5px dashed var(--accent);display:grid;place-items:center;font-size:9px;color:var(--accent);text-align:center;line-height:1.2;font-weight:700}
+
+/* 布局辅助 */
+.mt6{margin-top:6px}.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}
+.mb10{margin-bottom:10px}.mb14{margin-bottom:14px}
+.tc{text-align:center}.tr{text-align:right}
+.nowrap{white-space:nowrap}
+.fs11{font-size:11px}.fs15{font-size:15px}.fs17{font-size:17px}
+.w100{width:100%}
+.gap8{gap:8px}.gap16{gap:16px}
+.between{display:flex;justify-content:space-between;align-items:center}
+.center{display:flex;align-items:center}
+.scroll-x{overflow-x:auto}
+
+/* 页面进入过渡 */
+.page-in{animation:pageIn .32s cubic-bezier(.25,.8,.3,1)}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 侧栏折叠 */
+.wb.folded .side{width:64px;flex:0 0 64px}
+.wb.folded .sb-txt{display:none}
+.wb.folded .role-switch,.wb.folded .side-brand em{display:none}
+.wb.folded .side-brand{justify-content:center;padding:16px 8px 10px}
+.wb.folded .nav-item{justify-content:center;padding:9px 0}
+.wb.folded .nav-item .cnt{position:absolute;top:2px;right:6px;margin:0;font-size:9px}
+.wb.folded .side-foot{padding:10px 8px}
+.wb.folded .side-user{justify-content:center}
+.wb.folded .top-search .ph{display:none}
+
+/* 登录门 */
+.login-mask{position:fixed;inset:0;z-index:200;display:grid;place-items:center;
+  background:radial-gradient(1200px 700px at 18% -12%,var(--accent-bg),transparent 60%),
+             radial-gradient(900px 620px at 92% 112%,var(--accent-bg),transparent 55%),var(--bg);
+  transition:opacity .45s,visibility .45s;overflow:hidden}
+.login-mask:before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(var(--line2) 1px,transparent 1px);background-size:26px 26px;opacity:.5}
+.login-mask.bye{opacity:0;visibility:hidden}
+.login-card{width:410px;max-width:92vw;background:var(--panel);border:1px solid var(--line2);border-radius:20px;padding:30px 30px 22px;box-shadow:0 30px 80px rgba(0,0,0,.5);animation:loginIn .5s cubic-bezier(.2,.9,.3,1);position:relative}
+@keyframes loginIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+.login-brand{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.login-brand b{font-size:16.5px;display:block;letter-spacing:.2px}
+.login-brand em{font-size:11px;color:var(--ink3);display:block;margin-top:2px}
+.brand-mark.lg{width:44px;height:44px;flex:0 0 44px;border-radius:13px;font-size:22px}
+.login-note{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--ink2);background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 12px;margin-bottom:16px}
+.login-foot{margin-top:14px;text-align:center;line-height:1.7}
+
+/* 通知中心 */
+.bell-wrap{position:relative}
+.bell-badge{display:none;position:absolute;top:-5px;right:-5px;min-width:16px;height:16px;border-radius:9px;background:var(--bad);color:#fff;font-size:9.5px;font-weight:700;place-items:center;padding:0 4px;font-style:normal}
+.bell-panel{position:absolute;right:0;top:42px;width:372px;background:var(--panel);border:1px solid var(--line2);border-radius:14px;box-shadow:var(--shadow);z-index:60;opacity:0;pointer-events:none;transform:translateY(-6px);transition:.18s;overflow:hidden}
+.bell-wrap.open .bell-panel{opacity:1;pointer-events:auto;transform:none}
+.bp-h{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);font-size:13px;font-weight:650}
+.bp-item{display:flex;gap:10px;align-items:flex-start;padding:11px 14px;border-bottom:1px solid var(--line);cursor:pointer;transition:background .12s}
+.bp-item:hover{background:var(--panel2)}
+.bp-item:last-of-type{border-bottom:none}
+.bp-item .bp-ic{font-size:16px;width:22px;text-align:center;flex:0 0 22px}
+.bp-item b{font-size:12.3px;display:block}
+.bp-item.read{opacity:.5}
+.bp-f{padding:9px 14px;background:var(--panel2);color:var(--ink3)}
+
+/* 移动端折叠 */
+.mobile-only{display:none}
+@media (max-width:1240px){
+  .g2030,.g3020,.g4-2{grid-template-columns:1fr}
+  .grid4{grid-template-columns:1fr 1fr}
+}
+@media (max-width:1080px){
+  .grid3{grid-template-columns:1fr 1fr}
+  .top-search{width:180px}
+}
+@media (max-width:900px){
+  .side{position:fixed;left:-260px;transition:left .25s;height:100vh}
+  .wb.nav-open .side{left:0;box-shadow:var(--shadow)}
+  .mobile-only{display:grid}
+  .grid2{grid-template-columns:1fr}
+  .top-search{display:none}
+}
+
+/* ============================================================
+   页面级标题 / 补充工具类（个人中心与各平台通用）
+   ============================================================ */
+.page-t{font-size:19px;font-weight:750;letter-spacing:-.2px;line-height:1.35;margin:0 0 6px}
+.page-d{font-size:12.5px;color:var(--ink3);line-height:1.8;margin:0 0 18px;max-width:940px}
+.btn.xs{padding:2px 8px;font-size:10.5px;border-radius:6px;gap:4px}
+.btn.bad-outline{background:transparent;border-color:rgba(246,70,93,.45);color:var(--bad)}
+.btn.bad-outline:hover{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.warn{color:var(--gold)}
+.note.warn{color:var(--ink)}
+
+</style>
+</head>
+<body>
+<script>
+/* ============================================================
+   ÆTERNUM · 共享运行引擎（组件库 / 图表库 / 外壳 / 路由 / 交互）
+   ============================================================ */
+(function(){
+'use strict';
+
+/* ---------------- 工具 ---------------- */
+const esc = s => String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const $  = (s,r) => (r||document).querySelector(s);
+const $$ = (s,r) => Array.from((r||document).querySelectorAll(s));
+const nf = (n,d) => { if(n==null||n==='') return '—';
+  const x = Number(n); if(isNaN(x)) return String(n);
+  return x.toLocaleString('zh-CN',{minimumFractionDigits:d||0,maximumFractionDigits:d||0}); };
+const pct = (n,d) => nf(n,d==null?1:d)+'%';
+const money = n => '¥'+nf(n,0);
+const wan = n => n>=10000 ? nf(n/10000,1)+' 万' : nf(n,0);
+const C_ = { brand:'var(--accent)', ok:'var(--ok)', bad:'var(--bad)', gold:'var(--gold)', ink3:'var(--ink3)', ink2:'var(--ink2)', line:'var(--line2)' };
+
+/* ---------------- 图表库（纯 SVG，无依赖） ---------------- */
+const CH = {
+  spark(vals, o){
+    o = o||{}; const w=o.w||84, h=o.h||26, col=o.color||C_.brand;
+    const mx=Math.max.apply(null,vals), mn=Math.min.apply(null,vals), rg=(mx-mn)||1;
+    const pts = vals.map((v,i)=>[i/(vals.length-1)*w, h-2-((v-mn)/rg)*(h-6)]);
+    const d = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+    const id='sp'+Math.random().toString(36).slice(2,7);
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${col}" stop-opacity=".34"/><stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+      <path d="${d} L${w} ${h} L0 ${h} Z" fill="url(#${id})"/><path d="${d}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linejoin="round"/></svg>`;
+  },
+  area(dat, o){
+    o=o||{}; const w=o.w||640, h=o.h||190, pad={l:38,r:12,t:14,b:24};
+    const col=o.color||C_.brand, col2=o.color2||'var(--accent2)';
+    const series = o.series||[{k:'', v:dat.map((d,i)=>typeof d==='number'?d:d.v), c:col}];
+    const all = series.reduce((a,s)=>a.concat(s.v),[]);
+    const mx = o.max||Math.max.apply(null,all)*1.12, mn=0;
+    const iw=w-pad.l-pad.r, ih=h-pad.t-pad.b, n=series[0].v.length;
+    const X=i=>pad.l+(n===1?iw/2:i/(n-1)*iw);
+    const Y=v=>pad.t+ih-((v-mn)/((mx-mn)||1))*ih;
+    let g='';
+    for(let i=0;i<=4;i++){ const y=pad.t+ih/4*i; const val=mx-(mx/4)*i;
+      g+=`<line x1="${pad.l}" y1="${y}" x2="${w-pad.r}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`;
+      g+=`<text x="${pad.l-6}" y="${y+3.5}" text-anchor="end" font-size="9" fill="var(--ink3)" font-family="var(--mono)">${o.fmtY?o.fmtY(val):nf(val,0)}</text>`; }
+    let xs='';
+    const lab = o.xlabels||[];
+    if(lab.length){ const step=Math.ceil(n/Math.min(n,8));
+      lab.forEach((L,i)=>{ if(i%step) return; xs+=`<text x="${X(i)}" y="${h-7}" text-anchor="middle" font-size="9" fill="var(--ink3)">${esc(L)}</text>`; }); }
+    let paths='';
+    series.forEach((s,si)=>{
+      const d=s.v.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1)).join(' ');
+      const id='ar'+si+Math.random().toString(36).slice(2,6);
+      paths+=`<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${s.c}" stop-opacity=".30"/><stop offset="1" stop-color="${s.c}" stop-opacity="0"/></linearGradient></defs>`;
+      paths+=`<path d="${d} L${X(n-1)} ${pad.t+ih} L${X(0)} ${pad.t+ih} Z" fill="url(#${id})"/>`;
+      paths+=`<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2" stroke-linejoin="round"/>`;
+      if(o.dots!==false) s.v.forEach((v,i)=>{ if(n<=14) paths+=`<circle cx="${X(i)}" cy="${Y(v)}" r="2.6" fill="${s.c}"/>`; });
+    });
+    return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="width:100%;height:${h}px">${g}${paths}${xs}</svg>`;
+  },
+  bars(items, o){
+    o=o||{}; const w=o.w||640, h=o.h||200, pad={l:34,r:12,t:14,b:28};
+    const col=o.color||C_.brand, iw=w-pad.l-pad.r, ih=h-pad.t-pad.b;
+    const mx=Math.max.apply(null,items.map(d=>d.v))*1.15||1;
+    const bw=iw/items.length, gap=bw*0.34;
+    let g='';
+    for(let i=0;i<=4;i++){ const y=pad.t+ih/4*i; g+=`<line x1="${pad.l}" y1="${y}" x2="${w-pad.r}" y2="${y}" stroke="var(--line)"/>`;
+      g+=`<text x="${pad.l-6}" y="${y+3.5}" text-anchor="end" font-size="9" fill="var(--ink3)" font-family="var(--mono)">${nf(mx-(mx/4)*i,0)}</text>`; }
+    items.forEach((d,i)=>{
+      const x=pad.l+bw*i+gap/2, bh=(d.v/mx)*ih, y=pad.t+ih-bh;
+      const c=d.c||col; const id='bg'+i+Math.random().toString(36).slice(2,5);
+      g+=`<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}" stop-opacity="${d.dim?.45:.95}"/><stop offset="1" stop-color="${c}" stop-opacity="${d.dim?.12:.35}"/></linearGradient></defs>`;
+      g+=`<rect x="${x}" y="${y}" width="${bw-gap}" height="${Math.max(bh,1)}" rx="3.5" fill="url(#${id})"/>`;
+      if(o.showVal!==false) g+=`<text x="${x+(bw-gap)/2}" y="${y-5}" text-anchor="middle" font-size="9.5" fill="var(--ink2)" font-family="var(--mono)">${nf(d.v,o.dec||0)}</text>`;
+      g+=`<text x="${x+(bw-gap)/2}" y="${h-8}" text-anchor="middle" font-size="9.5" fill="var(--ink3)">${esc(d.k)}</text>`; });
+    return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px">${g}</svg>`;
+  },
+  hbars(items, o){
+    o=o||{}; const w=o.w||520, rowh=o.rowh||26, lh=o.lw||104;
+    const h=items.length*rowh+8, mx=Math.max.apply(null,items.map(d=>d.v))||1;
+    let g='';
+    items.forEach((d,i)=>{
+      const y=i*rowh+4, bw=(d.v/mx)*(w-lh-70), c=d.c||C_.brand;
+      g+=`<text x="0" y="${y+13}" font-size="11" fill="var(--ink2)">${esc(d.k)}</text>`;
+      const id='hb'+i+Math.random().toString(36).slice(2,5);
+      g+=`<defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="${c}" stop-opacity=".95"/><stop offset="1" stop-color="${c}" stop-opacity=".42"/></linearGradient></defs>`;
+      g+=`<rect x="${lh}" y="${y+3}" width="${w-lh-70}" height="14" rx="7" fill="var(--panel2)"/>`;
+      g+=`<rect x="${lh}" y="${y+3}" width="${Math.max(bw,2)}" height="14" rx="7" fill="url(#${id})"/>`;
+      g+=`<text x="${w-6}" y="${y+14}" text-anchor="end" font-size="10.5" fill="var(--ink2)" font-family="var(--mono)">${d.txt||nf(d.v,o.dec||0)}</text>`; });
+    return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px">${g}</svg>`;
+  },
+  donut(items, o){
+    o=o||{}; const s=o.size||150, r=s/2-9, cx=s/2, cy=s/2, th=o.thick||15;
+    const tot=items.reduce((a,b)=>a+b.v,0)||1; let ang=-90, g='';
+    items.forEach((d,i)=>{
+      const sw=d.v/tot*360, e=ang+sw;
+      const p=(a)=>[cx+r*Math.cos(a*Math.PI/180), cy+r*Math.sin(a*Math.PI/180)];
+      const [x1,y1]=p(ang), [x2,y2]=p(e), la=sw>180?1:0;
+      g+=`<path d="M${x1} ${y1} A${r} ${r} 0 ${la} 1 ${x2} ${y2}" fill="none" stroke="${d.c}" stroke-width="${th}" stroke-linecap="butt"/>`;
+      ang=e; });
+    if(o.center) g+=`<text x="${cx}" y="${cy+2}" text-anchor="middle" font-size="17" font-weight="700" fill="var(--ink)" font-family="var(--mono)">${o.center}</text>`
+      + (o.cl?`<text x="${cx}" y="${cy+16}" text-anchor="middle" font-size="9" fill="var(--ink3)">${esc(o.cl)}</text>`:'');
+    return `<svg width="${s}" height="${s}" viewBox="0 0 ${s} ${s}">${g}</svg>`;
+  },
+  gauge(v, o){
+    o=o||{}; const s=o.size||120, r=s/2-12, cx=s/2, cy=s/2+8;
+    const ang=(v/100)*180-180;
+    const p=(a)=>[cx+r*Math.cos(a*Math.PI/180), cy+r*Math.sin(a*Math.PI/180)];
+    const [x1,y1]=p(-180), [x2,y2]=p(0), [x3,y3]=p(ang);
+    const c=o.color||(v>=80?C_.ok:v>=60?C_.gold:C_.bad);
+    return `<svg width="${s}" height="${s*0.72}" viewBox="0 0 ${s} ${s*0.72}">
+      <path d="M${x1} ${y1} A${r} ${r} 0 0 1 ${x2} ${y2}" fill="none" stroke="var(--panel2)" stroke-width="11" stroke-linecap="round"/>
+      <path d="M${x1} ${y1} A${r} ${r} 0 0 1 ${x3} ${y3}" fill="none" stroke="${c}" stroke-width="11" stroke-linecap="round"/>
+      <text x="${cx}" y="${cy-4}" text-anchor="middle" font-size="20" font-weight="750" fill="var(--ink)" font-family="var(--mono)">${v}</text>
+      <text x="${cx}" y="${cy+12}" text-anchor="middle" font-size="9.5" fill="var(--ink3)">${esc(o.label||'')}</text></svg>`;
+  },
+  radar(dims, o){
+    o=o||{}; const s=o.size||230, cx=s/2, cy=s/2+4, R=s/2-40, n=dims.length;
+    const pt=(i,rr)=>{ const a=-90+i*360/n; return [cx+rr*Math.cos(a*Math.PI/180), cy+rr*Math.sin(a*Math.PI/180)]; };
+    let g='';
+    [.25,.5,.75,1].forEach(f=>{ const ps=dims.map((_,i)=>pt(i,R*f).map(x=>x.toFixed(1)).join(',')).join(' ');
+      g+=`<polygon points="${ps}" fill="none" stroke="var(--line)" stroke-width="1"/>`; });
+    dims.forEach((d,i)=>{ const [x,y]=pt(i,R); g+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)"/>`;
+      const [lx,ly]=pt(i,R+22); g+=`<text x="${lx}" y="${ly+3}" text-anchor="middle" font-size="9.5" fill="var(--ink3)">${esc(d.k)}</text>`; });
+    const ps = dims.map((d,i)=>pt(i,R*(d.v/100)).map(x=>x.toFixed(1)).join(',')).join(' ');
+    g+=`<polygon points="${ps}" fill="${C_.brand}" fill-opacity=".2" stroke="${C_.brand}" stroke-width="1.8"/>`;
+    dims.forEach((d,i)=>{ const [x,y]=pt(i,R*(d.v/100)); g+=`<circle cx="${x}" cy="${y}" r="2.8" fill="${C_.brand}"/>`; });
+    return `<svg width="${s}" height="${s+10}" viewBox="0 0 ${s} ${s+10}">${g}</svg>`;
+  },
+  heat(cells, o){
+    o=o||{}; const cols=o.cols||12, sz=o.size||18;
+    return `<div class="heat" style="grid-template-columns:repeat(${cols},1fr)">`+
+      cells.map(c=>`<i title="${esc(c.tip||'')}" style="background:${c.v?`color-mix(in srgb, var(--accent) ${12+c.v*88}%, transparent)`:''}"></i>`).join('')+`</div>`;
+  },
+  stackbar(segs, o){
+    o=o||{}; const w=o.w||560, h=o.h||16, tot=segs.reduce((a,b)=>a+b.v,0)||1;
+    let x=0, g='';
+    segs.forEach(s=>{ const bw=s.v/tot*w;
+      g+=`<rect x="${x}" y="0" width="${bw}" height="${h}" fill="${s.c}" rx="0"/>`;
+      if(bw>44) g+=`<text x="${x+bw/2}" y="${h/2+3.5}" text-anchor="middle" font-size="9.5" fill="#fff" font-family="var(--mono)">${esc(s.k)}</text>`;
+      x+=bw; });
+    return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:${h}px" preserveAspectRatio="none">${g}</svg>`;
+  },
+  flow(nodes, o){
+    o=o||{}; const w=o.w||660, nh=42, gap=12;
+    const per=o.per||Math.ceil(nodes.length/Math.ceil(nodes.length/(o.cols||4)));
+    let g='', y=4;
+    const cols=o.cols||4, cw=(w-(cols-1)*gap)/cols;
+    nodes.forEach((n,i)=>{ const col=i%cols, row=Math.floor(i/cols);
+      const x=col*(cw+gap), yy=row*(nh+gap)+4;
+      g+=`<rect x="${x}" y="${yy}" width="${cw}" height="${nh}" rx="8" fill="${n.on?'var(--accent-bg)':'var(--panel2)'}" stroke="${n.on?'var(--accent)':'var(--line)'}"/>`;
+      g+=`<text x="${x+cw/2}" y="${yy+18}" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--ink)">${esc(n.k)}</text>`;
+      g+=`<text x="${x+cw/2}" y="${yy+32}" text-anchor="middle" font-size="9" fill="var(--ink3)">${esc(n.s||'')}</text>`;
+      if(col<cols-1 && i<nodes.length-1) g+=`<path d="M${x+cw} ${yy+nh/2} l${gap} 0" stroke="var(--ink3)" stroke-width="1.4" marker-end="url(#ar)"/>`;
+    });
+    const rows=Math.ceil(nodes.length/cols); const H=rows*(nh+gap)+4;
+    return `<svg viewBox="0 0 ${w} ${H}" style="width:100%;height:${H}px"><defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--ink3)"/></marker></defs>${g}</svg>`;
+  }
+};
+
+/* ---------------- 组件库 ---------------- */
+const C = {
+  tag(t, k){ return `<span class="tag ${k||''}">${esc(t)}</span>`; },
+  dot(k){ return `<span class="dot ${k||''}"></span>`; },
+  panel(title, body, sub, cls){
+    return `<div class="panel ${cls||''}">${title!==false?`<div class="panel-h">${title}${sub?`<span class="sub">${sub}</span>`:''}</div>`:''}<div class="panel-b ${body===null?'tight':''}">${body||''}</div></div>`;
+  },
+  kpi(o){
+    return `<div class="kpi ${o.hl?'hl':''}">
+      <div class="k-lb">${o.i?`<span>${o.i}</span>`:''}${esc(o.lb)}</div>
+      <div class="k-v">${o.v}${o.unit?`<small>${esc(o.unit)}</small>`:''}</div>
+      <div class="k-foot">${o.foot||''}</div>
+      ${o.spark?`<span class="spark">${CH.spark(o.spark,{color:o.c||C_.brand})}</span>`:''}
+    </div>`;
+  },
+  table(cols, rows, o){
+    o=o||{};
+    return `<table class="dt"><thead><tr>${cols.map(c=>`<th class="${c.cls||''}">${c.t||c}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(r=>`<tr class="${r._click?'rowlink':''}" ${r._click?`data-nav="${r._click}"`:''}>${r.cells||r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  },
+  tbar(left, right){ return `<div class="tbar">${left}${right?`<span class="sp"></span>${right}`:''}</div>`; },
+  note(k, html, ic){ const m={info:'ⓘ',ok:'✓',warn:'⚠',bad:'⛔'};
+    return `<div class="note ${k}"><span class="ni">${ic||m[k]||'ⓘ'}</span><div>${html}</div></div>`; },
+  rule(id, t, why, how){
+    return `<div class="rule-anno"><span class="ra-id">[${esc(id)}]</span> <b>${esc(t)}</b><br>${esc(why)}${how?`<br><span class="muted">落点：</span>${esc(how)}`:''}</div>`;
+  },
+  stepper(steps, cur){ return `<div class="stepper">${steps.map((s,i)=>{
+    const cl = i<cur?'done':(i===cur?'act':'');
+    return `<div class="stp ${cl}"><div class="si">${i<cur?'✓':i+1}</div><span>${esc(s)}</span></div>`; }).join('')}</div>`; },
+  tl(items){ return `<div class="tl">${items.map(i=>`<div class="tl-item ${i.k||''}"><div class="tl-t">${i.t}</div><div class="tl-d">${i.d}</div></div>`).join('')}</div>`; },
+  kv(arr){ return arr.map(([k,v])=>`<div class="kv"><span class="k">${k}</span><span class="v">${v}</span></div>`).join(''); },
+  field(o){
+    return `<div class="fld"><label class="${o.req?'req':''}">${esc(o.lb)}</label>
+      ${o.ctrl||`<input class="inp" placeholder="${esc(o.ph||'')}" ${o.v?`value="${esc(o.v)}"`:''}>`}
+      ${o.hint?`<span class="hint">${o.hint}</span>`:''}</div>`;
+  },
+  switchRow(o){
+    return `<div class="switch-row"><div class="sr-t"><b>${esc(o.t)}</b>${o.d?`<em>${o.d}</em>`:''}</div>
+      <span class="switch ${o.on?'on':''}" data-switch="${esc(o.t)}"></span></div>`;
+  },
+  ring(v, label, sz){
+    return `<div class="ring" style="--p:${v}${sz?`;width:${sz}px;height:${sz}px`:''}"><span>${label||v+'%'}</span></div>`;
+  },
+  progress(v){ return `<div class="progress"><i style="width:${Math.min(v,100)}%"></i></div>`; },
+  avatar(name, cls, color){
+    const ch = String(name||'?').slice(0,1);
+    return `<span class="avatar ${cls||''}" style="background:${color||'linear-gradient(135deg,var(--accent),var(--accent2))'}">${esc(ch)}</span>`;
+  },
+  empty(t, s, ic){ return `<div class="empty"><span class="ei">${ic||'◌'}</span><div>${esc(t)}</div>${s?`<div class="small mt6">${esc(s)}</div>`:''}</div>`; },
+  priceCard(o){
+    return `<div class="price-card ${o.hl?'hl':''}">${o.badge?`<span class="pc-badge">${esc(o.badge)}</span>`:''}
+      <div><div class="pc-name">${esc(o.name)}</div><div class="pc-en">${esc(o.en||'')}</div></div>
+      <div class="pc-amt">${o.amt}<small>${o.per||''}</small></div>
+      <div class="tiny muted">${o.desc||''}</div>
+      <ul>${(o.feats||[]).map(f=>`<li>${f}</li>`).join('')}</ul>
+      <div style="margin-top:auto"><button class="btn ${o.hl?'p':''} w100" data-act="${o.act||'toast'}">${esc(o.cta||'选择')}</button></div></div>`;
+  },
+  chat(list){
+    return `<div class="chat">${list.map(m=>`<div class="bubble ${m.side}">${m.html}
+      <div class="b-meta">${m.tag?`<span class="b-tag">${esc(m.tag)}</span>`:''}${esc(m.time||'')}</div></div>`).join('')}</div>`;
+  },
+  device(o){
+    return `<div class="device"><span class="dv-ic">${o.i}</span>
+      <div style="flex:1"><div class="between"><b>${esc(o.n)}</b>${o.tag||''}</div>
+      <div class="small muted mt6">${o.d}</div></div>${o.right||''}</div>`;
+  },
+  cert(o){
+    return `<div class="cert"><div class="cert-no">${esc(o.no)}</div><div class="cert-t">${esc(o.t)}</div>
+      <div class="cert-s">${o.s}</div>${o.seal?`<div class="cert-seal">${esc(o.seal)}</div>`:''}</div>`;
+  },
+  orgTree(node, depth){
+    depth=depth||0;
+    let h = `<div class="ot-node ${node.on?'on':''}" ${node.id?`data-org="${node.id}"`:''}>
+      <span>${node.i||'▫'}</span><span style="flex:1">${esc(node.n)}</span>${node.cnt!=null?`<span class="tag">${node.cnt}</span>`:''}</div>`;
+    if(node.kids&&node.kids.length) h += `<div class="ot-children">${node.kids.map(k=>C.orgTree(k,depth+1)).join('')}</div>`;
+    return h;
+  },
+  tabs(tabs, tgt, active){
+    return `<div class="tabs" data-tabs="#${tgt}">${tabs.map((t,i)=>`<div class="tab ${(active?t.k===active:i===0)?'on':''}" data-tab="${esc(t.k)}">${esc(t.n)}${t.badge?` <span class="tag bad" style="margin-left:4px">${esc(t.badge)}</span>`:''}</div>`).join('')}</div>`;
+  },
+  panes(list, active){ return list.map((p,i)=>`<div data-pane="${esc(p.k)}" ${((active?p.k===active:i===0))?'':'style="display:none"'}>${p.html}</div>`).join(''); }
+};
+
+/* ---------------- 通知 / 抽屉库 / 模态库 / 自定义动作 ---------------- */
+window.DRAWERS = {}; window.MODALS = {}; window.ACTIONS = {};
+
+/* ---------------- 外壳状态 ---------------- */
+const S = { route:null, group:0, role:null, theme:null, folded:false, ruleOn:false };
+
+function APP(){ return window.APP; }
+function roles(){ return APP().roles; }
+function nav(){ return APP().nav; }
+function state(){ return APP().state; }
+function curRole(){ return roles()[S.role]; }
+function visible(item){
+  const r = item.roles||'all';
+  if(r==='all') return true;
+  return r.split(',').map(s=>s.trim()).indexOf(S.role)>=0;
+}
+function pages(){ return window.V||{}; }
+
+/* ---------------- 渲染：登录门 ---------------- */
+function renderLogin(){
+  const a=APP(), L=a.login||{};
+  return `<div class="login-mask" id="loginMask">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="brand-mark lg">${a.mark||'Æ'}</span>
+        <div><b>${esc(a.name)}</b><em>${esc(L.sub||a.sub||'')}</em></div>
+      </div>
+      <div class="login-note"><span class="dot ok"></span>${L.trusted||'安全环境已确认'} · <span class="mono">${esc(L.device||'')}</span></div>
+      <div class="fld"><label>${esc(L.idLabel||'账号')}</label><input class="inp" value="${esc(L.account||'')}" readonly></div>
+      <div class="fld"><label>${esc(L.codeLabel||'动态口令')}</label><input class="inp mono" value="418 206" readonly></div>
+      <div class="login-hint tiny muted">${L.hint||''}</div>
+      <button class="btn p lg" style="width:100%;margin-top:14px" data-act="do-login">${esc(L.cta||'安全登录 →')}</button>
+      <div class="login-foot tiny muted">${L.foot||''}</div>
+    </div></div>`;
+}
+
+/* ---------------- 渲染：导航 ---------------- */
+function renderTopNav(){
+  const el=$('#topNav'); if(!el) return;
+  el.innerHTML = nav().map((g,i)=>{
+    const vis=g.items.filter(visible);
+    const badge=vis.reduce((s,x)=>s+(x.badge?x.badge():0),0);
+    return `<div class="tn-item ${i===S.group?'on':''} ${vis.length?'':'dim'}" data-topnav="${i}" title="${esc(g.g)} · ${esc(g.d||'')}">
+      <span>${esc(g.g)}</span>${badge?`<i class="tn-badge">${badge>99?'99+':badge}</i>`:''}</div>`; }).join('');
+  const on=el.querySelector('.tn-item.on'); if(on&&on.scrollIntoView) on.scrollIntoView({block:'nearest',inline:'nearest'});
+}
+function renderSideNav(){
+  const el=$('#sideNav'); const g=nav()[S.group]||nav()[0];
+  const vis=g.items.filter(visible), lock=g.items.filter(i=>!visible(i));
+  let h=`<div class="nav-group sb-txt">${esc(g.g)}<span class="ng-d sb-txt">${esc(g.d||'')}</span></div>`;
+  vis.forEach(i=>{ const b=i.badge?i.badge():0;
+    h+=`<div class="nav-item ${S.route===i.id?'on':''}" data-nav="${i.id}" title="${esc(i.n)}">
+      <span class="ni">${i.i||'•'}</span><span class="sb-txt">${esc(i.n)}</span>${b?`<span class="cnt">${b}</span>`:''}</div>`; });
+  if(lock.length){ h+=`<div class="nav-lock-hint sb-txt">🔒 当前角色无权限</div>`;
+    lock.forEach(i=>{ h+=`<div class="nav-item locked" data-act="nav-locked" data-n="${esc(i.n)}"><span class="ni">${i.i||'•'}</span><span class="sb-txt">${esc(i.n)}</span><span class="cnt" style="background:var(--panel2);color:var(--ink3)">🔒</span></div>`; }); }
+  el.innerHTML=h;
+}
+function renderRoleSwitch(){
+  const a=APP();
+  $('#roleSwitch').innerHTML = `<div class="rs-lb sb-txt">${esc(a.roleLabel||'角色视角')}</div>
+    <select id="roleSel">${Object.keys(roles()).map(k=>`<option value="${k}" ${k===S.role?'selected':''}>${esc(roles()[k].n)}${roles()[k].u?' · '+esc(roles()[k].u):''}</option>`).join('')}</select>`;
+  $('#sideRoleName').textContent = roles()[S.role].u ? roles()[S.role].u+' · '+roles()[S.role].n : roles()[S.role].n;
+  $('#roleSel').onchange = e=>switchRole(e.target.value);
+}
+function renderCrumb(){
+  const v=pages()[S.route]||{}, g=nav()[S.group]||nav()[0];
+  $('#crumb').innerHTML=`<span class="cb-g">${esc(g.g)}</span><i class="cb-sep">›</i><b>${esc(v.t||'')}</b>`;
+  const a=APP();
+  $('#subRight').innerHTML=`<span class="cb-role"><span class="dot ok"></span>${esc(roles()[S.role].n)}${roles()[S.role].u?' · '+esc(roles()[S.role].u):''}</span>
+    <span class="cb-env">${esc(a.env||'PROD')} · ${esc(a.region||'ap-east-1')}</span>`;
+}
+function renderBell(){
+  const p=$('#bellPanel'); if(!p) return;
+  const ns=APP().notifications||[];
+  p.innerHTML=`<div class="bp-h">通知中心 <span class="tag b">${esc(APP().notifyScope||'全平台聚合')}</span><span style="flex:1"></span><a class="small" data-act="bell-readall">全部已读</a></div>
+    ${ns.map((n,i)=>`<div class="bp-item ${n.read?'read':''}" data-act="bell-go" data-i="${i}">
+      <span class="bp-ic">${n.i||'•'}</span><div style="flex:1"><b>${esc(n.t)}</b><div class="small muted">${esc(n.d)}</div></div>
+      <span class="mono small muted">${esc(n.time||'')}</span></div>`).join('')}
+    <div class="bp-f small muted">点击直达对应页面 · 已读状态仅本演示会话有效</div>`;
+}
+function renderBellBadge(){
+  const b=$('#bellBadge'); if(!b) return;
+  const n=(APP().notifications||[]).filter(x=>!x.read).length;
+  b.style.display=n?'grid':'none'; b.textContent=n>9?'9+':n;
+}
+function renderAll(){
+  renderTopNav(); renderSideNav(); renderRoleSwitch(); renderAll._b();
+}
+renderAll._b = function(){ renderBellBadge(); };
+
+/* ---------------- 路由 / 渲染页面 ---------------- */
+function render(){
+  const c=$('#content'); if(!c) return;
+  const v=pages()[S.route];
+  if(!v){ const first=nav().flatMap(g=>g.items).find(visible); if(first){S.route=first.id; return render();} c.innerHTML=C.empty('无可见页面'); return; }
+  c.innerHTML = typeof v.render==='function' ? v.render() : v.render;
+  c.scrollTop=0;
+  c.classList.remove('page-in'); void c.offsetWidth; c.classList.add('page-in');
+  if(v.on) try{ v.on(c); }catch(e){ console.warn(e); }
+  renderTopNav(); renderSideNav(); renderCrumb();
+}
+function go(id){
+  const v=pages()[id];
+  if(!v) return;
+  const all=nav();
+  const gi=all.findIndex(g=>g.items.some(x=>x.id===id));
+  if(gi>=0 && !all[gi].items.some(x=>x.id===id&&visible(x))){
+    toast('当前角色（'+curRole().n+'）无权访问该页面——最小权限演示','warn'); return;
+  }
+  S.route=id; if(gi>=0) S.group=gi;
+  render();
+}
+function goGroup(i){
+  const cur=nav()[S.group];
+  if(i===S.group && cur && cur.items.some(x=>x.id===S.route&&visible(x))) return;
+  S.group=i; const g=nav()[i]; const first=g.items.find(visible);
+  if(first && (!pages()[S.route] || nav().findIndex(x=>x.items.some(y=>y.id===S.route))!==i)) S.route=first.id;
+  render();
+}
+function switchRole(k){
+  S.role=k;
+  if(!pages()[S.route]) { const first=nav().flatMap(g=>g.items).find(visible); if(first) S.route=first.id; }
+  if(!nav()[S.group].items.some(visible)) S.group=nav().findIndex(g=>g.items.some(visible));
+  renderAll(); render();
+  toast('已切换为「'+roles()[k].n+'」：无权限菜单已置灰，越权操作被拦截','ok');
+}
+
+/* ---------------- 抽屉 / 模态 / 命令面板 ---------------- */
+function openDrawer(spec){
+  const D = typeof spec==='string' ? {title:spec, body:''} : spec;
+  $('#drawer').className='drawer'+(D.wide?' wide':'');
+  $('#drawer').innerHTML=`<div class="drawer-h"><b>${D.title}</b>${D.tag||''}<span class="x" data-act="close-drawer">✕</span></div>
+    <div class="drawer-b">${D.body||''}</div>${D.foot?`<div class="drawer-f">${D.foot}</div>`:''}`;
+  $('[data-dmask]').classList.add('on'); $('#drawer').classList.add('on');
+  if(D.on) try{D.on($('#drawer'));}catch(e){}
+}
+function closeDrawer(){ $('[data-dmask]').classList.remove('on'); $('#drawer').classList.remove('on'); }
+function openModal(spec){
+  const M = typeof spec==='string' ? {title:'', body:spec} : spec;
+  $('#modal').className='modal'+(M.wide?' wide':'');
+  $('#modal').innerHTML=`${M.title?`<div class="modal-h">${M.title}</div>`:''}<div class="modal-b">${M.body||''}</div>
+    ${M.foot===null?'':`<div class="modal-f">${M.foot||`<button class="btn" data-act="close-modal">取消</button><button class="btn p" data-act="close-modal">确认</button>`}</div>`}`;
+  $('[data-mmask]').classList.add('on'); $('#modal').classList.add('on');
+  if(M.on) try{M.on($('#modal'));}catch(e){}
+}
+function closeModal(){ $('[data-mmask]').classList.remove('on'); $('#modal').classList.remove('on'); }
+let palHits=[], palIdx=0;
+function openPalette(){ $('[data-pmask]').classList.add('on'); $('#palette').classList.add('on'); const i=$('#palInput'); if(i){i.value='';i.focus();} palSearch(''); }
+function closePalette(){ $('[data-pmask]').classList.remove('on'); $('#palette').classList.remove('on'); }
+function palSearch(q){
+  q=(q||'').trim().toLowerCase();
+  const a=APP();
+  const pgs=nav().flatMap(g=>g.items).filter(visible).map(i=>({t:i.n,k:'页面',go:i.id,ic:i.i||'▸'}));
+  const extra=(a.searchIndex||[]);
+  const all=pgs.concat(extra);
+  palHits = q? all.filter(x=>x.t.toLowerCase().indexOf(q)>=0) : pgs;
+  palIdx=0;
+  $('#palList').innerHTML = palHits.length
+    ? palHits.slice(0,14).map((h,i)=>`<div class="pal-item ${i===0?'on':''}" data-pal="${esc(h.go)}"><span class="pi">${h.ic||'▸'}</span>${esc(h.t)}<span class="pk">${esc(h.k)}</span></div>`).join('')
+    : `<div class="pal-empty">没有找到「${esc(q)}」</div>`;
+}
+function palMove(d){ const its=$$('#palList .pal-item'); if(!its.length) return;
+  palIdx=(palIdx+d+its.length)%its.length; its.forEach((e,i)=>e.classList.toggle('on',i===palIdx)); its[palIdx].scrollIntoView({block:'nearest'}); }
+function palGo(){ const e=$$('#palList .pal-item')[palIdx]; if(!e) return; closePalette(); go(e.dataset.pal); }
+
+/* ---------------- Toast ---------------- */
+function toast(msg, kind){
+  let box=$('#toasts'); if(!box){ box=document.createElement('div'); box.id='toasts'; box.className='toasts'; document.body.appendChild(box); }
+  const d=document.createElement('div'); d.className='toast '+(kind||'');
+  d.innerHTML=`<span>${kind==='err'||kind==='bad'?'⛔':kind==='warn'?'⚠':kind==='ok'?'✓':'ⓘ'}</span><div>${msg}</div>`;
+  box.appendChild(d);
+  setTimeout(()=>{d.style.opacity='0';d.style.transform='translateX(14px)';d.style.transition='.3s';},3300);
+  setTimeout(()=>d.remove(),3700);
+}
+
+/* ---------------- 主题 ---------------- */
+function applyTheme(t){
+  S.theme=t; document.documentElement.setAttribute('data-theme',t);
+  try{ localStorage.setItem('aeternum-theme-'+APP().key, t); }catch(e){}
+}
+
+/* ---------------- 事件委托 ---------------- */
+document.addEventListener('click', function(e){
+  const t=e.target;
+  const navEl=t.closest('[data-nav]'); if(navEl){ go(navEl.dataset.nav); return; }
+  const tn=t.closest('[data-topnav]'); if(tn){ goGroup(+tn.dataset.topnav); return; }
+  const tab=t.closest('.tab'); if(tab){ const box=tab.closest('[data-tabs]'); const tgt=$(box.dataset.tabs);
+      $$('.tab',box).forEach(x=>x.classList.remove('on')); tab.classList.add('on');
+      $$('[data-pane]',tgt).forEach(p=>p.style.display = p.dataset.pane===tab.dataset.tab?'':'none'); return; }
+  const seg=t.closest('.seg span'); if(seg){ $$('span',seg.parentNode).forEach(x=>x.classList.remove('on')); seg.classList.add('on');
+      if(seg.dataset.seg) { const box=seg.closest('[data-seggroup]'); if(box){ const tgt=$(box.dataset.seggroup);
+        $$('[data-segpane]',tgt).forEach(p=>p.style.display=p.dataset.segpane===seg.dataset.seg?'':'none'); } }
+      if(seg.dataset.act && window.ACTIONS[seg.dataset.act]) window.ACTIONS[seg.dataset.act](seg); return; }
+  const sw=t.closest('[data-switch]'); if(sw){ sw.classList.toggle('on'); toast('「'+sw.dataset.switch+'」已'+(sw.classList.contains('on')?'开启':'关闭'), sw.classList.contains('on')?'ok':'warn'); return; }
+  const orgn=t.closest('[data-org]'); if(orgn){ $$('[data-org]').forEach(x=>x.classList.remove('on')); orgn.classList.add('on');
+      if(window.ACTIONS.orgPick) window.ACTIONS.orgPick(orgn.dataset.org); return; }
+
+  const a=t.closest('[data-act]'); if(!a) return;
+  const act=a.dataset.act;
+  const generic={
+    'do-login':()=>{ $('#loginMask').classList.add('bye'); toast('安全登录成功 · 已进入 '+APP().name,'ok'); },
+    'fold':()=>{ S.folded=!S.folded; $('#wb').classList.toggle('folded',S.folded); },
+    'theme':()=>{ applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark'); },
+    'rule-toggle':()=>{ S.ruleOn=!S.ruleOn; $('#wb').classList.toggle('rule-on',S.ruleOn); toast(S.ruleOn?'合规标注已开启：页面浮现规则落点':'合规标注已关闭'); },
+    'palette':openPalette,'close-drawer':closeDrawer,'close-modal':closeModal,'close-palette':closePalette,
+    'bell':()=>{ const w=$('#bellWrap'); if(w.classList.contains('open')) w.classList.remove('open'); else { renderBell(); w.classList.add('open'); } },
+    'bell-readall':()=>{ (APP().notifications||[]).forEach(n=>n.read=true); renderBell(); renderBellBadge(); toast('已全部标记为已读','ok'); },
+    'bell-go':()=>{ const i=+a.dataset.i; const n=(APP().notifications||[])[i]; if(n){ n.read=true; renderBell(); renderBellBadge(); if(n.go) go(n.go); } },
+    'nav-locked':()=>{ toast('当前角色（'+curRole().n+'）无「'+a.dataset.n+'」权限——最小权限演示','warn'); },
+    'toast':()=>{ toast(a.dataset.msg||'演示操作：已记录到操作审计','ok'); },
+    'drawer':()=>{ const k=a.dataset.drawer; const fn=window.DRAWERS[k]; if(fn) openDrawer(fn(a.dataset.id)); else openDrawer({title:a.dataset.title||'详情',body:'<div class="muted small">无内容</div>'}); },
+    'modal':()=>{ const k=a.dataset.modal; const fn=window.MODALS[k]; if(fn) openModal(fn(a.dataset.id)); else openModal({title:'确认操作',body:'<div class="small">演示确认框</div>'}); },
+    'twofa':()=>openModal({title:'二次验证（2FA）',body:`<div class="note info"><span class="ni">🔐</span><div>敏感操作需二次验证。当前角色 <b>${esc(curRole().n)}</b>，操作将写入不可篡改审计日志。</div></div>
+      ${C.field({lb:'动态口令（Google Authenticator）',v:'418 206',hint:'演示环境已预填'})}
+      ${C.field({lb:'操作事由',req:true,ph:'请填写本次操作的理由（驳回类操作必填）'})}`,
+      foot:`<button class="btn" data-act="close-modal">取消</button><button class="btn p" data-act="toast" data-msg="二次验证通过 · 操作已执行并写入审计">验证并执行</button>`}),
+    'copy':()=>{ try{navigator.clipboard.writeText(a.dataset.copy||'');}catch(err){} toast('已复制：'+(a.dataset.copy||''),'ok'); }
+  };
+  if(generic[act]) { generic[act](); return; }
+  if(window.ACTIONS[act]) window.ACTIONS[act](a,e);
+});
+
+/* ---------------- 键盘 ---------------- */
+document.addEventListener('keydown', function(e){
+  const meta=e.metaKey||e.ctrlKey;
+  if(meta && (e.key==='k'||e.key==='K')){ e.preventDefault(); 
+    if($('#palette').classList.contains('on')) closePalette(); else openPalette(); }
+  if(e.key==='Escape'){ closeDrawer(); closeModal(); closePalette(); const w=$('#bellWrap'); if(w) w.classList.remove('open'); }
+  if($('#palette').classList.contains('on')){
+    const inp=$('#palInput');
+    if(e.key==='ArrowDown'){ e.preventDefault(); palMove(1); }
+    if(e.key==='ArrowUp'){ e.preventDefault(); palMove(-1); }
+    if(e.key==='Enter'){ e.preventDefault(); palGo(); }
+    if(inp && e.target!==inp && e.key.length===1){ inp.focus(); }
+  }
+});
+
+/* ---------------- 启动 ---------------- */
+function boot(){
+  const a=APP();
+  document.title=a.name+(a.sub?' · '+a.sub:'');
+  S.role=Object.keys(a.roles)[0];
+  S.group=0;
+  S.route=(a.startPage) || (nav()[0].items.find(visible)||{}).id;
+  let th=a.defaultTheme||'dark';
+  try{ const saved=localStorage.getItem('aeternum-theme-'+a.key); if(saved) th=saved; }catch(e){}
+  applyTheme(th);
+
+  /* 注入品牌色 */
+  const ac=a.accent||{};
+  if(ac.main){
+    const st=document.createElement('style');
+    st.textContent=`html[data-theme="dark"]{--accent:${ac.main};--accent2:${ac.alt||ac.main};--accent-bg:${ac.bg||'rgba(91,108,255,.14)'}}
+      html[data-theme="light"]{--accent:${ac.mainL||ac.main};--accent2:${ac.altL||ac.alt||ac.main};--accent-bg:${ac.bgL||'rgba(76,95,224,.09)'}}`;
+    document.head.appendChild(st);
+  }
+
+  document.body.insertAdjacentHTML('afterbegin', renderLogin());
+  const shell=`<div class="wb" id="wb">
+    <aside class="side" id="side">
+      <div class="side-brand"><span class="brand-mark">${a.mark||'Æ'}</span>
+        <div class="sb-txt"><b>${esc(a.short||a.name)}</b><em>${esc(a.version||'')}</em></div></div>
+      <div class="role-switch" id="roleSwitch"></div>
+      <nav class="side-nav" id="sideNav"></nav>
+      <div class="side-foot">
+        <div class="env-chip"><i></i><span class="sb-txt">${esc(a.envLabel||'生产环境 · 演示')}</span></div>
+        <div class="side-user"><span class="uav" id="sideAvatar">${esc((roles()[S.role].u||roles()[S.role].n).slice(0,1))}</span>
+          <div class="sb-txt"><b id="sideUserName">${esc(roles()[S.role].u||roles()[S.role].n)}</b><em id="sideRoleName"></em></div></div>
+      </div>
+    </aside>
+    <div class="main">
+      <header class="topbar">
+        <button class="tb-icon" data-act="fold" title="折叠菜单">☰</button>
+        <nav class="topnav" id="topNav"></nav>
+        <div class="top-search" data-act="palette"><span>🔍</span><span class="ph">${esc(a.searchPlaceholder||'搜索页面 / 记录 / 规则…')}</span><kbd>⌘K</kbd></div>
+        <div class="top-acts">
+          <span class="bell-wrap" id="bellWrap"><button class="tb-icon" data-act="bell" title="通知中心">🔔<i class="bell-badge" id="bellBadge"></i></button>
+            <div class="bell-panel" id="bellPanel"></div></span>
+          <button class="tb-icon" data-act="rule-toggle" title="合规标注：页面浮现规则落点">⚑</button>
+          <button class="tb-icon" data-act="theme" title="深浅主题切换">◐</button>
+        </div>
+      </header>
+      <div class="subbar"><div class="crumb" id="crumb"></div><div class="sub-sp"></div><div class="sub-right" id="subRight"></div></div>
+      <main class="content" id="content"></main>
+    </div></div>
+  <div class="drawer-mask" data-dmask></div><aside class="drawer" id="drawer"></aside>
+  <div class="modal-mask" data-mmask></div><div class="modal" id="modal"></div>
+  <div class="pal-mask" data-pmask></div><div class="palette" id="palette">
+    <input class="pal-in" id="palInput" placeholder="输入关键词搜索：页面名 / 记录编号 / 业务规则…" oninput="window.__palSearch(this.value)">
+    <div class="pal-list" id="palList"></div></div>
+  <div class="toasts" id="toasts"></div>`;
+  document.body.insertAdjacentHTML('beforeend', shell);
+
+  renderAll(); render(); renderCrumb(); renderBellBadge();
+  window.__palSearch = palSearch;
+}
+
+/* ---------------- 导出 ---------------- */
+window.AE = { boot, go, toast, C, CH, esc, nf, money, wan, openDrawer, openModal, closeDrawer, closeModal, S, state, APP };
+window.bootAeternum = boot;
+})();
+
+</script>
+<script>
+/* ============================================================
+   企业中心 · 数据层
+   面向：集团企业 / 区域分公司 / 渠道商 / 代理商 / 代运营 / 服务商
+   ============================================================ */
+
+window.APP = {
+  key:'ent',
+  name:'数字永生企业中心管理平台',
+  short:'Æternum Enterprise',
+  sub:'企业 · 渠道 · 代理 · 代运营 · 服务商',
+  mark:'Æ', version:'企业中心 v1.0', env:'PROD', region:'cn-east-2', envLabel:'企业生产环境 · 多租户',
+  defaultTheme:'dark',
+  accent:{ main:'#1fb6a6', alt:'#3d8bfd', bg:'rgba(31,182,166,.14)', mainL:'#0e9488', altL:'#2563eb', bgL:'rgba(14,148,136,.10)' },
+  roleLabel:'企业角色视角',
+  searchPlaceholder:'搜索客户 / 订单 / 渠道 / 合同…',
+  notifyScope:'企业内聚合',
+  login:{ sub:'企业生产环境 · 多租户隔离', trusted:'企业专属租户已隔离', device:'租户 T-8842 · 已信任',
+    idLabel:'企业账号', account:'admin@qingshan-group.cn', codeLabel:'动态口令（企业 SSO + 2FA）',
+    hint:'企业账号强制 SSO + 2FA · 数据按租户物理隔离 · 全部操作写入企业审计',
+    cta:'安全登录 →', foot:'仅限授权成员 · 敏感操作需审批流 · 跨租户访问一律拒绝' },
+
+  roles:{
+    owner:  { n:'企业主账号', u:'郑亦然', desc:'集团主账号，全部权限，含资金与审批终审' },
+    admin:  { n:'企业管理员', u:'何思远', desc:'组织 / 成员 / 产品配置，无资金终审权' },
+    channel:{ n:'渠道经理',   u:'苏明哲', desc:'渠道商与代理商运营，客户与订单查看' },
+    agent:  { n:'代理商',     u:'林可欣', desc:'仅可见自己名下的客户与订单' },
+    fin:    { n:'财务主管',   u:'方雨薇', desc:'结算 / 发票 / 对账，无客户数据导出权' }
+  },
+
+  nav:[
+    { g:'工作台', d:'驾驶舱 · 待办 · 消息', items:[
+      { id:'dash',  n:'企业驾驶舱', i:'◎' },
+      { id:'todo',  n:'待办中心',   i:'✓', badge:()=>window.APP.state.todo.filter(t=>t.st==='待处理').length },
+      { id:'inbox', n:'消息通知',   i:'✉' }
+    ]},
+    { g:'组织与成员', d:'架构 · 成员 · 权限 · 服务商', items:[
+      { id:'org',      n:'组织架构',   i:'⌂' },
+      { id:'members',  n:'成员与角色', i:'◍' },
+      { id:'roles',    n:'权限组',     i:'⚿', roles:'owner,admin' },
+      { id:'partners', n:'服务商认证', i:'⬡' }
+    ]},
+    { g:'渠道与代理', d:'渠道 · 代理 · 返佣 · 区域', items:[
+      { id:'channels',   n:'渠道商管理',   i:'⇉' },
+      { id:'agents',     n:'代理商分销',   i:'◈' },
+      { id:'commission', n:'返佣与激励',   i:'₸' },
+      { id:'territory',  n:'区域代理地图', i:'🌐' }
+    ]},
+    { g:'客户与订单', d:'客户 · 订单 · 合同 · 服务单', items:[
+      { id:'customers', n:'客户档案',   i:'◔' },
+      { id:'orders',    n:'订单管理',   i:'⇄' },
+      { id:'contracts', n:'合同管理',   i:'✎' },
+      { id:'services',  n:'服务单',     i:'🎧', badge:()=>window.APP.state.services.filter(s=>s.st==='待响应').length }
+    ]},
+    { g:'产品与套餐', d:'货架 · 定价 · 白标', items:[
+      { id:'catalog', n:'套餐货架',   i:'▦' },
+      { id:'pricing', n:'定价与折扣', i:'%' },
+      { id:'white',   n:'白标与定制', i:'⬟' }
+    ]},
+    { g:'交付与服务', d:'交付 · 代运营 · SLA · 项目', items:[
+      { id:'delivery', n:'交付看板',   i:'⛃' },
+      { id:'retainer', n:'代运营任务', i:'↻' },
+      { id:'sla',      n:'SLA 管理',   i:'⏱' },
+      { id:'projects', n:'项目协作',   i:'⌗' }
+    ]},
+    { g:'结算与财务', d:'账户 · 返佣结算 · 发票', items:[
+      { id:'wallet',     n:'账户与余额', i:'₿' },
+      { id:'settlement', n:'返佣结算',   i:'≡' },
+      { id:'invoice',    n:'发票与账期', i:'▤' }
+    ]},
+    { g:'数据与报表', d:'经营 · 画像 · ROI · 导出', items:[
+      { id:'analytics', n:'经营分析',   i:'▥' },
+      { id:'personas',  n:'客户画像',   i:'◐' },
+      { id:'roi',       n:'渠道 ROI',   i:'⇗' }
+    ]},
+    { g:'合规与资质', d:'证照 · 合规 · 授权链', items:[
+      { id:'credentials', n:'资质证照',   i:'🛡' },
+      { id:'compliance',  n:'合规检查',   i:'⚖' },
+      { id:'consent',     n:'授权链核验', i:'✍' }
+    ]},
+    { g:'系统设置', d:'企业 · 集成 · 日志', items:[
+      { id:'settings',    n:'企业信息',   i:'⚙' },
+      { id:'integration', n:'API 与集成', i:'⇥' },
+      { id:'logs',        n:'操作日志',   i:'☰' }
+    ]}
+  ],
+
+  state:{
+    todo:[
+      { id:'TD-4021', t:'合同待审批', d:'青山殡葬集团 · 员工生命记忆福利服务框架协议 ¥ 186 万', by:'苏明哲', st:'待处理', lv:'高', due:'今日' },
+      { id:'TD-4020', t:'返佣结算待确认', d:'2026-06 上半年渠道返佣 ¥ 1,020 万（含 412 家渠道商）', by:'方雨薇', st:'待处理', lv:'高', due:'今日' },
+      { id:'TD-4018', t:'服务商认证待审', d:'康寧心理咨询（临终关怀服务商）资质核验', by:'何思远', st:'待处理', lv:'中', due:'明日' },
+      { id:'TD-4016', t:'SLA 违约预警待处置', d:'代运营客户「福安生命」交付延迟 3 天，触发违约金条款', by:'系统', st:'待处理', lv:'高', due:'今日' },
+      { id:'TD-4011', t:'白标物料待审', d:'某保险集团定制品牌落地页（科学边界措辞预检未通过）', by:'何思远', st:'处理中', lv:'中', due:'明日' },
+      { id:'TD-4008', t:'大客户增购待跟进', d:'区域代理「海西生命」申请增购 200 个 Legacy 名额', by:'林可欣', st:'待处理', lv:'中', due:'本周' }
+    ],
+    services:[
+      { id:'SV-88214', c:'福安生命（代运营客户）', topic:'交付延迟与违约金核算', lv:'高', st:'待响应', t:'12:26', owner:'—', sla:'4h' },
+      { id:'SV-88213', c:'青山殡葬集团', topic:'批量开通 180 个 Eternal 账号失败排查', lv:'高', st:'处理中', t:'12:02', owner:'苏明哲', sla:'4h' },
+      { id:'SV-88211', c:'康宁医院（临终关怀）', topic:'生命回顾采集器机构版部署咨询', lv:'中', st:'待响应', t:'11:20', owner:'—', sla:'8h' },
+      { id:'SV-88208', c:'海西生命（区域代理）', topic:'返佣对账差异 ¥ 4.2 万', lv:'中', st:'处理中', t:'10:41', owner:'方雨薇', sla:'8h' },
+      { id:'SV-88201', c:'某保险集团', topic:'联合产品（数字遗产信托）合规口径确认', lv:'中', st:'已解决', t:'昨日', owner:'何思远', sla:'—' }
+    ],
+    channels:[
+      { id:'CH-0412', n:'华南生命科技', type:'渠道商', region:'华南', lv:'金牌', cust:2840, gmv:'862 万', rate:'18%', st:'正常', coord:'苏明哲' },
+      { id:'CH-0398', n:'华东安宁服务', type:'渠道商', region:'华东', lv:'金牌', cust:2210, gmv:'742 万', rate:'18%', st:'正常', coord:'苏明哲' },
+      { id:'CH-0361', n:'西南记忆文化', type:'渠道商', region:'西南', lv:'银牌', cust:1180, gmv:'386 万', rate:'14%', st:'正常', coord:'林可欣' },
+      { id:'CH-0322', n:'东北安泽服务', type:'渠道商', region:'东北', lv:'银牌', cust:864, gmv:'242 万', rate:'14%', st:'观察期', coord:'林可欣' },
+      { id:'CH-0288', n:'海西生命', type:'区域代理', region:'华东南', lv:'金牌', cust:1642, gmv:'512 万', rate:'16%', st:'正常', coord:'苏明哲' },
+      { id:'CH-0231', n:'西北慈安', type:'渠道商', region:'西北', lv:'铜牌', cust:402, gmv:'96 万', rate:'10%', st:'整改中', coord:'林可欣' }
+    ]
+  },
+
+  notifications:[
+    { i:'✎', t:'合同待审批（含 ¥186 万框架协议）', d:'青山殡葬集团 · 员工生命记忆福利服务', time:'12:41', go:'contracts' },
+    { i:'≡', t:'返佣结算进入确认阶段', d:'2026-06 上半年 ¥ 1,020 万 · 412 家渠道商', time:'12:11', go:'settlement' },
+    { i:'⏱', t:'SLA 违约预警', d:'代运营客户「福安生命」交付延迟 3 天', time:'11:55', go:'sla' },
+    { i:'🛡', t:'白标物料预检未通过', d:'某保险集团落地页命中科学边界措辞', time:'11:20', go:'white' },
+    { i:'⇉', t:'渠道政策更新', d:'金牌渠道商返佣比例上调至 19%（7 月 1 日起）', time:'10:02', go:'commission' }
+  ],
+
+  searchIndex:[
+    { t:'CH-0412 华南生命科技 · 金牌渠道商', k:'渠道商', go:'channels', ic:'⇉' },
+    { t:'CH-0288 海西生命 · 区域代理', k:'渠道商', go:'channels', ic:'⇉' },
+    { t:'CT-2026-0186 青山殡葬集团框架协议', k:'合同', go:'contracts', ic:'✎' },
+    { t:'SV-88214 交付延迟与违约金核算', k:'服务单', go:'services', ic:'🎧' },
+    { t:'Bespoke 企业定制 ¥50,000 起', k:'套餐', go:'catalog', ic:'▦' },
+    { t:'Eternal 永恒契约 企业批量 ¥339', k:'套餐', go:'pricing', ic:'%' },
+    { t:'R11 未经授权的形象声音克隆构成侵权', k:'合规规则', go:'compliance', ic:'⚑' },
+    { t:'R07 对外宣传不得越过科学边界', k:'合规规则', go:'white', ic:'⚑' },
+    { t:'返佣结算规则 v3.2（金牌 18% 起）', k:'规则', go:'commission', ic:'₸' },
+    { t:'授权链核验 · 批量客户', k:'合规', go:'consent', ic:'✍' }
+  ]
+};
+
+</script>
+<script>
+/* ============================================================
+   企业中心 · 页面组 1：工作台 / 组织与成员
+   ============================================================ */
+(function(){
+const { C, CH, esc, nf, money, wan } = window.AE;
+window.V = window.V || {};
+
+/* ---------------- 企业驾驶舱 ---------------- */
+window.V.dash = {
+  t:'企业驾驶舱', d:'企业经营总览 · 渠道 · 客户 · 交付 · 资金',
+  render(){
+    return `
+    <div class="hero">
+      <h1>青山生命科技集团 <span class="tag b">金牌服务商</span><span class="banner-live"><i></i>实时</span></h1>
+      <p>企业中心面向集团企业、渠道商、代理商、代运营与服务商，提供"招商—订单—交付—结算—合规"全链路经营管理能力。所有终端客户数据按租户物理隔离，跨租户访问一律拒绝。</p>
+      <div class="hero-meta">
+        <div class="hm">下属机构<b>246</b></div><div class="hm">渠道 / 代理<b>2,254 家</b></div>
+        <div class="hm">在服终端客户<b>68,420</b></div><div class="hm">月 GMV<b>¥ 4,860 万</b></div>
+        <div class="hm">本月返佣<b>¥ 1,020 万</b></div><div class="hm">SLA 达标<b>96.8%</b></div>
+      </div>
+    </div>
+    <div class="kpis mt14">
+      ${C.kpi({lb:'月 GMV',v:'¥ 4,860',unit:'万',foot:'<span class="up">▲ 8.2%</span>',spark:[3200,3480,3720,3980,4210,4460,4620,4780,4860]})}
+      ${C.kpi({lb:'在服终端客户',v:'68,420',unit:'人',foot:'<span class="up">▲ 2,840 本月新增</span>'})}
+      ${C.kpi({lb:'渠道 / 代理',v:'2,254',unit:'家',foot:'金牌 186 · 银牌 642 · 铜牌 1,426'})}
+      ${C.kpi({lb:'本月返佣支出',v:'¥ 1,020',unit:'万',foot:'占 GMV 21.0%'})}
+      ${C.kpi({lb:'SLA 达标率',v:'96.8',unit:'%',foot:'<span class="tag warn">2 项违约预警</span>',c:'var(--gold)'})}
+      ${C.kpi({lb:'应收账款',v:'¥ 6,842',unit:'万',foot:'<span class="tag warn">账期 30–90 天</span>'})}
+    </div>
+
+    <div class="sec-title"><b>经营趋势与渠道结构</b></div>
+    <div class="g2030">
+      ${C.panel('GMV 与返佣趋势（近 9 月，万元）', CH.area([3200,3480,3720,3980,4210,4460,4620,4780,4860],{series:[
+        {k:'GMV',v:[3200,3480,3720,3980,4210,4460,4620,4780,4860],c:'var(--accent)'},
+        {k:'返佣支出',v:[640,700,748,800,846,896,940,986,1020],c:'#3d8bfd'}],
+        xlabels:['10月','11月','12月','1月','2月','3月','4月','5月','6月'],h:212}), '返佣占 GMV 稳定在 21% 左右')}
+      ${C.panel('渠道层级结构', `<div class="row gap16" style="align-items:center">${CH.donut([
+        {k:'金牌',v:186,c:'#f0b90b'},{k:'银牌',v:642,c:'#1fb6a6'},{k:'铜牌',v:1426,c:'#3d8bfd'}
+      ],{size:150,center:'2,254',cl:'渠道总数'})}
+      <div class="legend" style="flex-direction:column;gap:8px;flex:1">
+        <span><i style="background:#f0b90b"></i>金牌 186 家 · 返佣 18%</span>
+        <span><i style="background:#1fb6a6"></i>银牌 642 家 · 返佣 14%</span>
+        <span><i style="background:#3d8bfd"></i>铜牌 1,426 家 · 返佣 10%</span>
+        <span class="muted tiny">7 月起金牌上调至 19%（政策 v3.3）</span></div></div>`, null)}
+    </div>
+
+    <div class="sec-title"><b>经营健康 · 待办与风险</b></div>
+    <div class="g2030">
+      ${C.panel('关键经营指标', C.table([{t:'指标'},{t:'当前',cls:'r'},{t:'环比'},{t:'健康线'},{t:'判定'}],[
+        {cells:['客户续费率（年付）','28.4%','<span class="up">▲ 2.1pt</span>','≥ 25%','<span class="tag ok">达标</span>']},
+        {cells:['获客成本 CAC','¥ 486','<span class="down">▲ 6.2%</span>','≤ ¥ 600','<span class="tag ok">达标</span>']},
+        {cells:['客单价（企业批量）','¥ 1,242','<span class="up">▲ 3.4%</span>','—','<span class="tag ok">良好</span>']},
+        {cells:['交付准时率','94.2%','<span class="down">▼ 1.8pt</span>','≥ 95%','<span class="tag warn">临界</span>']},
+        {cells:['合规检查通过率','97.4%','<span class="up">▲ 0.6pt</span>','100%','<span class="tag warn">1 项待整改</span>']}
+      ]), `<a class="small link" data-nav="analytics">经营分析 ›</a>`)}
+      ${C.panel('风险提示', C.tl([
+        {t:'SLA 违约预警（高）',d:'代运营客户「福安生命」交付延迟 3 天，触发违约金条款',k:'bad'},
+        {t:'白标物料预检未通过',d:'某保险集团落地页命中"完整意识上传"，需重写（R07）',k:'warn'},
+        {t:'渠道整改中的 1 家',d:'西北慈安 · 存在超范围宣传，已暂停新增客户',k:'warn'},
+        {t:'客户批量开通失败',d:'青山殡葬集团 180 个 Eternal 账号开通失败，已转服务单',k:'warn'},
+        {t:'应收账款集中度',d:'前 5 大客户占应收 42%，账期偏长',k:''}
+      ]), `<a class="small link" data-nav="todo">全部待办 ›</a>`)}
+    </div>
+
+    <div class="sec-title"><b>终端客户行业分布</b></div>
+    <div class="grid3">
+      ${C.panel('客户来源行业', CH.hbars([
+        {k:'殡葬服务机构',v:28420,txt:'28,420 人',c:'var(--accent)'},
+        {k:'临终关怀 / 医院',v:14260,txt:'14,260 人',c:'#1fb6a6'},
+        {k:'保险 / 信托',v:10840,txt:'10,840 人',c:'#3d8bfd'},
+        {k:'企业员工福利',v:8620,txt:'8,620 人',c:'var(--gold)'},
+        {k:'家族办公室',v:3280,txt:'3,280 人',c:'#8b5cff'},
+        {k:'科研协作机构',v:3000,txt:'3,000 人',c:'var(--ink3)'}
+      ],{w:520,lw:140}), null)}
+      ${C.panel('套餐结构（企业侧）', C.table([{t:'套餐'},{t:'客户数',cls:'r'},{t:'企业价',cls:'r'},{t:'占比',cls:'r'}],[
+        {cells:['Seed 记忆存证','12,860','¥0','18.8%']},
+        {cells:['Eternal 永恒契约','42,180','¥339 批量','61.6%']},
+        {cells:['Legacy 传承者','13,260','¥1,699 批量','19.4%']},
+        {cells:['Bespoke 企业定制','120','¥50,000 起','0.2%']}
+      ]), null)}
+      ${C.panel('交付形态', `<div class="tc">${CH.radar([{k:'直接交付',v:62},{k:'代运营',v:48},{k:'白标',v:36},{k:'API 集成',v:28},{k:'联合产品',v:22},{k:'渠道分销',v:88}],{size:230})}</div>
+        <div class="small muted tc mt10">渠道分销与企业批量是主要交付形态</div>`, null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 待办中心 ---------------- */
+window.V.todo = {
+  t:'待办中心', d:'审批 · 确认 · 跟进 · 全部待办收敛',
+  render(){
+    const T=window.APP.state.todo;
+    return `
+    <div class="row wrap between mb14">
+      <div class="row gap8">${C.tag('待处理 '+T.filter(t=>t.st==='待处理').length,'bad')}${C.tag('处理中 '+T.filter(t=>t.st==='处理中').length,'warn')}${C.tag('今日到期 3','b')}</div>
+      <button class="btn sm" data-act="toast" data-msg="已开启每日 09:00 待办提醒">开启提醒</button>
+    </div>
+    <div class="kpis">
+      ${C.kpi({lb:'待处理',v:T.filter(t=>t.st==='待处理').length,unit:'项',foot:'<span class="tag bad">3 项今日到期</span>',hl:true,c:'var(--bad)'})}
+      ${C.kpi({lb:'平均处理时长',v:'6.4',unit:'小时',foot:'目标 ≤ 8 小时',c:'var(--ok)'})}
+      ${C.kpi({lb:'本月已完成',v:'186',unit:'项',foot:'准时率 94.6%'})}
+      ${C.kpi({lb:'超期未处理',v:'0',unit:'项',foot:'<span class="tag ok">零超期</span>',c:'var(--ok)'})}
+      ${C.kpi({lb:'审批流节点',v:'4',unit:'级',foot:'经办 → 主管 → 财务 → 主账号'})}
+    </div>
+    <div class="sec-title"><b>我的待办</b></div>
+    ${C.panel(false, C.table([{t:'编号'},{t:'事项'},{t:'详情'},{t:'发起人'},{t:'优先级'},{t:'截止'},{t:'状态'},{t:'操作'}],
+      T.map(t=>({cells:[`<span class="mono">${t.id}</span>`,`<b>${esc(t.t)}</b>`,`<span class="small muted">${esc(t.d)}</span>`,t.by,
+        `<span class="tag ${t.lv==='高'?'bad':''}">${t.lv}</span>`,t.due,
+        `<span class="tag ${t.st==='待处理'?'bad':'warn'}">${t.st}</span>`,
+        `<button class="btn sm" data-act="drawer" data-drawer="todoDetail" data-id="${t.id}">处理</button>`]}))
+    ), `<span class="small muted">共 ${T.length} 项（演示数据）· 全部审批动作写入企业审计</span>`)}
+
+    <div class="sec-title"><b>审批流配置</b></div>
+    <div class="g3020">
+      ${C.panel('审批流程', C.stepper(['经办提交','部门主管','财务复核','主账号终审'],1), '金额阈值：≥ ¥50 万需主账号终审')}
+      ${C.panel('阈值规则', C.table([{t:'事项类型'},{t:'金额阈值'},{t:'审批层级'}],[
+        {cells:['合同签署','< ¥50 万','主管 + 财务']},
+        {cells:['合同签署','≥ ¥50 万','主管 + 财务 + 主账号']},
+        {cells:['返佣结算','任何金额','财务 + 主账号']},
+        {cells:['渠道政策调整','—','管理员 + 主账号']},
+        {cells:['白标物料发布','—','管理员 + 合规预检']}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 消息通知 ---------------- */
+window.V.inbox = {
+  t:'消息通知', d:'系统通知 · 业务提醒 · 合规提示',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'未读消息',v:'12',unit:'条',foot:'含 3 条高优先级'})}
+      ${C.kpi({lb:'本月推送',v:'1,842',unit:'条',foot:'点击率 42.6%'})}
+      ${C.kpi({lb:'合规提示',v:'4',unit:'条',foot:'<span class="tag warn">需处理</span>'})}
+      ${C.kpi({lb:'系统公告',v:'18',unit:'条',foot:'平台侧统一发布'})}
+      ${C.kpi({lb:'订阅规则',v:'6',unit:'类',foot:'可自定义订阅范围'})}
+    </div>
+    <div class="sec-title"><b>消息列表</b></div>
+    ${C.panel(false, C.table([{t:'类型'},{t:'标题'},{t:'内容'},{t:'时间'},{t:'状态'}],[
+      {cells:['<span class="tag bad">待办</span>','合同待审批','青山殡葬集团 · 员工生命记忆福利服务框架协议 ¥186 万','12:41','<span class="tag">未读</span>']},
+      {cells:['<span class="tag warn">风险</span>','SLA 违约预警','代运营客户「福安生命」交付延迟 3 天','11:55','<span class="tag">未读</span>']},
+      {cells:['<span class="tag warn">合规</span>','白标物料预检未通过','落地页命中"完整意识上传"，需重写（R07）','11:20','<span class="tag">未读</span>']},
+      {cells:['<span class="tag b">政策</span>','渠道政策更新','金牌渠道商返佣比例上调至 19%（7 月 1 日起）','10:02','<span class="tag ok">已读</span>']},
+      {cells:['<span class="tag">系统</span>','平台版本升级','企业中心 v1.1 将于本周末灰度发布，含结算批量能力','昨日','<span class="tag ok">已读</span>']},
+      {cells:['<span class="tag">公告</span>','科学边界措辞纪律更新','禁用语库 CL-2.1 已发布，全部对外物料需重新预检','昨日','<span class="tag ok">已读</span>']}
+    ]), null)}
+    <div class="sec-title"><b>订阅设置</b></div>
+    <div class="grid2">
+      ${C.panel('订阅范围', C.switchRow({t:'待办与审批提醒',d:'审批流待处理即时推送',on:true})
+        +C.switchRow({t:'风险与 SLA 预警',d:'违约预警 15 分钟内触达',on:true})
+        +C.switchRow({t:'合规预检结果',d:'物料预检不通过即时通知',on:true})
+        +C.switchRow({t:'渠道政策变更',d:'返佣与政策调整通知',on:true}), null)}
+      ${C.panel('推送渠道', C.table([{t:'渠道'},{t:'状态'},{t:'说明'}],[
+        {cells:['站内消息','<span class="tag ok">已开启</span>','默认渠道']},
+        {cells:['企业微信 / 钉钉','<span class="tag ok">已开启</span>','需管理员配置机器人']},
+        {cells:['邮件','<span class="tag ok">已开启</span>','发送至主账号邮箱']},
+        {cells:['短信','<span class="tag b">仅高风险</span>','SLA 违约 / 合规风险']}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 组织架构 ---------------- */
+window.V.org = {
+  t:'组织架构', d:'集团—分公司—渠道—代理 多级组织',
+  render(){
+    const tree={n:'青山生命科技集团',i:'⌂',cnt:'246 机构',on:false,kids:[
+      {n:'华南大区',i:'▫',cnt:'62',kids:[{n:'华南生命科技（渠道商）',i:'⇉',cnt:'2,840 客户'},{n:'广深分公司',i:'▫',cnt:'8'}]},
+      {n:'华东大区',i:'▫',cnt:'74',kids:[{n:'华东安宁服务（渠道商）',i:'⇉',cnt:'2,210 客户'},{n:'长三角分公司',i:'▫',cnt:'12'}]},
+      {n:'华东南区',i:'▫',cnt:'38',kids:[{n:'海西生命（区域代理）',i:'◈',cnt:'1,642 客户',on:true}]},
+      {n:'西南大区',i:'▫',cnt:'42',kids:[{n:'西南记忆文化（渠道商）',i:'⇉',cnt:'1,180 客户'}]},
+      {n:'东北大区',i:'▫',cnt:'20',kids:[{n:'东北安泽服务（渠道商 · 观察期）',i:'⇉',cnt:'864 客户'}]},
+      {n:'西北大区',i:'▫',cnt:'10',kids:[{n:'西北慈安（渠道商 · 整改中）',i:'⇉',cnt:'402 客户'}]}
+    ]};
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'机构总数',v:'246',unit:'个',foot:'集团 1 · 大区 6 · 分公司 42 · 渠道 197'})}
+      ${C.kpi({lb:'成员总数',v:'2,842',unit:'人',foot:'含机构账号 1,206 个'})}
+      ${C.kpi({lb:'在服终端客户',v:'68,420',unit:'人',foot:'按机构归属统计'})}
+      ${C.kpi({lb:'组织层级',v:'5',unit:'级',foot:'集团 → 大区 → 分公司 → 渠道 → 代理'})}
+      ${C.kpi({lb:'数据隔离',v:'物理',unit:'级',foot:'<span class="tag ok">租户级隔离</span>',c:'var(--ok)'})}
+    </div>
+    <div class="sec-title"><b>组织树</b><span class="sp"></span><button class="btn sm" data-act="toast" data-msg="新增机构需集团主账号审批">+ 新增机构</button></div>
+    <div class="g2030">
+      ${C.panel('组织层级', `<div class="otree">${C.orgTree(tree)}</div>`, '点击节点查看机构详情')}
+      ${C.panel('机构详情 · 海西生命', `
+        ${C.kv([['机构编号','CH-0288'],['类型','区域代理'],['所属大区','华东南区'],['负责人','林可欣'],['在服客户','1,642 人'],['累计 GMV','¥ 512 万'],['返佣比例','16%'],['状态','<span class="tag ok">正常</span>'],['数据隔离','独立租户，不可跨租户访问']])}
+        <div class="hr-dashed"></div>
+        <div class="btn-row"><button class="btn sm" data-act="toast" data-msg="已切换至该机构视角（权限收敛）">以该机构视角查看</button>
+        <button class="btn sm" data-act="toast" data-msg="已生成机构经营报告">生成报告</button></div>
+        ${C.note('info','<b>多租户隔离说明</b>：机构成员仅可见本机构及下级机构的客户数据；任何跨租户查询在网关层直接拒绝并记录。')}
+      `, '已选择节点')}
+    </div>
+    <div class="sec-title"><b>组织能力</b></div>
+    <div class="grid3">
+      ${C.panel('层级权限', C.table([{t:'层级'},{t:'可见范围'},{t:'可操作'}],[
+        {cells:['集团主账号','全部','全部 + 资金终审']},
+        {cells:['大区','本大区及下级','机构管理 / 客户 / 订单']},
+        {cells:['分公司','本分公司','客户 / 订单 / 服务']},
+        {cells:['渠道商','本渠道及下级代理','客户 / 订单 / 返佣查看']},
+        {cells:['代理商','仅本机构','自己名下客户与订单']}
+      ]), null)}
+      ${C.panel('机构变动记录', C.tl([
+        {t:'2026-06-11 · 新增',d:'华东南区新增 2 家银牌渠道商',k:'ok'},
+        {t:'2026-05-28 · 降级',d:'西北慈安 由银牌降为铜牌（业绩未达标）',k:'warn'},
+        {t:'2026-04-18 · 整改',d:'西北慈安 因超范围宣传暂停新增客户',k:'bad'},
+        {t:'2026-03-02 · 升级',d:'海西生命 由银牌升为金牌（GMV 达标）',k:'brand'}
+      ]), null)}
+      ${C.panel('组织策略', C.switchRow({t:'跨租户访问拦截',d:'任何跨租户查询在网关层拒绝并告警',on:true})
+        +C.switchRow({t:'机构准入审核',d:'新机构需资质核验 + 主账号审批',on:true})
+        +C.switchRow({t:'业绩自动升降级',d:'按季度 GMV 与合规表现自动调整等级',on:true})
+        +C.switchRow({t:'整改自动限权',d:'进入整改期即暂停新增客户',on:true}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 成员与角色 ---------------- */
+window.V.members = {
+  t:'成员与角色', d:'成员管理 · 角色分配 · 权限收敛',
+  render(){
+    const R=window.APP.roles;
+    return `
+    ${C.note('info','<b>最小权限原则</b>：企业内每个成员按岗位收敛权限；代理商的可见范围仅限自己名下的客户与订单，越权操作被网关拦截并记录。')}
+    <div class="kpis">
+      ${C.kpi({lb:'成员总数',v:'2,842',unit:'人',foot:'活跃 2,610 · 停用 232'})}
+      ${C.kpi({lb:'角色数',v:'5',unit:'类',foot:'企业主账号 / 管理员 / 渠道 / 代理 / 财务'})}
+      ${C.kpi({lb:'待激活邀请',v:'18',unit:'个',foot:'邀请 7 天过期'})}
+      ${C.kpi({lb:'越权拦截（月）',v:'26',unit:'次',foot:'全部写入企业审计'})}
+      ${C.kpi({lb:'2FA 开启率',v:'100',unit:'%',foot:'<span class="tag ok">强制</span>',c:'var(--ok)'})}
+    </div>
+    <div class="sec-title"><b>成员列表</b><span class="sp"></span><button class="btn sm p" data-act="modal" data-modal="invite">+ 邀请成员</button></div>
+    ${C.panel(false, C.table([{t:'姓名'},{t:'账号'},{t:'所属机构'},{t:'角色'},{t:'可见范围'},{t:'最近登录'},{t:'状态'},{t:'操作'}],[
+      {cells:['<div class="row gap8">'+C.avatar('郑亦然')+'<b>郑亦然</b></div>','<span class="mono small">zheng@qingshan-group.cn</span>','集团总部','<span class="tag b">企业主账号</span>','全部机构','12:04','<span class="dot ok"></span>在线',`<button class="btn sm" data-act="drawer" data-drawer="memberDetail">详情</button>`]},
+      {cells:['<div class="row gap8">'+C.avatar('何思远')+'<b>何思远</b></div>','<span class="mono small">he@qingshan-group.cn</span>','集团总部','<span class="tag b">企业管理员</span>','全部机构','11:42','<span class="dot ok"></span>在线',`<button class="btn sm" data-act="drawer" data-drawer="memberDetail">详情</button>`]},
+      {cells:['<div class="row gap8">'+C.avatar('苏明哲')+'<b>苏明哲</b></div>','<span class="mono small">su@qingshan-group.cn</span>','华南大区','<span class="tag">渠道经理</span>','华南 / 华东南','12:26','<span class="dot ok"></span>在线',`<button class="btn sm" data-act="drawer" data-drawer="memberDetail">详情</button>`]},
+      {cells:['<div class="row gap8">'+C.avatar('林可欣')+'<b>林可欣</b></div>','<span class="mono small">lin@xihai-life.cn</span>','海西生命（代理）','<span class="tag">代理商</span>','仅本机构','11:58','<span class="dot ok"></span>在线',`<button class="btn sm" data-act="drawer" data-drawer="memberDetail">详情</button>`]},
+      {cells:['<div class="row gap8">'+C.avatar('方雨薇')+'<b>方雨薇</b></div>','<span class="mono small">fang@qingshan-group.cn</span>','集团财务部','<span class="tag">财务主管</span>','全部机构（仅财务）','10:41','<span class="dot idle"></span>离线',`<button class="btn sm" data-act="drawer" data-drawer="memberDetail">详情</button>`]},
+      {cells:['<div class="row gap8">'+C.avatar('钱海')+'<b>钱海</b></div>','<span class="mono small">qian@xibei-cian.cn</span>','西北慈安（渠道）','<span class="tag bad">已限权</span>','仅本机构（只读）','昨日','<span class="dot warn"></span>整改期',`<button class="btn sm" data-act="drawer" data-drawer="memberDetail">详情</button>`]}
+    ]), `<span class="small muted">共 2,842 名成员 · 全部强制 2FA</span>`)}
+
+    <div class="sec-title"><b>角色定义</b></div>
+    <div class="grid3">
+      ${C.panel('角色与权限边界', C.table([{t:'角色'},{t:'人员'},{t:'边界'}],
+        Object.keys(R).map(k=>({cells:[`<b>${R[k].n}</b>`,R[k].u,`<span class="small muted">${R[k].desc}</span>`]}))
+      ), null)}
+      ${C.panel('敏感操作', C.table([{t:'操作'},{t:'要求'}],[
+        {cells:['合同签署','主管 + 财务 + 主账号']},
+        {cells:['返佣结算','财务 + 主账号']},
+        {cells:['客户数据导出','审批 + 水印 + 审计']},
+        {cells:['渠道政策调整','管理员 + 主账号']},
+        {cells:['白标物料发布','管理员 + 合规预检']}
+      ]), null)}
+      ${C.panel('成员策略', C.switchRow({t:'强制 2FA',d:'全部成员登录需双因素认证',on:true})
+        +C.switchRow({t:'离职自动停权',d:'HR 系统同步，离职即停用账号',on:true})
+        +C.switchRow({t:'数据导出审批',d:'客户数据导出需审批并带水印',on:true})
+        +C.switchRow({t:'整改期自动限权',d:'进入整改期成员降为只读',on:true}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 权限组 ---------------- */
+window.V.roles = {
+  t:'权限组', d:'权限点矩阵 · 自定义权限组',
+  render(){
+    const perms=['查看驾驶舱','客户与订单','合同审阅','渠道与代理','产品与定价','返佣与结算','数据导出','成员管理','系统配置','合规发布'];
+    const M={ owner:[1,1,1,1,1,1,1,1,1,1], admin:[1,1,1,1,1,0,0,1,1,0], channel:[1,1,1,1,0,0,0,0,0,0], agent:[1,1,0,0,0,0,0,0,0,0], fin:[1,1,1,0,0,1,1,0,0,0] };
+    const R=window.APP.roles;
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'权限点',v:'10',unit:'类',foot:'按业务域划分'})}
+      ${C.kpi({lb:'内置角色',v:'5',unit:'个',foot:'不可删除，可微调'})}
+      ${C.kpi({lb:'自定义权限组',v:'8',unit:'个',foot:'如"仅审阅合同"组'})}
+      ${C.kpi({lb:'越权拦截（月）',v:'26',unit:'次',foot:'网关层拦截'})}
+      ${C.kpi({lb:'权限变更留痕',v:'100',unit:'%',foot:'<span class="tag ok">全量审计</span>',c:'var(--ok)'})}
+    </div>
+    ${C.panel(false, C.table([{t:'权限'}].concat(Object.keys(R).map(k=>({t:R[k].n}))),
+      perms.map((p,i)=>({cells:[`<b>${p}</b>`].concat(Object.keys(R).map(k=>M[k][i]?'<span class="tag ok">✓</span>':'<span class="tag">—</span>'))}))
+    ), `<span class="small muted">✓ 允许 · — 禁止 · 权限变更写入企业审计</span>`)}
+    <div class="sec-title"><b>自定义权限组</b></div>
+    ${C.panel(false, C.table([{t:'权限组'},{t:'说明'},{t:'成员数',cls:'r'},{t:'权限点'},{t:'状态'},{t:'操作'}],[
+      {cells:['合同审阅组','仅可查看与审阅合同，不可编辑','12','<span class="small muted">合同审阅 / 客户与订单（只读）</span>','<span class="tag ok">启用</span>',`<button class="btn sm" data-act="toast" data-msg="权限组编辑需管理员权限">编辑</button>`]},
+      {cells:['大区运营组','大区层面的机构与客户运营','24','<span class="small muted">客户与订单 / 渠道与代理 / 数据导出</span>','<span class="tag ok">启用</span>',`<button class="btn sm" data-act="toast" data-msg="权限组编辑需管理员权限">编辑</button>`]},
+      {cells:['结算复核组','返佣结算复核，无审批权','6','<span class="small muted">返佣与结算（复核）/ 数据导出</span>','<span class="tag ok">启用</span>',`<button class="btn sm" data-act="toast" data-msg="权限组编辑需管理员权限">编辑</button>`]},
+      {cells:['合规预检组','白标与对外物料合规预检','8','<span class="small muted">合规发布 / 产品与定价（只读）</span>','<span class="tag ok">启用</span>',`<button class="btn sm" data-act="toast" data-msg="权限组编辑需管理员权限">编辑</button>`]}
+    ]), null)}
+    `;
+  }
+};
+
+/* ---------------- 服务商认证 ---------------- */
+window.V.partners = {
+  t:'服务商认证', d:'渠道 / 代运营 / 服务商资质核验与准入',
+  render(){
+    return `
+    ${C.note('warn','<b>准入前置</b>：任何服务商在承接终端客户前必须完成资质核验（营业执照、行业资质、合规承诺书），且签署《科学边界宣传承诺书》——违反承诺即暂停合作（R07）。')}
+    <div class="kpis">
+      ${C.kpi({lb:'服务商总数',v:'316',unit:'家',foot:'渠道 197 · 代运营 86 · 其他 33'})}
+      ${C.kpi({lb:'待认证',v:'5',unit:'家',foot:'<span class="tag warn">1 家资质待补</span>'})}
+      ${C.kpi({lb:'认证通过率',v:'86.4',unit:'%',foot:'驳回主因：行业资质不全'})}
+      ${C.kpi({lb:'承诺书签署率',v:'100',unit:'%',foot:'<span class="tag ok">强制</span>',c:'var(--ok)'})}
+      ${C.kpi({lb:'年度复检到期',v:'18',unit:'家',foot:'30 天内到期'})}
+    </div>
+    <div class="sec-title"><b>认证队列</b></div>
+    ${C.panel(false, C.table([{t:'机构'},{t:'类型'},{t:'资质核验'},{t:'合规承诺书'},{t:'团队规模'},{t:'状态'},{t:'操作'}],[
+      {cells:['康寧心理咨询','临终关怀服务商','<span class="tag warn">行业资质待补</span>','<span class="tag ok">已签</span>','42 人','<span class="tag b">审核中</span>',`<button class="btn sm" data-act="drawer" data-drawer="partnerDetail">审核</button>`]},
+      {cells:['福安生命（代运营）','代运营服务商','<span class="tag ok">通过</span>','<span class="tag ok">已签</span>','86 人','<span class="tag ok">已认证</span>',`<button class="btn sm" data-act="drawer" data-drawer="partnerDetail">详情</button>`]},
+      {cells:['某保险集团','联合产品方','<span class="tag ok">通过</span>','<span class="tag warn">待重签（CL-2.1）</span>','—','<span class="tag warn">待重签</span>',`<button class="btn sm" data-act="drawer" data-drawer="partnerDetail">处置</button>`]},
+      {cells:['西北慈安','渠道商','<span class="tag ok">通过</span>','<span class="tag bad">违反（超范围宣传）</span>','24 人','<span class="tag bad">整改中</span>',`<button class="btn sm" data-act="drawer" data-drawer="partnerDetail">处置</button>`]},
+      {cells:['华东安宁服务','渠道商','<span class="tag ok">通过</span>','<span class="tag ok">已签</span>','120 人','<span class="tag ok">已认证</span>',`<button class="btn sm" data-act="drawer" data-drawer="partnerDetail">详情</button>`]}
+    ]), null)}
+    <div class="sec-title"><b>准入标准与认证体系</b></div>
+    <div class="grid3">
+      ${C.panel('准入标准', C.table([{t:'类别'},{t:'必备资质'}],[
+        {cells:['渠道商','营业执照 + 行业资质 + 承诺书']},
+        {cells:['代运营','营业执照 + 数据安全承诺 + 团队证明']},
+        {cells:['服务商（殡葬）','殡葬服务相关资质']},
+        {cells:['服务商（医疗）','医疗机构执业许可']},
+        {cells:['联合产品方','金融/保险牌照 + 合规审查']}
+      ]), null)}
+      ${C.panel('分级与权益', C.table([{t:'等级'},{t:'门槛'},{t:'返佣'},{t:'权益'}],[
+        {cells:['金牌','年 GMV ≥ ¥500 万','18%','专属渠道经理 + 优先支持']},
+        {cells:['银牌','年 GMV ≥ ¥200 万','14%','联合营销 + 培训']},
+        {cells:['铜牌','年 GMV ≥ ¥50 万','10%','标准支持']}
+      ]), null)}
+      ${C.panel('年度复检', C.tl([
+        {t:'资质有效性',d:'营业执照与行业资质年检状态',k:'brand'},
+        {t:'合规记录',d:'是否存在超范围宣传 / 客户投诉',k:'brand'},
+        {t:'数据安全',d:'是否有客户数据导出与保管合规记录',k:'brand'},
+        {t:'业绩达成',d:'GMV 与客户满意度',k:'brand'}
+      ]), '不合格即降级或终止合作')}
+    </div>
+    `;
+  }
+};
+})();
+
+</script>
+<script>
+/* ============================================================
+   企业中心 · 页面组 2：渠道与代理 / 客户与订单
+   ============================================================ */
+(function(){
+const { C, CH, esc, nf, money, wan } = window.AE;
+window.V = window.V || {};
+
+/* ---------------- 渠道商管理 ---------------- */
+window.V.channels = {
+  t:'渠道商管理', d:'渠道台账 · 分级 · 政策 · 业绩',
+  render(){
+    const C_=window.APP.state.channels;
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'渠道商总数',v:'197',unit:'家',foot:'金牌 42 · 银牌 96 · 铜牌 59'})}
+      ${C.kpi({lb:'活跃渠道',v:'182',unit:'家',foot:'<span class="tag ok">活跃率 92.4%</span>',c:'var(--ok)'})}
+      ${C.kpi({lb:'渠道带来 GMV',v:'¥ 3,842',unit:'万',foot:'占总 GMV 79.1%'})}
+      ${C.kpi({lb:'渠道客户数',v:'48,620',unit:'人',foot:'占终端客户 71.1%'})}
+      ${C.kpi({lb:'观察期 / 整改',v:'4',unit:'家',foot:'<span class="tag warn">1 家整改中</span>'})}
+    </div>
+    <div class="tbar mb10" style="border:1px solid var(--line);border-radius:var(--r);background:var(--panel)">
+      <input class="inp" style="width:210px" placeholder="渠道编号 / 名称 / 负责人">
+      <select class="inp"><option>全部等级</option><option>金牌</option><option>银牌</option><option>铜牌</option></select>
+      <select class="inp"><option>全部大区</option><option>华南</option><option>华东</option><option>华东南</option><option>西南</option><option>东北</option><option>西北</option></select>
+      <select class="inp"><option>全部状态</option><option>正常</option><option>观察期</option><option>整改中</option></select>
+      <button class="btn sm p" data-act="toast" data-msg="已应用筛选">检索</button>
+      <span class="sp"></span><button class="btn sm" data-act="twofa">导出（需审批）</button>
+    </div>
+    ${C.panel(false, C.table([{t:'渠道编号'},{t:'名称'},{t:'类型'},{t:'大区'},{t:'等级'},{t:'客户数',cls:'r'},{t:'月 GMV',cls:'r'},{t:'返佣',cls:'r'},{t:'对接人'},{t:'状态'},{t:'操作'}],
+      C_.map(c=>({cells:[`<span class="mono">${c.id}</span>`,`<b>${esc(c.n)}</b>`,c.type,c.region,
+        `<span class="tag ${c.lv==='金牌'?'warn':c.lv==='银牌'?'b':''}">${c.lv}</span>`,
+        `<span class="mono">${nf(c.cust)}</span>`,`<span class="mono">${c.gmv}</span>`,`<span class="mono">${c.rate}</span>`,c.coord,
+        `<span class="tag ${c.st==='正常'?'ok':c.st==='观察期'?'warn':'bad'}">${c.st}</span>`,
+        `<button class="btn sm" data-act="drawer" data-drawer="channelDetail" data-id="${c.id}">详情</button>`]}))
+    ), `<span class="small muted">共 ${C_.length} 条（演示）· 渠道政策 v3.3 自 7 月 1 日生效</span>`)}
+
+    <div class="sec-title"><b>渠道分级与政策</b></div>
+    <div class="g3020">
+      ${C.panel('分级政策 v3.3', C.table([{t:'等级'},{t:'年 GMV 门槛'},{t:'返佣比例'},{t:'客户折扣'},{t:'专属权益'}],[
+        {cells:['<span class="tag warn">金牌</span>','≥ ¥500 万','<b>19%</b>（7 月起）','¥319','专属渠道经理 / 优先支持 / 联合市场']},
+        {cells:['<span class="tag b">银牌</span>','≥ ¥200 万','14%','¥339','联合营销 / 培训赋能']},
+        {cells:['<span class="tag">铜牌</span>','≥ ¥50 万','10%','¥359','标准支持']},
+        {cells:['<span class="tag bad">观察期</span>','< ¥50 万','8%','¥379','限期提升否则降级']}
+      ]), '返佣比例随等级递增，7 月起金牌上调 1pt')}
+      ${C.panel('渠道业绩分布', CH.bars([
+        {k:'金牌(42)',v:2840},{k:'银牌(96)',v:1180},{k:'铜牌(59)',v:386},{k:'观察(4)',v:96}
+      ],{h:196}),'月均 GMV（万元/家，示意）')}
+    </div>
+    ${C.rule('R11','未经授权的形象声音克隆构成侵权且平台担责','渠道商在销售中若擅自使用未授权肖像或声音素材，平台作为服务提供方同样担责。','渠道物料必须走平台合规预检，违规即暂停合作。')}
+    `;
+  }
+};
+
+/* ---------------- 代理商分销 ---------------- */
+window.V.agents = {
+  t:'代理商分销', d:'代理层级 · 分销网络 · 业绩排行',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'代理商总数',v:'2,057',unit:'家',foot:'一级 412 · 二级 1,645'})}
+      ${C.kpi({lb:'活跃代理',v:'1,842',unit:'家',foot:'活跃率 89.5%'})}
+      ${C.kpi({lb:'代理层级',v:'2',unit:'级',foot:'禁止三级及以下代理'})}
+      ${C.kpi({lb:'月新增客户',v:'2,840',unit:'人',foot:'代理贡献 62%'})}
+      ${C.kpi({lb:'代理月均 GMV',v:'¥ 1.86',unit:'万',foot:'TOP10% 代理贡献 48%'})}
+    </div>
+    ${C.note('info','<b>层级纪律</b>：分销层级上限为二级，禁止三级及以上分销（避免传销式结构风险）；返佣按层级递减且总额上限受控。')}
+    <div class="sec-title"><b>业绩排行（本月）</b></div>
+    <div class="g2030">
+      ${C.panel('代理商 GMV 排行 TOP10', CH.hbars([
+        {k:'海西生命',v:512,txt:'¥ 512 万',c:'var(--gold)'},
+        {k:'西南记忆文化',v:386,txt:'¥ 386 万',c:'var(--accent)'},
+        {k:'粤东安和',v:342,txt:'¥ 342 万',c:'var(--accent)'},
+        {k:'苏南生命服务',v:286,txt:'¥ 286 万',c:'var(--accent)'},
+        {k:'川渝记忆堂',v:248,txt:'¥ 248 万',c:'var(--accent)'},
+        {k:'京畿安宁',v:204,txt:'¥ 204 万',c:'var(--accent)'},
+        {k:'鲁中慈心',v:186,txt:'¥ 186 万',c:'var(--accent)'},
+        {k:'闽南思源',v:162,txt:'¥ 162 万',c:'var(--accent)'}
+      ],{w:540,lw:130}), null)}
+      ${C.panel('分销网络结构', C.table([{t:'层级'},{t:'数量',cls:'r'},{t:'返佣规则'},{t:'约束'}],[
+        {cells:['一级代理','412','企业返佣的 16%','需资质核验']},
+        {cells:['二级代理','1,645','一级返佣的 40%','需一级代管']},
+        {cells:['三级及以下','<span class="down">禁止</span>','—','<span class="tag bad">平台禁止</span>']}
+      ]), '层级上限 2 级，返佣总额受控')}
+    </div>
+    <div class="sec-title"><b>代理商台账</b></div>
+    ${C.panel(false, C.table([{t:'代理编号'},{t:'名称'},{t:'层级'},{t:'上级渠道'},{t:'客户数',cls:'r'},{t:'月 GMV',cls:'r'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">AG-2884</span>','海西生命','一级','华南生命科技','1,642','<span class="mono">¥ 512 万</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="agentDetail">详情</button>`]},
+      {cells:['<span class="mono">AG-2741</span>','粤东安和','一级','华南生命科技','1,180','<span class="mono">¥ 342 万</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="agentDetail">详情</button>`]},
+      {cells:['<span class="mono">AG-2640</span>','苏南生命服务','二级','华东安宁服务','842','<span class="mono">¥ 286 万</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="agentDetail">详情</button>`]},
+      {cells:['<span class="mono">AG-2518</span>','川渝记忆堂','二级','西南记忆文化','620','<span class="mono">¥ 248 万</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="agentDetail">详情</button>`]},
+      {cells:['<span class="mono">AG-2302</span>','某三级意图代理','<span class="tag bad">三级</span>','—','0','<span class="mono">—</span>','<span class="tag bad">已拒绝准入</span>',`<button class="btn sm" data-act="toast" data-msg="三级代理不符合平台分销层级纪律">查看</button>`]}
+    ]), null)}
+    `;
+  }
+};
+
+/* ---------------- 返佣与激励 ---------------- */
+window.V.commission = {
+  t:'返佣与激励', d:'返佣规则 · 激励活动 · 结算周期',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'本月返佣支出',v:'¥ 1,020',unit:'万',foot:'占 GMV 21.0%'})}
+      ${C.kpi({lb:'返佣机构数',v:'2,254',unit:'家',foot:'渠道 197 · 代理 2,057'})}
+      ${C.kpi({lb:'平均返佣率',v:'16.4',unit:'%',foot:'金牌 19% 拉动'})}
+      ${C.kpi({lb:'激励活动预算',v:'¥ 186',unit:'万',foot:'本季度 · 已用 62%'})}
+      ${C.kpi({lb:'返佣申诉',v:'3',unit:'件',foot:'2 件已解决'})}
+    </div>
+    ${C.note('info','<b>返佣总额受控</b>：返佣率与层级结构共同决定总支出上限。所有返佣规则变更需管理员 + 主账号双审，且提前 30 天公告（政策 v3.3 已于 6 月 1 日公告，7 月 1 日生效）。')}
+    <div class="sec-title"><b>返佣规则</b></div>
+    <div class="g3020">
+      ${C.panel('返佣规则表', C.table([{t:'业务类型'},{t:'渠道等级'},{t:'返佣比例',cls:'r'},{t:'计算基数'},{t:'结算周期'}],[
+        {cells:['SBT 铸造','金牌','<b>22%</b>','铸造实收','月结']},
+        {cells:['SBT 铸造','银牌 / 铜牌','18% / 14%','铸造实收','月结']},
+        {cells:['订阅（Eternal）','金牌','<b>19%</b>','首年订阅实收','月结']},
+        {cells:['订阅（Eternal）','银牌 / 铜牌','14% / 10%','首年订阅实收','月结']},
+        {cells:['订阅续费','全部','6%','续费实收','月结']},
+        {cells:['Legacy 传承者','金牌','<b>15%</b>','实收','月结']},
+        {cells:['Bespoke 企业定制','—','一事一议','合同额','项目结']}
+      ]), '续费返佣显著低于首年，避免"只拉新不留存"')}
+      ${C.panel('返佣趋势', CH.area([640,700,748,800,846,896,940,986,1020],{series:[{k:'返佣支出',v:[640,700,748,800,846,896,940,986,1020],c:'#3d8bfd'}],xlabels:['10月','11月','12月','1月','2月','3月','4月','5月','6月'],h:200}),'万元 · 占 GMV 稳定 21%')}
+    </div>
+    <div class="sec-title"><b>激励活动</b></div>
+    ${C.panel(false, C.table([{t:'活动'},{t:'周期'},{t:'对象'},{t:'激励规则'},{t:'预算/已用'},{t:'效果'},{t:'状态'}],[
+      {cells:['Q2 冲量激励','04-01 – 06-30','全部渠道','GMV 环比增长 ≥20% 额外返 2%','¥ 80 万 / ¥ 68 万','<span class="up">62% 渠道达标</span>','<span class="tag ok">已结束</span>']},
+      {cells:['新客首单激励','05-01 – 08-31','代理','新客首单额外返 ¥60/单','¥ 60 万 / ¥ 32 万','<span class="up">2,840 新客</span>','<span class="tag b">进行中</span>']},
+      {cells:['纪念订阅留存激励','06-01 – 09-30','全部渠道','续费率 ≥70% 返 3%','¥ 46 万 / ¥ 12 万','<span class="up">续费率 68%</span>','<span class="tag b">进行中</span>']},
+      {cells:['合规标杆奖','年度','渠道 / 代理','全年零合规事故奖励','—','—','<span class="tag">未开始</span>']}
+    ]), `<span class="small muted">激励规则不得诱导"承诺复活"等违规宣传，违者取消激励资格（R07）</span>`)}
+    <div class="sec-title"><b>返佣申诉</b></div>
+    ${C.panel(false, C.table([{t:'申诉编号'},{t:'机构'},{t:'事由'},{t:'金额差异',cls:'r'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">AP-2026-018</span>','海西生命','对账差异（订单归属争议）','¥ 4.2 万','<span class="tag b">处理中</span>',`<button class="btn sm" data-act="drawer" data-drawer="appealDetail">处理</button>`]},
+      {cells:['<span class="mono">AP-2026-016</span>','西南记忆文化','返佣比例适用错误','¥ 1.8 万','<span class="tag ok">已解决</span>',`<button class="btn sm" data-act="drawer" data-drawer="appealDetail">查看</button>`]},
+      {cells:['<span class="mono">AP-2026-011</span>','粤东安和','结算周期跨月争议','¥ 0.6 万','<span class="tag ok">已解决</span>',`<button class="btn sm" data-act="drawer" data-drawer="appealDetail">查看</button>`]}
+    ]), null)}
+    `;
+  }
+};
+
+/* ---------------- 区域代理地图 ---------------- */
+window.V.territory = {
+  t:'区域代理地图', d:'区域覆盖 · 空白市场 · 冲突仲裁',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'已覆盖省份',v:'26',unit:'个',foot:'覆盖率 76.5%'})}
+      ${C.kpi({lb:'空白市场',v:'8',unit:'个',foot:'<span class="tag warn">待招募</span>'})}
+      ${C.kpi({lb:'区域独家代理',v:'42',unit:'家',foot:'合同约定的独家区域'})}
+      ${C.kpi({lb:'区域冲突',v:'2',unit:'起',foot:'均已仲裁'})}
+      ${C.kpi({lb:'平均区域渗透率',v:'2.4',unit:'‰',foot:'按辖区人口口径'})}
+    </div>
+    <div class="sec-title"><b>区域覆盖</b></div>
+    ${C.panel(false, C.table([{t:'大区'},{t:'覆盖省份'},{t:'渠道 / 代理',cls:'r'},{t:'终端客户',cls:'r'},{t:'月 GMV',cls:'r'},{t:'渗透率',cls:'r'},{t:'状态'}],[
+      {cells:['华南','广东 / 广西 / 海南 / 福建','642','18,420','<span class="mono">¥ 1,624 万</span>','3.8‰','<span class="tag ok">成熟</span>']},
+      {cells:['华东','上海 / 江苏 / 浙江 / 安徽','586','16,240','<span class="mono">¥ 1,386 万</span>','3.2‰','<span class="tag ok">成熟</span>']},
+      {cells:['华东南','江西 / 湖南','324','8,620','<span class="mono">¥ 742 万</span>','2.1‰','<span class="tag b">成长</span>']},
+      {cells:['西南','四川 / 重庆 / 云南 / 贵州','286','9,840','<span class="mono">¥ 686 万</span>','1.8‰','<span class="tag b">成长</span>']},
+      {cells:['东北','辽宁 / 吉林 / 黑龙江','186','6,240','<span class="mono">¥ 386 万</span>','1.2‰','<span class="tag warn">待提升</span>']},
+      {cells:['西北','陕西 / 甘肃 / 宁夏','124','4,180','<span class="mono">¥ 248 万</span>','0.9‰','<span class="tag warn">待提升</span>']},
+      {cells:['华北','北京 / 天津 / 河北','106','4,880','<span class="mono">¥ 288 万</span>','1.4‰','<span class="tag b">空白较多</span>']}
+    ]), null)}
+    <div class="sec-title"><b>空白市场与冲突仲裁</b></div>
+    <div class="g3020">
+      ${C.panel('待招募空白市场', C.table([{t:'区域'},{t:'人口',cls:'r'},{t:'现有覆盖'},{t:'建议优先级'}],[
+        {cells:['内蒙古','2,400 万','无','<span class="tag b">中</span>']},
+        {cells:['新疆','2,580 万','无','<span class="tag b">中</span>']},
+        {cells:['青海','594 万','无','<span class="tag">低</span>']},
+        {cells:['西藏','364 万','无','<span class="tag">低</span>']},
+        {cells:['港澳台（境外分区）','—','不适用','<span class="tag bad">境外分区运营</span>']}
+      ]), null)}
+      ${C.panel('区域冲突仲裁', C.tl([
+        {t:'跨区抢单 · 已仲裁',d:'粤东安和 与 闽南思源 争抢厦门客户，按客户实际所在地归属',k:'warn'},
+        {t:'独家区域违约 · 已处置',d:'某独家代理未达约定业绩，独家权转普通代理资格',k:'warn'},
+        {t:'区域边界规则',d:'以客户常用地址所在省级行政区为准，线上客户按签约渠道归属',k:'brand'},
+        {t:'冲突预防',d:'客户建档即做区域校验，冲突客户需上级裁定',k:'ok'}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 客户档案 ---------------- */
+window.V.customers = {
+  t:'客户档案', d:'终端客户 · 归属机构 · 服务状态',
+  render(){
+    return `
+    ${C.note('info','<b>数据隔离与最小可见</b>：本页展示的是归属本集团的终端客户（已获授权）。代理商仅可见自己名下客户；导出客户数据需审批并带水印。')}
+    <div class="kpis">
+      ${C.kpi({lb:'终端客户总数',v:'68,420',unit:'人',foot:'渠道带来 71.1%'})}
+      ${C.kpi({lb:'本月新增',v:'2,840',unit:'人',foot:'<span class="up">▲ 6.2%</span>'})}
+      ${C.kpi({lb:'在服中',v:'64,180',unit:'人',foot:'采集 / 建模 / 纪念各阶段'})}
+      ${C.kpi({lb:'年付客户',v:'19,432',unit:'人',foot:'年付渗透率 28.4%'})}
+      ${C.kpi({lb:'客户满意度',v:'4.7',unit:'/5',foot:'遗属类单列 4.8'})}
+    </div>
+    <div class="tbar mb10" style="border:1px solid var(--line);border-radius:var(--r);background:var(--panel)">
+      <input class="inp" style="width:210px" placeholder="客户编号 / 姓名 / 手机号">
+      <select class="inp"><option>全部归属机构</option><option>华南生命科技</option><option>华东安宁服务</option><option>海西生命</option></select>
+      <select class="inp"><option>全部套餐</option><option>Seed</option><option>Eternal</option><option>Legacy</option></select>
+      <select class="inp"><option>全部阶段</option><option>S2 采集</option><option>S3 建模</option><option>S4 纪念</option><option>S6 永续</option></select>
+      <button class="btn sm p" data-act="toast" data-msg="已应用筛选">检索</button>
+      <span class="sp"></span><button class="btn sm" data-act="twofa">导出（需审批）</button>
+    </div>
+    ${C.panel(false, C.table([{t:'客户编号'},{t:'客户'},{t:'归属机构'},{t:'套餐'},{t:'阶段'},{t:'订阅'},{t:'累计贡献',cls:'r'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">CU-88213417</span>','<div class="row gap8">'+C.avatar('李文博')+'<b>李文博</b></div>','华南生命科技','Eternal','S2 采集','¥29/月','<span class="mono">¥ 6,420</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="customerDetail">详情</button>`]},
+      {cells:['<span class="mono">CU-88213398</span>','<div class="row gap8">'+C.avatar('王天宇')+'<b>王天宇</b></div>','华南生命科技','Eternal','S3 建模','¥29/月','<span class="mono">¥ 3,180</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="customerDetail">详情</button>`]},
+      {cells:['<span class="mono">CU-88213122</span>','<div class="row gap8">'+C.avatar('孙浩')+'<b>孙浩</b></div>','海西生命','Legacy','S5 具身','¥99/月','<span class="mono">¥ 12,860</span>','<span class="tag ok">正常</span>',`<button class="btn sm" data-act="drawer" data-drawer="customerDetail">详情</button>`]},
+      {cells:['<span class="mono">CU-88212911</span>','<div class="row gap8">'+C.avatar('钱小峰')+'<b>钱小峰</b></div>','西南记忆文化','Eternal','S3 建模','¥29/月','<span class="mono">¥ 2,860</span>','<span class="tag warn">一致性待核</span>',`<button class="btn sm" data-act="drawer" data-drawer="customerDetail">详情</button>`]},
+      {cells:['<span class="mono">CU-88212884</span>','<div class="row gap8">'+C.avatar('（已故）')+'<b>（已故 · 遗嘱生效）</b></div>','华东安宁服务','Legacy','S6 永续','¥99/月','<span class="mono">¥ 18,420</span>','<span class="tag b">遗产执行中</span>',`<button class="btn sm" data-act="drawer" data-drawer="customerDetail">详情</button>`]},
+      {cells:['<span class="mono">CU-88212603</span>','<div class="row gap8">'+C.avatar('张工')+'<b>张工</b></div>','粤东安和','Eternal','S4 纪念','已退订','<span class="mono">¥ 1,240</span>','<span class="tag">已流失</span>',`<button class="btn sm" data-act="drawer" data-drawer="customerDetail">详情</button>`]}
+    ]), `<span class="small muted">共 68,420 名终端客户 · 导出需审批（A09 同理）</span>`)}
+
+    <div class="sec-title"><b>客户结构与健康</b></div>
+    <div class="grid3">
+      ${C.panel('客户阶段分布', `<div class="tc">${CH.donut([
+        {k:'S1',v:8,c:'#5b6cff'},{k:'S2',v:38,c:'#1fb6a6'},{k:'S3',v:26,c:'#3d8bfd'},{k:'S4',v:20,c:'var(--gold)'},{k:'S5/S6',v:8,c:'#0ecb81'}
+      ],{size:150,center:'68.4K',cl:'客户'})}</div>
+      <div class="legend tc mt10">S2 采集 38% · S3 建模 26%（企业侧客户转化路径与平台一致）</div>`, null)}
+      ${C.panel('客户健康度', C.table([{t:'指标'},{t:'当前',cls:'r'},{t:'判定'}],[
+        {cells:['次月留存','34.2%','<span class="tag warn">待提升</span>']},
+        {cells:['年付渗透率','28.4%','<span class="tag ok">良好</span>']},
+        {cells:['NPS','62','<span class="tag ok">良好</span>']},
+        {cells:['投诉率','0.42%','<span class="tag ok">达标</span>']},
+        {cells:['一致性达标率','91.4%','<span class="tag warn">关注</span>']}
+      ]), null)}
+      ${C.panel('客户来源渠道', CH.hbars([
+        {k:'华南生命科技',v:18.4,txt:'18.4%'},{k:'华东安宁服务',v:16.2,txt:'16.2%'},
+        {k:'海西生命',v:12.8,txt:'12.8%'},{k:'西南记忆文化',v:9.4,txt:'9.4%'},
+        {k:'其他渠道 / 代理',v:43.2,txt:'43.2%'}
+      ],{w:500,lw:140}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 订单管理 ---------------- */
+window.V.orders = {
+  t:'订单管理', d:'订单 · 开通 · 履约 · 售后',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'本月订单',v:'2,842',unit:'单',foot:'<span class="up">▲ 6.2%</span>'})}
+      ${C.kpi({lb:'订单金额',v:'¥ 4,860',unit:'万',foot:'均单 ¥ 1,710'})}
+      ${C.kpi({lb:'履约完成率',v:'94.2',unit:'%',foot:'<span class="tag warn">延迟 3 单</span>',c:'var(--gold)'})}
+      ${C.kpi({lb:'批量订单占比',v:'42.6',unit:'%',foot:'殡葬机构 / 保险渠道批量'})}
+      ${C.kpi({lb:'售后退款率',v:'1.8',unit:'%',foot:'退款主因：一致性不达预期'})}
+    </div>
+    <div class="sec-title"><b>订单列表</b></div>
+    ${C.panel(false, C.table([{t:'订单号'},{t:'客户 / 机构'},{t:'套餐'},{t:'数量',cls:'r'},{t:'金额',cls:'r'},{t:'归属渠道'},{t:'履约进度'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">OD-20260611-0186</span>','青山殡葬集团（企业批量）','Eternal 批量','180','<span class="mono">¥ 61,020</span>','城厢服务','<div style="width:110px">'+C.progress(62)+'</div>','<span class="tag b">履约中</span>',`<button class="btn sm" data-act="drawer" data-drawer="orderDetail">详情</button>`]},
+      {cells:['<span class="mono">OD-20260611-0184</span>','某保险集团（联合产品）','Legacy 批量','60','<span class="mono">¥ 101,940</span>','集团直营','<div style="width:110px">'+C.progress(88)+'</div>','<span class="tag b">履约中</span>',`<button class="btn sm" data-act="drawer" data-drawer="orderDetail">详情</button>`]},
+      {cells:['<span class="mono">OD-20260611-0179</span>','康宁医院（临终关怀）','Eternal','40','<span class="mono">¥ 13,560</span>','华东安宁服务','<div style="width:110px">'+C.progress(100)+'</div>','<span class="tag ok">已完成</span>',`<button class="btn sm" data-act="drawer" data-drawer="orderDetail">详情</button>`]},
+      {cells:['<span class="mono">OD-20260611-0171</span>','福安生命（代运营客户）','Eternal + 代运营','86','<span class="mono">¥ 63,240</span>','福安生命','<div style="width:110px">'+C.progress(46)+'</div>','<span class="tag bad">延迟</span>',`<button class="btn sm" data-act="drawer" data-drawer="orderDetail">处置</button>`]},
+      {cells:['<span class="mono">OD-20260610-0164</span>','个人客户 李文博','Eternal','1','<span class="mono">¥ 399 + ¥29/月</span>','华南生命科技','<div style="width:110px">'+C.progress(100)+'</div>','<span class="tag ok">已完成</span>',`<button class="btn sm" data-act="drawer" data-drawer="orderDetail">详情</button>`]},
+      {cells:['<span class="mono">OD-20260610-0161</span>','个人客户 张工','Eternal','1','<span class="mono">¥ 399</span>','粤东安和','<div style="width:110px">'+C.progress(100)+'</div>','<span class="tag bad">已退款</span>',`<button class="btn sm" data-act="drawer" data-drawer="orderDetail">查看</button>`]}
+    ]), `<span class="small muted">共 2,842 单（演示展示 6 单）· 批量订单走机构合同</span>`)}
+
+    <div class="sec-title"><b>履约与售后</b></div>
+    <div class="g3020">
+      ${C.panel('履约流程', C.stepper(['下单 / 合同','授权链核验','账号开通','采集启动','建模交付','验收结算'],3), '批量订单可分批验收；授权链未核验不得开通账号')}
+      ${C.panel('售后与退款', C.table([{t:'原因'},{t:'占比',cls:'r'},{t:'处置'}],[
+        {cells:['一致性不达预期','42%','降级服务 + 退差价 / 回滚版本']},
+        {cells:['采集周期过长','26%','补采加速 + 时长补偿']},
+        {cells:['家属异议','18%','转遗属支持 + 伦理委员会']},
+        {cells:['其他','14%','一事一议']}
+      ]), null)}
+    </div>
+    ${C.rule('R02','一致性不达预期不得以"已交付"为由拒绝退款','把低保真化身按高保真卖出，换来的是退款诉讼、监管介入与品牌死亡。','退款流程中强制核验一致性报告，未达标即按合同降级或退款。')}
+    `;
+  }
+};
+
+/* ---------------- 合同管理 ---------------- */
+window.V.contracts = {
+  t:'合同管理', d:'合同签署 · 审批 · 台账 · 到期',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'生效合同',v:'2,842',unit:'份',foot:'框架 186 · 单笔 2,656'})}
+      ${C.kpi({lb:'待审批',v:'1',unit:'份',foot:'<span class="tag bad">含 ¥186 万框架协议</span>',hl:true,c:'var(--bad)'})}
+      ${C.kpi({lb:'合同总金额',v:'¥ 3.86',unit:'亿',foot:'本年度累计'})}
+      ${C.kpi({lb:'30 天内到期',v:'42',unit:'份',foot:'续约提醒已推送'})}
+      ${C.kpi({lb:'合规审查通过率',v:'94.6',unit:'%',foot:'驳回主因：宣传条款超标'})}
+    </div>
+    <div class="sec-title"><b>合同台账</b></div>
+    ${C.panel(false, C.table([{t:'合同编号'},{t:'相对方'},{t:'类型'},{t:'金额',cls:'r'},{t:'期限'},{t:'合规审查'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">CT-2026-0186</span>','青山殡葬集团','框架协议','<span class="mono">¥ 186 万</span>','2026-07 ~ 2027-06','<span class="tag ok">通过</span>','<span class="tag bad">待审批</span>',`<button class="btn sm" data-act="drawer" data-drawer="contractDetail" data-id="CT-2026-0186">审批</button>`]},
+      {cells:['<span class="mono">CT-2026-0184</span>','某保险集团','联合产品协议','<span class="mono">¥ 120 万</span>','2026-06 ~ 2028-05','<span class="tag warn">需修改</span>','<span class="tag warn">待重签</span>',`<button class="btn sm" data-act="drawer" data-drawer="contractDetail" data-id="CT-2026-0184">处置</button>`]},
+      {cells:['<span class="mono">CT-2026-0179</span>','康宁医院','服务协议','<span class="mono">¥ 42 万</span>','2026-05 ~ 2027-04','<span class="tag ok">通过</span>','<span class="tag ok">生效中</span>',`<button class="btn sm" data-act="drawer" data-drawer="contractDetail" data-id="CT-2026-0179">详情</button>`]},
+      {cells:['<span class="mono">CT-2026-0164</span>','华南生命科技','渠道合作协议','<span class="mono">—</span>','2025-01 ~ 2027-12','<span class="tag ok">通过</span>','<span class="tag ok">生效中</span>',`<button class="btn sm" data-act="drawer" data-drawer="contractDetail" data-id="CT-2026-0164">详情</button>`]},
+      {cells:['<span class="mono">CT-2026-0152</span>','西北慈安','渠道合作协议','<span class="mono">—</span>','2025-03 ~ 2027-02','<span class="tag ok">通过</span>','<span class="tag bad">履约异常</span>',`<button class="btn sm" data-act="drawer" data-drawer="contractDetail" data-id="CT-2026-0152">处置</button>`]}
+    ]), null)}
+    <div class="sec-title"><b>合同合规红线</b></div>
+    <div class="grid2">
+      ${C.panel('合同必备条款', C.table([{t:'条款'},{t:'要求'}],[
+        {cells:['科学边界声明','合同须载明"不承诺完整意识上传"（R07）']},
+        {cells:['一致性等级与赔付','明确承诺等级与不达标的降级/赔付方式（R02）']},
+        {cells:['数据主权条款','神经数据属用户所有，服务商不得交易（R01）']},
+        {cells:['授权链要求','服务商须协助完成授权链核验']},
+        {cells:['追思克制条款','禁止以逝者服务进行情绪施压式营销（R10）']},
+        {cells:['终止权保障','任何存续态须保留终止机制（R08）']}
+      ]), null)}
+      ${C.panel('审批阈值与流程', C.stepper(['经办提交','法务合规','财务复核','主账号终审'],1)
+        + `<div class="mt14">${C.kv([['< ¥50 万','主管 + 财务'],['≥ ¥50 万','主管 + 财务 + 主账号'],['联合产品协议','法务 + 合规 + 主账号'],['渠道合作协议','管理员 + 主账号']])}</div>`, null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 服务单 ---------------- */
+window.V.services = {
+  t:'服务单', d:'客户服务 · SLA · 交付异常',
+  render(){
+    const S=window.APP.state.services;
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'待响应',v:S.filter(s=>s.st==='待响应').length,unit:'单',foot:'<span class="tag bad">2 单高优先级</span>',hl:true,c:'var(--bad)'})}
+      ${C.kpi({lb:'处理中',v:S.filter(s=>s.st==='处理中').length,unit:'单',foot:'平均处理 4.2 小时'})}
+      ${C.kpi({lb:'SLA 达标率',v:'96.8',unit:'%',foot:'<span class="tag ok">达标</span>',c:'var(--ok)'})}
+      ${C.kpi({lb:'本月服务单',v:'1,842',unit:'单',foot:'一次解决率 84%'})}
+      ${C.kpi({lb:'客户满意度',v:'4.7',unit:'/5',foot:'机构客户 4.6 · 个人 4.8'})}
+    </div>
+    <div class="sec-title"><b>服务单队列</b></div>
+    ${C.panel(false, C.table([{t:'服务单'},{t:'客户 / 机构'},{t:'主题'},{t:'优先级'},{t:'状态'},{t:'SLA'},{t:'处理人'},{t:'时间'},{t:'操作'}],
+      S.map(s=>({cells:[`<span class="mono">${s.id}</span>`,s.c,s.topic,
+        `<span class="tag ${s.lv==='高'?'bad':''}">${s.lv}</span>`,
+        `<span class="tag ${s.st==='待响应'?'bad':s.st==='处理中'?'warn':'ok'}">${s.st}</span>`,
+        `<span class="mono">${s.sla}</span>`,s.owner,`<span class="mono small">${s.t}</span>`,
+        `<button class="btn sm" data-act="drawer" data-drawer="serviceDetail" data-id="${s.id}">处理</button>`]}))
+    ), `<span class="small muted">共 ${S.length} 单 · 企业客户 SLA 4 小时（个人 8 小时）</span>`)}
+
+    <div class="sec-title"><b>服务能力与 SLA</b></div>
+    <div class="g3020">
+      ${C.panel('SLA 分级', C.table([{t:'客户类型'},{t:'首响'},{t:'解决'},{t:'违约金'}],[
+        {cells:['集团企业客户','30 分钟','4 小时','按合同 0.5%/日']},
+        {cells:['渠道 / 代理','1 小时','8 小时','返佣扣减']},
+        {cells:['机构客户','1 小时','8 小时','按合同']},
+        {cells:['个人客户','2 小时','24 小时','服务补偿']}
+      ]), null)}
+      ${C.panel('服务单分布', CH.hbars([
+        {k:'交付与开通',v:642,txt:'642 单'},{k:'一致性相关',v:412,txt:'412 单'},
+        {k:'结算与对账',v:286,txt:'286 单'},{k:'合规与授权',v:186,txt:'186 单'},
+        {k:'其他',v:316,txt:'316 单'}
+      ],{w:520,lw:130}), '近 30 日')}
+    </div>
+    `;
+  }
+};
+})();
+
+</script>
+<script>
+/* ============================================================
+   企业中心 · 页面组 3：产品与套餐 / 交付与服务
+   ============================================================ */
+(function(){
+const { C, CH, esc, nf, money, wan } = window.AE;
+window.V = window.V || {};
+
+/* ---------------- 套餐货架 ---------------- */
+window.V.catalog = {
+  t:'套餐货架', d:'企业货架 · 批量价 · 联合产品',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'在售套餐',v:'4',unit:'档',foot:'Seed / Eternal / Legacy / Bespoke'})}
+      ${C.kpi({lb:'企业批量价差',v:'15',unit:'%',foot:'较 C 端零售价平均优惠'})}
+      ${C.kpi({lb:'联合产品',v:'3',unit:'类',foot:'保险 / 信托 / 殡葬机构'})}
+      ${C.kpi({lb:'货架转化率',v:'8.4',unit:'%',foot:'企业客户下单转化'})}
+      ${C.kpi({lb:'主推套餐',v:'Eternal',unit:'',foot:'占订单 61.6%'})}
+    </div>
+    <div class="sec-title"><b>企业货架</b><em>价格与《产品战略白皮书》三档定价同源，企业侧为批量优惠价</em></div>
+    <div class="price-grid">
+      ${C.priceCard({name:'记忆存证',en:'Seed',amt:'¥0',per:'',desc:'引流与企业员工福利入门',feats:['有限记忆条目','不可铸造','企业批量开通'],cta:'引流层'})}
+      ${C.priceCard({name:'永恒契约',en:'Eternal',amt:'¥339',per:' 起 / 人（批量）',badge:'企业主推',hl:true,desc:'C 端 ¥399 · 企业批量优惠 15%',feats:['1 份 SBT 确权','去中心化存储','数字纪念页','基础人格互动'],cta:'主推'})}
+      ${C.priceCard({name:'传承者',en:'Legacy',amt:'¥1,699',per:' 起 / 人（批量）',desc:'C 端 ¥1,999 · 含继承设置',feats:['多重确权','人格引擎高级建模','数字遗产继承设置','专属支持'],cta:'高端'})}
+      ${C.priceCard({name:'定制',en:'Bespoke',amt:'¥50,000',per:' 起 / 项目',desc:'机构定制 + 白标',feats:['专属人格档案','强制隐私合规','定制开发','白标交付'],cta:'机构'})}
+    </div>
+    <div class="sec-title"><b>联合产品</b></div>
+    ${C.panel(false, C.table([{t:'联合产品'},{t:'合作方类型'},{t:'形态'},{t:'分润'},{t:'合规要求'},{t:'状态'},{t:'操作'}],[
+      {cells:['数字遗产信托','信托机构','信托内嵌记忆资产托管','机构 30% / 平台 70%','<span class="tag ok">合规审查通过</span>','<span class="tag ok">已上线</span>',`<button class="btn sm" data-act="toast" data-msg="联合产品详情需合规组权限">详情</button>`]},
+      {cells:['生命关怀保险','保险机构','保额内附赠 Eternal 权益','按保单结算','<span class="tag ok">合规审查通过</span>','<span class="tag ok">已上线</span>',`<button class="btn sm" data-act="toast" data-msg="联合产品详情需合规组权限">详情</button>`]},
+      {cells:['殡葬服务包','殡葬机构','服务包内嵌数字纪念','机构 25% / 平台 75%','<span class="tag ok">合规审查通过</span>','<span class="tag ok">已上线</span>',`<button class="btn sm" data-act="toast" data-msg="联合产品详情需合规组权限">详情</button>`]},
+      {cells:['医疗机构生命回顾','医院 / 安宁疗护','临终关怀工具包','项目制','<span class="tag warn">待补医疗合规材料</span>','<span class="tag b">在办</span>',`<button class="btn sm" data-act="toast" data-msg="已通知合规组补充材料">处置</button>`]}
+    ]), `<span class="small muted">联合产品的对外宣传口径统一由平台合规预检（R07）</span>`)}
+    ${C.rule('R07','对外宣传不得越过科学边界','渠道与联合产品方若擅自使用"完整意识上传""复活"等表述，平台承担连带责任。','全部企业货架物料统一由平台预检，命中禁用语即下线。')}
+    `;
+  }
+};
+
+/* ---------------- 定价与折扣 ---------------- */
+window.V.pricing = {
+  t:'定价与折扣', d:'企业价目 · 折扣权限 · 价格保护',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'企业价目表版本',v:'PL-3.4',unit:'',foot:'7 月 1 日生效'})}
+      ${C.kpi({lb:'折扣档次',v:'4',unit:'档',foot:'5% / 10% / 15% / 一事一议'})}
+      ${C.kpi({lb:'平均折扣率',v:'12.4',unit:'%',foot:'企业客户实际成交'})}
+      ${C.kpi({lb:'价格保护客户',v:'186',unit:'家',foot:'签约后 12 个月内不涨价'})}
+      ${C.kpi({lb:'异常低价告警',v:'2',unit:'单',foot:'低于成本线，已拦截'})}
+    </div>
+    <div class="sec-title"><b>企业价目表（PL-3.4）</b></div>
+    ${C.panel(false, C.table([{t:'套餐'},{t:'C 端零售价'},{t:'企业基础价'},{t:'折扣门槛'},{t:'最低成交价'},{t:'毛利',cls:'r'}],[
+      {cells:['Seed','¥0','¥0','—','¥0','—']},
+      {cells:['Eternal','¥399 + ¥29/月','¥339 + ¥25/月','≥ 50 人 10% / ≥ 200 人 15%','¥339','<span class="mono">58%</span>']},
+      {cells:['Legacy','¥1,999 + ¥99/月','¥1,699 + ¥84/月','≥ 20 人 10% / ≥ 100 人 15%','¥1,699','<span class="mono">64%</span>']},
+      {cells:['Bespoke','¥50,000 起','一事一议','按项目规模','不低于 ¥50,000','<span class="mono">35%</span>']}
+    ]), `<span class="small muted">低于最低成交价需主账号特批，且仍不得低于单位成本线</span>`)}
+
+    <div class="sec-title"><b>折扣权限与价格保护</b></div>
+    <div class="g3020">
+      ${C.panel('折扣审批权限', C.table([{t:'折扣'},{t:'审批人'},{t:'适用范围'}],[
+        {cells:['≤ 5%','渠道经理','标准批量']},
+        {cells:['≤ 10%','大区负责人','中大型客户']},
+        {cells:['≤ 15%','企业管理员','≥ 200 人批量']},
+        {cells:['> 15%','企业主账号特批','战略客户 / 联合产品']},
+        {cells:['低于成本线','<span class="down">一律禁止</span>','任何情况']}
+      ]), null)}
+      ${C.panel('价格保护与异常拦截', C.switchRow({t:'签约后 12 个月价格保护',d:'期间降价对已签约客户同步适用（向下保护）',on:true})
+        +C.switchRow({t:'低于成本价自动拦截',d:'任何低于单位成本的报价在系统层拒绝',on:true})
+        +C.switchRow({t:'价格一致性校验',d:'渠道报价不得高于企业公示价',on:true})
+        +C.switchRow({t:'补贴式定价禁止',d:'不做"低于成本"的补贴式定价（白皮书纪律）',on:true}), null)}
+    </div>
+    ${C.note('warn','<b>定价纪律（源自产品战略白皮书）</b>：不做"低于成本"的补贴式定价，也不做一次性买断的永久承诺——前者掏空利润，后者掏空经常性收入。')}
+    `;
+  }
+};
+
+/* ---------------- 白标与定制 ---------------- */
+window.V.white = {
+  t:'白标与定制', d:'白标品牌 · 定制交付 · 合规预检',
+  render(){
+    return `
+    ${C.note('bad','<b>R07 白标风险最高</b>：白标客户（保险 / 殡葬 / 医疗机构）常自行制作对外物料，一旦使用"完整意识上传""复活"等表述，平台作为服务提供方同样被追责。因此白标物料强制走平台预检。')}
+    <div class="kpis">
+      ${C.kpi({lb:'白标客户',v:'42',unit:'家',foot:'保险 12 · 殡葬 18 · 医疗 8 · 其他 4'})}
+      ${C.kpi({lb:'白标物料',v:'286',unit:'件',foot:'预检通过 84.6%'})}
+      ${C.kpi({lb:'预检拦截',v:'44',unit:'件',foot:'<span class="tag bad">命中禁用语</span>',hl:true,c:'var(--bad)'})}
+      ${C.kpi({lb:'平均交付周期',v:'18',unit:'天',foot:'含品牌定制 + 合规预检'})}
+      ${C.kpi({lb:'白标收入',v:'¥ 486',unit:'万',foot:'占企业侧收入 10%'})}
+    </div>
+    <div class="sec-title"><b>白标项目</b></div>
+    ${C.panel(false, C.table([{t:'项目'},{t:'客户'},{t:'品牌定制'},{t:'域名 / 入口'},{t:'物料预检'},{t:'交付进度'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">WL-2026-018</span>','某保险集团','全套品牌 + 联名','insurelife.example.cn','<span class="tag bad">1 件未通过</span>','<div style="width:110px">'+C.progress(72)+'</div>','<span class="tag warn">待重写</span>',`<button class="btn sm" data-act="drawer" data-drawer="whiteDetail">处置</button>`]},
+      {cells:['<span class="mono">WL-2026-016</span>','青山殡葬集团','半定制（Logo + 配色）','qingshan-memory.cn','<span class="tag ok">全部通过</span>','<div style="width:110px">'+C.progress(100)+'</div>','<span class="tag ok">已上线</span>',`<button class="btn sm" data-act="drawer" data-drawer="whiteDetail">详情</button>`]},
+      {cells:['<span class="mono">WL-2026-014</span>','康宁医院','工具包定制','院内系统内嵌','<span class="tag ok">全部通过</span>','<div style="width:110px">'+C.progress(58)+'</div>','<span class="tag b">交付中</span>',`<button class="btn sm" data-act="drawer" data-drawer="whiteDetail">详情</button>`]},
+      {cells:['<span class="mono">WL-2026-011</span>','某信托机构','联名页面','trust.example.cn','<span class="tag ok">全部通过</span>','<div style="width:110px">'+C.progress(100)+'</div>','<span class="tag ok">已上线</span>',`<button class="btn sm" data-act="drawer" data-drawer="whiteDetail">详情</button>`]}
+    ]), null)}
+
+    <div class="sec-title"><b>白标物料预检</b></div>
+    <div class="grid2">
+      ${C.panel('预检结果（本月）', C.table([{t:'物料'},{t:'客户'},{t:'结果'},{t:'处置'}],[
+        {cells:['落地页 V4','某保险集团','<span class="tag bad">命中 2 处</span>','退回重写']},
+        {cells:['宣传短视频','青山殡葬集团','<span class="tag ok">通过</span>','已上线']},
+        {cells:['院内工具包文案','康宁医院','<span class="tag ok">通过</span>','已上线']},
+        {cells:['股东信附件','某信托机构','<span class="tag warn">需修改 1 处</span>','待重提']}
+      ]), null)}
+      ${C.panel('预检机制', C.switchRow({t:'白标物料强制预检',d:'未通过预检的物料无法上线（R07）',on:true})
+        +C.switchRow({t:'禁用语库同步',d:'与平台口径基线 CL-2.1 同步更新',on:true})
+        +C.switchRow({t:'违规下线',d:'线上物料被举报或抽检命中即下线',on:true})
+        +C.switchRow({t:'白标合同条款',d:'合同约定违规宣传的连带赔偿责任',on:true}), null)}
+    </div>
+    ${C.rule('R07','对外宣传不得越过科学边界','白标客户常自行制作物料，平台必须承担预检义务，否则连带担责。','白标合同要求全部物料上线前送检，违规即下线并保留追偿权。')}
+    `;
+  }
+};
+
+/* ---------------- 交付看板 ---------------- */
+window.V.delivery = {
+  t:'交付看板', d:'交付全流程 · 批量开通 · 异常',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'在交付项目',v:'186',unit:'个',foot:'企业批量 68 · 白标 42 · 代运营 76'})}
+      ${C.kpi({lb:'准时交付率',v:'94.2',unit:'%',foot:'<span class="tag warn">低于 95% 目标</span>',c:'var(--gold)'})}
+      ${C.kpi({lb:'平均交付周期',v:'18',unit:'天',foot:'批量 12 天 · 白标 18 天'})}
+      ${C.kpi({lb:'延迟项目',v:'3',unit:'个',foot:'<span class="tag bad">1 个已触发违约条款</span>'})}
+      ${C.kpi({lb:'本月交付客户',v:'2,842',unit:'人',foot:'含批量开通 2,210 人'})}
+    </div>
+    <div class="sec-title"><b>交付流程健康度</b></div>
+    ${C.panel(false, `<div class="panel-b">${CH.flow([
+      {k:'合同生效',s:'自动',on:true},{k:'授权链核验',s:'合规引擎',on:true},
+      {k:'账号批量开通',s:'批量接口',on:true},{k:'设备发放',s:'物流',on:true},
+      {k:'采集启动',s:'客户配合',on:true},{k:'建模交付',s:'建模平台',on:true},
+      {k:'一致性验收',s:'盲测',on:false},{k:'结算归档',s:'财务',on:false}
+    ],{cols:4})}</div>`, '当前瓶颈：一致性验收（平均等待 6.2 天）')}
+
+    <div class="sec-title"><b>交付异常</b></div>
+    <div class="g2030">
+      ${C.panel('延迟与阻塞', C.tl([
+        {t:'福安生命 · 延迟 3 天',d:'代运营客户；建模任务算力排队导致延期，已触发合同违约金条款',k:'bad'},
+        {t:'青山殡葬集团 · 批量开通失败 180 个',d:'授权链批量核验接口超时，已转服务单 SV-88213',k:'warn'},
+        {t:'康宁医院 · 设备发放延迟',d:'采集设备物流受区域管制影响，预计延后 4 天',k:'warn'},
+        {t:'某保险集团 · 白标上线阻塞',d:'物料预检未通过（R07），需重写后上线',k:'warn'}
+      ]), null)}
+      ${C.panel('批量开通能力', C.table([{t:'能力'},{t:'规格'},{t:'状态'}],[
+        {cells:['批量账号开通','≤ 500 个/批','<span class="tag ok">可用</span>']},
+        {cells:['批量授权链核验','≤ 300 个/批','<span class="tag warn">超时频发</span>']},
+        {cells:['批量设备发放','按物流批次','<span class="tag ok">可用</span>']},
+        {cells:['批量一致性验收','≤ 100 个/批','<span class="tag warn">排队 6.2 天</span>']}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 代运营任务 ---------------- */
+window.V.retainer = {
+  t:'代运营任务', d:'代运营服务包 · 任务看板 · 服务报告',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'代运营客户',v:'76',unit:'个',foot:'机构客户委托'})}
+      ${C.kpi({lb:'在办任务',v:'412',unit:'项',foot:'本月完成 386 项'})}
+      ${C.kpi({lb:'任务准时率',v:'92.6',unit:'%',foot:'<span class="tag warn">1 项违约</span>',c:'var(--gold)'})}
+      ${C.kpi({lb:'代运营收入',v:'¥ 386',unit:'万',foot:'按服务包月费 + 效果分成'})}
+      ${C.kpi({lb:'客户续约率',v:'86.4',unit:'%',foot:'代运营服务续约'})}
+    </div>
+    <div class="sec-title"><b>代运营服务包</b></div>
+    <div class="grid3">
+      ${C.panel('标准包', `<div class="fs17"><b>¥ 8,000</b> /月</div>
+        <ul class="small" style="margin:12px 0 0 16px;line-height:2"><li>账号与授权链代办</li><li>采集任务排期与提醒</li>
+        <li>纪念空间搭建与运营</li><li>月度服务报告</li></ul>`, null)}
+      ${C.panel('进阶包', `<div class="fs17"><b>¥ 18,000</b> /月</div>
+        <ul class="small" style="margin:12px 0 0 16px;line-height:2"><li>标准包全部</li><li>一致性验收协助</li>
+        <li>家属沟通与期望管理</li><li>季度合规巡检</li></ul>`, null)}
+      ${C.panel('旗舰包', `<div class="fs17"><b>¥ 48,000</b> /月</div>
+        <ul class="small" style="margin:12px 0 0 16px;line-height:2"><li>进阶包全部</li><li>专属项目经理</li>
+        <li>白标与联合产品支持</li><li>SLA 4 小时响应</li></ul>`, null)}
+    </div>
+    <div class="sec-title"><b>代运营任务看板</b></div>
+    ${C.panel(false, C.table([{t:'任务'},{t:'代运营客户'},{t:'类型'},{t:'负责人'},{t:'进度'},{t:'截止'},{t:'状态'}],[
+      {cells:['RT-8821','福安生命','建模交付推进','苏明哲','<div style="width:120px">'+C.progress(46)+'</div>','已超期','<span class="tag bad">违约预警</span>']},
+      {cells:['RT-8820','青山殡葬集团','批量授权链核验','何思远','<div style="width:120px">'+C.progress(72)+'</div>','06-14','<span class="tag b">进行中</span>']},
+      {cells:['RT-8818','康宁医院','机构版工具包部署','何思远','<div style="width:120px">'+C.progress(58)+'</div>','06-20','<span class="tag b">进行中</span>']},
+      {cells:['RT-8816','某保险集团','白标物料合规重写','何思远','<div style="width:120px">'+C.progress(24)+'</div>','06-16','<span class="tag warn">阻塞</span>']},
+      {cells:['RT-8812','海西生命','季度合规巡检','苏明哲','<div style="width:120px">'+C.progress(100)+'</div>','06-10','<span class="tag ok">已完成</span>']}
+    ]), null)}
+    ${C.rule('R10','代运营在追思场景的行为必须克制','代运营方若以"延续记忆"为名催收或施压，平台承担品牌与合规责任。','代运营话术库由平台统一维护，违规话术即时下线并计违约。')}
+    `;
+  }
+};
+
+/* ---------------- SLA 管理 ---------------- */
+window.V.sla = {
+  t:'SLA 管理', d:'服务等级 · 违约核算 · 改进计划',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'SLA 达标率',v:'96.8',unit:'%',foot:'<span class="tag warn">目标 98%</span>',c:'var(--gold)'})}
+      ${C.kpi({lb:'违约事件',v:'3',unit:'起',foot:'1 起已核算违约金'})}
+      ${C.kpi({lb:'违约金计提',v:'¥ 18.6',unit:'万',foot:'本月计提'})}
+      ${C.kpi({lb:'平均响应时长',v:'26',unit:'分钟',foot:'目标 ≤ 30 分钟',c:'var(--ok)'})}
+      ${C.kpi({lb:'平均解决时长',v:'5.4',unit:'小时',foot:'目标 ≤ 8 小时',c:'var(--ok)'})}
+    </div>
+    <div class="sec-title"><b>违约事件与核算</b></div>
+    ${C.panel(false, C.table([{t:'事件'},{t:'客户'},{t:'违约类型'},{t:'超出',cls:'r'},{t:'违约金',cls:'r'},{t:'影响'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">SL-2026-018</span>','福安生命','交付延迟','3 天','<span class="mono">¥ 18.6 万</span>','<span class="tag bad">合同 0.5%/日</span>','<span class="tag warn">待结算</span>',`<button class="btn sm" data-act="drawer" data-drawer="slaDetail">处置</button>`]},
+      {cells:['<span class="mono">SL-2026-016</span>','海西生命','返佣结算延迟','2 天','<span class="mono">返佣扣减 2%</span>','<span class="tag warn">渠道信任受损</span>','<span class="tag ok">已处置</span>',`<button class="btn sm" data-act="drawer" data-drawer="slaDetail">查看</button>`]},
+      {cells:['<span class="mono">SL-2026-011</span>','康宁医院','设备发放延迟','4 天','<span class="mono">服务补偿</span>','<span class="tag">轻微</span>','<span class="tag ok">已处置</span>',`<button class="btn sm" data-act="drawer" data-drawer="slaDetail">查看</button>`]}
+    ]), null)}
+    <div class="sec-title"><b>SLA 体系与改进</b></div>
+    <div class="g3020">
+      ${C.panel('SLA 指标与目标', C.table([{t:'指标'},{t:'当前'},{t:'目标'},{t:'判定'}],[
+        {cells:['首响时长','26 分钟','≤ 30 分钟','<span class="tag ok">达标</span>']},
+        {cells:['解决时长','5.4 小时','≤ 8 小时','<span class="tag ok">达标</span>']},
+        {cells:['交付准时率','94.2%','≥ 95%','<span class="tag warn">未达标</span>']},
+        {cells:['批量开通成功率','98.4%','≥ 99%','<span class="tag warn">未达标</span>']},
+        {cells:['一致性验收周期','6.2 天','≤ 3 天','<span class="tag bad">显著未达标</span>']}
+      ]), null)}
+      ${C.panel('改进计划', C.tl([
+        {t:'一致性验收提速',d:'扩建一致性引擎并发；批量验收改为异步流水线（目标 ≤3 天）',k:'brand'},
+        {t:'批量开通接口加固',d:'授权链核验接口增加重试与限流保护',k:'brand'},
+        {t:'交付排期预警前置',d:'订单确认即生成交付甘特，提前 3 天预警资源缺口',k:'brand'},
+        {t:'SLA 看板下沉',d:'代运营客户可在企业中心实时查看 SLA 状态',k:'ok'}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 项目协作 ---------------- */
+window.V.projects = {
+  t:'项目协作', d:'重大项目 · 里程碑 · 干系人',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'重大项目',v:'12',unit:'个',foot:'Bespoke + 白标 + 联合产品'})}
+      ${C.kpi({lb:'在办里程碑',v:'42',unit:'个',foot:'本月完成 28 个'})}
+      ${C.kpi({lb:'风险项目',v:'3',unit:'个',foot:'<span class="tag warn">2 个延期</span>'})}
+      ${C.kpi({lb:'平均项目周期',v:'68',unit:'天',foot:'Bespoke 平均 92 天'})}
+      ${C.kpi({lb:'项目毛利',v:'42',unit:'%',foot:'Bespoke 35% · 白标 48%'})}
+    </div>
+    <div class="sec-title"><b>重大项目台账</b></div>
+    ${C.panel(false, C.table([{t:'项目'},{t:'客户'},{t:'类型'},{t:'合同额',cls:'r'},{t:'里程碑'},{t:'负责人'},{t:'状态'}],[
+      {cells:['<span class="mono">PJ-2026-018</span>','青山殡葬集团','框架协议 + 批量交付','<span class="mono">¥ 186 万</span>','<div style="width:130px">'+C.progress(62)+'</div>','苏明哲','<span class="tag b">进行中</span>']},
+      {cells:['<span class="mono">PJ-2026-016</span>','某保险集团','白标 + 联合产品','<span class="mono">¥ 120 万</span>','<div style="width:130px">'+C.progress(72)+'</div>','何思远','<span class="tag warn">物料阻塞</span>']},
+      {cells:['<span class="mono">PJ-2026-014</span>','康宁医院','机构版工具包','<span class="mono">¥ 42 万</span>','<div style="width:130px">'+C.progress(58)+'</div>','何思远','<span class="tag b">进行中</span>']},
+      {cells:['<span class="mono">PJ-2026-011</span>','某信托机构','数字遗产信托联合产品','<span class="mono">¥ 260 万</span>','<div style="width:130px">'+C.progress(100)+'</div>','郑亦然','<span class="tag ok">已交付</span>']},
+      {cells:['<span class="mono">PJ-2026-008</span>','超高净值客户 A','Bespoke 专属人格档案','<span class="mono">¥ 320 万</span>','<div style="width:130px">'+C.progress(34)+'</div>','郑亦然','<span class="tag b">进行中</span>']}
+    ]), null)}
+    <div class="sec-title"><b>里程碑与干系人</b></div>
+    <div class="g2030">
+      ${C.panel('项目里程碑（青山殡葬集团）', C.tl([
+        {t:'合同签署 · 已完成',d:'2026-06-02 · 框架协议生效',k:'ok'},
+        {t:'批量开通 180 个账号 · 阻塞',d:'授权链核验接口超时，已转服务单',k:'bad'},
+        {t:'设备发放 · 进行中',d:'预计 06-16 完成',k:'brand'},
+        {t:'采集启动培训 · 待开始',d:'计划 06-20',k:''},
+        {t:'首期验收结算 · 待开始',d:'计划 07-15',k:''}
+      ]), null)}
+      ${C.panel('干系人与协作', C.table([{t:'角色'},{t:'人员 / 机构'},{t:'职责'}],[
+        {cells:['企业侧项目负责人','苏明哲','交付总协调']},
+        {cells:['平台侧支持','企业中心服务组','接口与建模支持']},
+        {cells:['客户方对接人','青山殡葬 人事部','员工名单与授权收集']},
+        {cells:['合规负责人','何思远','授权链与宣传口径']},
+        {cells:['财务对接','方雨薇','分期结算与发票']}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+})();
+
+</script>
+<script>
+/* ============================================================
+   企业中心 · 页面组 4：结算与财务 / 数据与报表 / 合规与资质 / 系统设置
+   ============================================================ */
+(function(){
+const { C, CH, esc, nf, money, wan } = window.AE;
+window.V = window.V || {};
+
+/* ---------------- 账户与余额 ---------------- */
+window.V.wallet = {
+  t:'账户与余额', d:'资金账户 · 收支流水 · 提现',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'账户可用余额',v:'¥ 2,842',unit:'万',foot:'可提现',hl:true})}
+      ${C.kpi({lb:'冻结金额',v:'¥ 486',unit:'万',foot:'结算中 + 履约保证金'})}
+      ${C.kpi({lb:'本月收入',v:'¥ 4,860',unit:'万',foot:'<span class="up">▲ 8.2%</span>'})}
+      ${C.kpi({lb:'本月支出',v:'¥ 1,206',unit:'万',foot:'返佣 1,020 + 其他 186'})}
+      ${C.kpi({lb:'应收账款',v:'¥ 6,842',unit:'万',foot:'<span class="tag warn">账期 30–90 天</span>'})}
+    </div>
+    ${C.note('info','<b>资金安全</b>：企业资金账户独立托管，提现需财务 + 主账号双签；大额提现（≥ ¥500 万）需 T+1 到账并人工复核。')}
+    <div class="sec-title"><b>收支流水</b></div>
+    ${C.panel(false, C.table([{t:'时间'},{t:'类型'},{t:'摘要'},{t:'金额',cls:'r'},{t:'余额',cls:'r'},{t:'状态'}],[
+      {cells:['12:41','收入','青山殡葬集团框架协议首款','<span class="mono up">+¥ 55.8 万</span>','<span class="mono">¥ 2,842 万</span>','<span class="tag ok">已到账</span>']},
+      {cells:['11:20','支出','2026-05 返佣结算打款','<span class="mono down">−¥ 986 万</span>','<span class="mono">¥ 2,786 万</span>','<span class="tag ok">已完成</span>']},
+      {cells:['10:02','收入','某保险集团联合产品分润','<span class="mono up">+¥ 42.6 万</span>','<span class="mono">¥ 3,772 万</span>','<span class="tag ok">已到账</span>']},
+      {cells:['昨日','冻结','福安生命履约保证金','<span class="mono">−¥ 18.6 万</span>','<span class="mono">¥ 3,729 万</span>','<span class="tag warn">冻结中</span>']},
+      {cells:['昨日','收入','海西生命返佣对账差异调整','<span class="mono up">+¥ 4.2 万</span>','<span class="mono">¥ 3,748 万</span>','<span class="tag b">处理中</span>']}
+    ]), `<span class="small muted">共 186 条流水 · 导出需财务权限 + 审批</span>`)}
+
+    <div class="sec-title"><b>资金趋势与提现</b></div>
+    <div class="g3020">
+      ${C.panel('收支趋势（近 9 月，万元）', CH.area([3200,3480,3720,3980,4210,4460,4620,4780,4860],{series:[
+        {k:'收入',v:[3200,3480,3720,3980,4210,4460,4620,4780,4860],c:'var(--accent)'},
+        {k:'支出',v:[820,880,940,1000,1060,1120,1180,1240,1206],c:'var(--bad)'}],
+        xlabels:['10月','11月','12月','1月','2月','3月','4月','5月','6月'],h:200}), null)}
+      ${C.panel('提现规则', C.table([{t:'金额'},{t:'审批'},{t:'到账'}],[
+        {cells:['< ¥ 100 万','财务主管','T+0']},
+        {cells:['¥ 100–500 万','财务 + 管理员','T+0']},
+        {cells:['≥ ¥ 500 万','财务 + 主账号双签','T+1（人工复核）']},
+        {cells:['履约保证金','不可提现','按合同释放']}
+      ]), '提现需绑定企业同名对公账户')}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 返佣结算 ---------------- */
+window.V.settlement = {
+  t:'返佣结算', d:'结算周期 · 对账 · 打款',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'本期应结返佣',v:'¥ 1,020',unit:'万',foot:'2026 上半年 · 412 家渠道商',hl:true})}
+      ${C.kpi({lb:'待确认',v:'1',unit:'期',foot:'需财务 + 主账号确认',c:'var(--gold)'})}
+      ${C.kpi({lb:'对账差异',v:'¥ 4.2',unit:'万',foot:'1 笔争议处理中'})}
+      ${C.kpi({lb:'平均结算周期',v:'12',unit:'天',foot:'目标 ≤ 15 天',c:'var(--ok)'})}
+      ${C.kpi({lb:'结算准确率',v:'99.6',unit:'%',foot:'近 12 个月'})}
+    </div>
+    ${C.note('warn','<b>结算纪律</b>：返佣结算涉及真实资金流出，必须财务 + 主账号双签；对账差异超过 ¥1 万即冻结该笔并启动核查。')}
+    <div class="sec-title"><b>结算批次</b></div>
+    ${C.panel(false, C.table([{t:'批次'},{t:'周期'},{t:'机构数',cls:'r'},{t:'GMV',cls:'r'},{t:'返佣',cls:'r'},{t:'差异',cls:'r'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">ST-2026-H1</span>','2026-01 ~ 06','412','<span class="mono">¥ 4,842 万</span>','<span class="mono">¥ 1,020 万</span>','<span class="mono down">¥ 4.2 万</span>','<span class="tag warn">待确认</span>',`<button class="btn sm" data-act="drawer" data-drawer="settleDetail" data-id="ST-2026-H1">确认</button>`]},
+      {cells:['<span class="mono">ST-2026-05</span>','2026-05','408','<span class="mono">¥ 826 万</span>','<span class="mono">¥ 986 万</span>','<span class="mono">¥ 0</span>','<span class="tag ok">已打款</span>',`<button class="btn sm" data-act="drawer" data-drawer="settleDetail" data-id="ST-2026-05">查看</button>`]},
+      {cells:['<span class="mono">ST-2026-04</span>','2026-04','402','<span class="mono">¥ 782 万</span>','<span class="mono">¥ 940 万</span>','<span class="mono">¥ 0</span>','<span class="tag ok">已打款</span>',`<button class="btn sm" data-act="drawer" data-drawer="settleDetail" data-id="ST-2026-04">查看</button>`]},
+      {cells:['<span class="mono">ST-2026-03</span>','2026-03','396','<span class="mono">¥ 742 万</span>','<span class="mono">¥ 896 万</span>','<span class="mono">¥ 0</span>','<span class="tag ok">已打款</span>',`<button class="btn sm" data-act="drawer" data-drawer="settleDetail" data-id="ST-2026-03">查看</button>`]}
+    ]), null)}
+
+    <div class="sec-title"><b>结算流程与对账</b></div>
+    <div class="g3020">
+      ${C.panel('结算流程', C.stepper(['生成结算单','渠道对账','差异核查','财务复核','主账号确认','打款'],2), '差异核查为强制环节，核查未完成不得进入打款')}
+      ${C.panel('对账差异明细', C.table([{t:'机构'},{t:'差异金额',cls:'r'},{t:'原因'},{t:'状态'}],[
+        {cells:['海西生命','<span class="mono down">¥ 4.2 万</span>','订单归属争议（跨区抢单）','<span class="tag b">处理中</span>']},
+        {cells:['西南记忆文化','<span class="mono">¥ 0</span>','已核对无误','<span class="tag ok">通过</span>']},
+        {cells:['粤东安和','<span class="mono">¥ 0</span>','已核对无误','<span class="tag ok">通过</span>']}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 发票与账期 ---------------- */
+window.V.invoice = {
+  t:'发票与账期', d:'开票 · 账期管理 · 回款跟踪',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'本月开票',v:'¥ 4,286',unit:'万',foot:'已开 386 张'})}
+      ${C.kpi({lb:'待开票',v:'¥ 574',unit:'万',foot:'42 张待处理'})}
+      ${C.kpi({lb:'应收账款',v:'¥ 6,842',unit:'万',foot:'<span class="tag warn">逾期 ¥ 386 万</span>',c:'var(--gold)'})}
+      ${C.kpi({lb:'平均账期',v:'58',unit:'天',foot:'合同约定 30–90 天'})}
+      ${C.kpi({lb:'逾期率',v:'5.6',unit:'%',foot:'目标 ≤ 5%'})}
+    </div>
+    <div class="sec-title"><b>应收账款账龄</b></div>
+    <div class="g2030">
+      ${C.panel('账龄分布', CH.hbars([
+        {k:'0–30 天',v:3860,txt:'¥ 3,860 万',c:'var(--ok)'},
+        {k:'31–60 天',v:1842,txt:'¥ 1,842 万',c:'var(--accent)'},
+        {k:'61–90 天',v:754,txt:'¥ 754 万',c:'var(--gold)'},
+        {k:'> 90 天（逾期）',v:386,txt:'¥ 386 万',c:'var(--bad)'}
+      ],{w:540,lw:130}), '合计 ¥ 6,842 万')}
+      ${C.panel('账期与催收', C.table([{t:'客户类型'},{t:'账期'},{t:'催收策略'}],[
+        {cells:['集团企业','60 天','到期前 7 天提醒，逾期即暂停新开通']},
+        {cells:['渠道 / 代理','30 天','返佣抵扣应付款']},
+        {cells:['机构客户','30–60 天','分账结算']},
+        {cells:['联合产品方','按项目','里程碑付款']},
+        {cells:['逾期 > 90 天','—','暂停服务 + 法务介入']}
+      ]), null)}
+    </div>
+    <div class="sec-title"><b>发票台账</b></div>
+    ${C.panel(false, C.table([{t:'发票号'},{t:'开票对象'},{t:'类型'},{t:'金额',cls:'r'},{t:'开票日期'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">INV-2026-08842</span>','青山殡葬集团','增值税专用','<span class="mono">¥ 55.8 万</span>','2026-06-11','<span class="tag ok">已开具</span>',`<button class="btn sm" data-act="toast" data-msg="发票下载需财务权限">下载</button>`]},
+      {cells:['<span class="mono">INV-2026-08836</span>','某保险集团','增值税专用','<span class="mono">¥ 42.6 万</span>','2026-06-10','<span class="tag ok">已开具</span>',`<button class="btn sm" data-act="toast" data-msg="发票下载需财务权限">下载</button>`]},
+      {cells:['<span class="mono">INV-2026-08821</span>','康宁医院','增值税普通','<span class="mono">¥ 13.6 万</span>','2026-06-08','<span class="tag ok">已开具</span>',`<button class="btn sm" data-act="toast" data-msg="发票下载需财务权限">下载</button>`]},
+      {cells:['—','海西生命','增值税专用','<span class="mono">¥ 4.2 万</span>','待开','<span class="tag warn">待开票</span>',`<button class="btn sm" data-act="twofa">申请开票</button>`]}
+    ]), null)}
+    `;
+  }
+};
+
+/* ---------------- 经营分析 ---------------- */
+window.V.analytics = {
+  t:'经营分析', d:'收入 · 成本 · 利润 · 机构贡献',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'月 GMV',v:'¥ 4,860',unit:'万',foot:'<span class="up">▲ 8.2%</span>'})}
+      ${C.kpi({lb:'企业侧净收入',v:'¥ 3,840',unit:'万',foot:'GMV − 返佣'})}
+      ${C.kpi({lb:'毛利率',v:'58.4',unit:'%',foot:'扣返佣与交付成本'})}
+      ${C.kpi({lb:'净利率',v:'26.4',unit:'%',foot:'扣运营与管理费用'})}
+      ${C.kpi({lb:'人效（人均 GMV）',v:'¥ 1.71',unit:'万/人',foot:'2,842 名成员'})}
+    </div>
+    <div class="sec-title"><b>收入与利润</b></div>
+    <div class="g2030">
+      ${C.panel('收入构成', `<div class="row gap16" style="align-items:center">${CH.donut([
+        {k:'订阅',v:52,c:'#1fb6a6'},{k:'SBT 铸造',v:26,c:'#3d8bfd'},{k:'代运营',v:8,c:'var(--gold)'},
+        {k:'白标',v:10,c:'#8b5cff'},{k:'企业定制',v:4,c:'#5b6cff'}
+      ],{size:150,center:'¥4,860万',cl:'月 GMV'})}
+      <div class="legend" style="flex-direction:column;gap:8px;flex:1">
+        <span><i style="background:#1fb6a6"></i>订阅 52% · ¥ 2,527 万</span>
+        <span><i style="background:#3d8bfd"></i>SBT 铸造 26% · ¥ 1,264 万</span>
+        <span><i style="background:#8b5cff"></i>白标 10% · ¥ 486 万</span>
+        <span><i style="background:#f0b90b"></i>代运营 8% · ¥ 386 万</span>
+        <span><i style="background:#5b6cff"></i>企业定制 4% · ¥ 197 万</span></div></div>`, null)}
+      ${C.panel('成本结构', C.table([{t:'成本项'},{t:'金额',cls:'r'},{t:'占 GMV',cls:'r'}],[
+        {cells:['渠道返佣','¥ 1,020 万','21.0%']},
+        {cells:['交付与人力','¥ 486 万','10.0%']},
+        {cells:['算力与存储分摊','¥ 320 万','6.6%']},
+        {cells:['市场与品牌','¥ 142 万','2.9%']},
+        {cells:['管理与行政','¥ 52 万','1.1%']}
+      ]), null)}
+    </div>
+    <div class="sec-title"><b>机构贡献排行</b></div>
+    ${C.panel(false, C.table([{t:'机构'},{t:'等级'},{t:'客户数',cls:'r'},{t:'月 GMV',cls:'r'},{t:'贡献占比',cls:'r'},{t:'毛利率',cls:'r'},{t:'趋势'}],[
+      {cells:['华南生命科技','<span class="tag warn">金牌</span>','2,840','<span class="mono">¥ 862 万</span>','17.7%','<span class="mono">56.2%</span>','<span class="up">▲ 6.4%</span>']},
+      {cells:['华东安宁服务','<span class="tag warn">金牌</span>','2,210','<span class="mono">¥ 742 万</span>','15.3%','<span class="mono">55.8%</span>','<span class="up">▲ 5.1%</span>']},
+      {cells:['海西生命','<span class="tag warn">金牌</span>','1,642','<span class="mono">¥ 512 万</span>','10.5%','<span class="mono">57.4%</span>','<span class="up">▲ 8.2%</span>']},
+      {cells:['西南记忆文化','<span class="tag b">银牌</span>','1,180','<span class="mono">¥ 386 万</span>','7.9%','<span class="mono">58.6%</span>','<span class="up">▲ 4.2%</span>']},
+      {cells:['东北安泽服务','<span class="tag b">银牌</span>','864','<span class="mono">¥ 242 万</span>','5.0%','<span class="mono">60.2%</span>','<span class="down">▼ 2.1%</span>']},
+      {cells:['西北慈安','<span class="tag">铜牌</span>','402','<span class="mono">¥ 96 万</span>','2.0%','<span class="mono">61.4%</span>','<span class="down">▼ 12.4%</span>']}
+    ]), `<span class="small muted">西北慈安因整改中暂停新增客户，贡献显著下滑</span>`)}
+    `;
+  }
+};
+
+/* ---------------- 客户画像 ---------------- */
+window.V.personas = {
+  t:'客户画像', d:'客群结构 · 需求特征 · 触达策略',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'客群细分',v:'6',unit:'类',foot:'按来源行业 + 需求特征'})}
+      ${C.kpi({lb:'主力客群',v:'临终关怀 / 殡葬',unit:'',foot:'占 62.4%'})}
+      ${C.kpi({lb:'高价值客群',v:'家族办公室',unit:'',foot:'客单 ¥ 8.6 万 · 占 4.8%'})}
+      ${C.kpi({lb:'画像标签',v:'42',unit:'个',foot:'行业 / 生命周期 / 需求'})}
+      ${C.kpi({lb:'画像覆盖率',v:'94.6',unit:'%',foot:'未覆盖为早期未采集客户'})}
+    </div>
+    <div class="sec-title"><b>客群细分</b></div>
+    ${C.panel(false, C.table([{t:'客群'},{t:'来源'},{t:'客户数',cls:'r'},{t:'客单价',cls:'r'},{t:'主要需求'},{t:'触达策略'},{t:'LTV/CAC'}],[
+      {cells:['<b>临终关怀 / 安宁疗护</b>','医院 / 机构','14,260','¥ 1,220','生命回顾 + 身后事交接','机构渠道 + 社工推荐','<span class="up">3.4</span>']},
+      {cells:['<b>殡葬服务</b>','殡葬机构','28,420','¥ 986','数字纪念 + 追思对话','服务包内嵌','<span class="up">3.1</span>']},
+      {cells:['<b>企业福利</b>','企业 / 工会','8,620','¥ 1,680','员工与家属记忆留存','B 端批量 + 内部宣讲','<span class="up">2.8</span>']},
+      {cells:['<b>保险 / 信托</b>','金融机构','10,840','¥ 2,420','遗产规划 + 传承','联合产品 + 顾问推荐','<span class="up">3.6</span>']},
+      {cells:['<b>家族办公室</b>','超高净值','3,280','¥ 86,000','专属人格档案 + 家族记忆','专属顾问 + 白手套','<span class="warn">2.4</span>']},
+      {cells:['<b>科研协作</b>','高校 / 研究院','3,000','¥ 0（数据协作）','合规数据协作','学术合作','<span class="muted">—</span>']}
+    ]), null)}
+    <div class="sec-title"><b>客群特征与策略</b></div>
+    <div class="grid3">
+      ${C.panel('需求特征雷达（主力客群）', `<div class="tc">${CH.radar([{k:'情感需求',v:94},{k:'传承认知',v:72},{k:'价格敏感',v:58},{k:'隐私要求',v:88},{k:'即时性',v:46},{k:'合规要求',v:86}],{size:230})}</div>
+        <div class="small muted tc mt10">情感需求与隐私要求双高，价格敏感度中等</div>`, null)}
+      ${C.panel('生命周期分布', CH.hbars([
+        {k:'首次接触',v:28,txt:'28%'},{k:'采集进行中',v:34,txt:'34%'},
+        {k:'建模 / 验证',v:22,txt:'22%'},{k:'纪念运营中',v:12,txt:'12%'},{k:'已永续',v:4,txt:'4%'}
+      ],{w:480,lw:120}), null)}
+      ${C.panel('触达与合规约束', C.tl([
+        {t:'期望管理优先',d:'追思与永生类触达必须先做期望管理，禁止情绪施压（R10）',k:'warn'},
+        {t:'纪念日触达默认关闭',d:'由家属自行开启（R10）',k:'warn'},
+        {t:'未成年人保护',d:'相关客群默认关闭高风险功能（R16）',k:'warn'},
+        {t:'机构渠道优先',d:'机构场景的合规性与信任度显著优于线上投放',k:'ok'}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 渠道 ROI ---------------- */
+window.V.roi = {
+  t:'渠道 ROI', d:'投入产出 · 渠道效率 · 优化建议',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'综合渠道 ROI',v:'3.42',unit:'',foot:'（GMV − 返佣）/ 渠道成本'})}
+      ${C.kpi({lb:'最优渠道 ROI',v:'4.86',unit:'',foot:'殡葬机构渠道'})}
+      ${C.kpi({lb:'最差渠道 ROI',v:'1.24',unit:'',foot:'<span class="tag bad">线上信息流</span>',c:'var(--bad)'})}
+      ${C.kpi({lb:'渠道成本占比',v:'23.8',unit:'%',foot:'返佣 + 渠道市场费用'})}
+      ${C.kpi({lb:'渠道客户 LTV',v:'¥ 1,842',unit:'',foot:'较直营高 18%'})}
+    </div>
+    <div class="sec-title"><b>渠道效率对比</b></div>
+    <div class="g2030">
+      ${C.panel('各渠道 ROI', CH.hbars([
+        {k:'殡葬机构渠道',v:486,txt:'4.86',c:'var(--ok)'},
+        {k:'临终关怀机构',v:442,txt:'4.42',c:'var(--ok)'},
+        {k:'保险 / 信托',v:386,txt:'3.86',c:'var(--accent)'},
+        {k:'企业福利渠道',v:312,txt:'3.12',c:'var(--accent)'},
+        {k:'家族办公室',v:248,txt:'2.48',c:'var(--gold)'},
+        {k:'线上信息流',v:124,txt:'1.24',c:'var(--bad)'}
+      ],{w:540,lw:140}), '（GMV − 返佣）/ 渠道成本')}
+      ${C.panel('渠道成本结构', C.table([{t:'成本项'},{t:'金额',cls:'r'},{t:'占比',cls:'r'}],[
+        {cells:['渠道返佣','¥ 1,020 万','88.2%']},
+        {cells:['渠道市场费用','¥ 96 万','8.3%']},
+        {cells:['渠道培训与赋能','¥ 28 万','2.4%']},
+        {cells:['渠道激励活动','¥ 12 万','1.1%']}
+      ]), null)}
+    </div>
+    <div class="sec-title"><b>优化建议</b></div>
+    <div class="grid3">
+      ${C.panel('加投入', C.tl([
+        {t:'殡葬机构渠道',d:'ROI 4.86 最高，建议返佣政策再倾斜（金牌 19% → 20%）',k:'ok'},
+        {t:'临终关怀机构',d:'ROI 4.42，机构合作可复制，建议扩展 20 家',k:'ok'},
+        {t:'保险 / 信托联合产品',d:'高客单 + 高信任，建议增加联合产品线',k:'ok'}
+      ]), null)}
+      ${C.panel('减投入', C.tl([
+        {t:'线上信息流',d:'ROI 1.24 低于健康线 2.0，建议削减 60% 预算',k:'bad'},
+        {t:'家族办公室',d:'ROI 2.48 尚可但转化周期长（平均 186 天），控制团队规模',k:'warn'}
+      ]), null)}
+      ${C.panel('结构优化目标', C.kv([
+        ['当前综合 ROI','3.42'],
+        ['目标 ROI','4.00（12 个月内）'],
+        ['路径','提机构渠道占比 + 削减低效投放'],
+        ['约束','不得以违规宣传换取增长（R07）'],
+        ['约束','不得以情绪施压提升转化（R10）']
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 资质证照 ---------------- */
+window.V.credentials = {
+  t:'资质证照', d:'企业资质 · 到期提醒 · 分支机构资质',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'资质总数',v:'42',unit:'项',foot:'主体 18 · 分支 / 渠道 24'})}
+      ${C.kpi({lb:'有效',v:'38',unit:'项',foot:'<span class="tag ok">90.5%</span>'})}
+      ${C.kpi({lb:'30 天内到期',v:'4',unit:'项',foot:'<span class="tag warn">已推送提醒</span>'})}
+      ${C.kpi({lb:'已过期',v:'0',unit:'项',foot:'<span class="tag ok">零过期</span>',c:'var(--ok)'})}
+      ${C.kpi({lb:'年度复检完成率',v:'94.6',unit:'%',foot:'2 家渠道待复检'})}
+    </div>
+    <div class="sec-title"><b>资质台账</b></div>
+    ${C.panel(false, C.table([{t:'资质名称'},{t:'主体'},{t:'编号'},{t:'有效期至'},{t:'状态'},{t:'操作'}],[
+      {cells:['营业执照','青山生命科技集团','<span class="mono">91310000MA1K…</span>','长期','<span class="tag ok">有效</span>',`<button class="btn sm" data-act="toast" data-msg="证照查看需管理员权限">查看</button>`]},
+      {cells:['增值电信业务许可（ICP/EDI）','青山生命科技集团','<span class="mono">沪B2-2026…</span>','2029-03-14','<span class="tag ok">有效</span>',`<button class="btn sm" data-act="toast" data-msg="证照查看需管理员权限">查看</button>`]},
+      {cells:['等保三级','青山生命科技集团','<span class="mono">DJCP-2026…</span>','2027-06-30','<span class="tag ok">有效</span>',`<button class="btn sm" data-act="toast" data-msg="证照查看需管理员权限">查看</button>`]},
+      {cells:['区块链信息服务备案','青山生命科技集团','<span class="mono">沪网信备 2026…</span>','长期','<span class="tag ok">有效</span>',`<button class="btn sm" data-act="toast" data-msg="证照查看需管理员权限">查看</button>`]},
+      {cells:['殡葬服务相关资质','青山殡葬集团（合作方）','<span class="mono">闽殡服 2024…</span>','2026-07-08','<span class="tag warn">30 天内到期</span>',`<button class="btn sm" data-act="toast" data-msg="已通知合作方续期">提醒续期</button>`]},
+      {cells:['医疗机构执业许可','康宁医院（合作方）','<span class="mono">浙卫医 2023…</span>','2027-01-20','<span class="tag ok">有效</span>',`<button class="btn sm" data-act="toast" data-msg="证照查看需管理员权限">查看</button>`]},
+      {cells:['数据安全承诺书','全部渠道 / 代理','<span class="muted">按机构存档</span>','年度重签','<span class="tag ok">已签 100%</span>',`<button class="btn sm" data-act="toast" data-msg="已生成重签任务">批量重签</button>`]}
+    ]), `<span class="small muted">资质到期前 30 天自动提醒；过期未续即暂停相关业务能力</span>`)}
+
+    <div class="sec-title"><b>资质与业务能力映射</b></div>
+    <div class="grid2">
+      ${C.panel('资质 → 能力', C.table([{t:'资质'},{t:'解锁能力'}],[
+        {cells:['增值电信业务许可','线上平台运营']},
+        {cells:['等保三级','神经数据处理系统上线']},
+        {cells:['区块链信息服务备案','数藏与存证服务']},
+        {cells:['殡葬服务资质 (合作方)','纪念与追思服务销售']},
+        {cells:['医疗执业许可 (合作方)','临终关怀场景交付']}
+      ]), null)}
+      ${C.panel('合规约束', C.switchRow({t:'资质到期自动限权',d:'过期即暂停对应业务能力，避免无证经营',on:true})
+        +C.switchRow({t:'合作方资质核验',d:'签约前强制核验并年度复检',on:true})
+        +C.switchRow({t:'证照到期提醒',d:'到期前 30 / 15 / 7 天三次提醒',on:true})
+        +C.switchRow({t:'证照查看留痕',d:'敏感证照查看需权限并记录',on:true}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 合规检查 ---------------- */
+window.V.compliance = {
+  t:'合规检查', d:'企业合规自检 · 红线规则 · 整改',
+  render(){
+    return `
+    ${C.note('bad','<b>合规是企业的生存线</b>：企业作为服务提供方，在宣传、数据、肖像、追思等环节与平台共同承担合规责任。本页是企业侧合规自检的唯一入口。')}
+    <div class="kpis">
+      ${C.kpi({lb:'检查项',v:'18',unit:'项',foot:'企业侧合规清单'})}
+      ${C.kpi({lb:'通过率',v:'94.4',unit:'%',foot:'<span class="tag bad">1 项未通过</span>',hl:true,c:'var(--gold)'})}
+      ${C.kpi({lb:'整改中',v:'1',unit:'家',foot:'西北慈安 · 超范围宣传'})}
+      ${C.kpi({lb:'违规事件（本年）',v:'2',unit:'起',foot:'均已处置'})}
+      ${C.kpi({lb:'年度复检',v:'2026-09',unit:'',foot:'下次复检日期'})}
+    </div>
+    <div class="sec-title"><b>合规自检清单</b></div>
+    ${C.panel(false, C.table([{t:'合规项'},{t:'要求'},{t:'状态'},{t:'证据'},{t:'操作'}],[
+      {cells:['宣传口径合规','全部物料走平台预检，禁用越界表述','<span class="tag bad">未通过</span>','<span class="small muted">某保险集团落地页命中</span>',`<button class="btn sm" data-act="drawer" data-drawer="compDetail">整改</button>`]},
+      {cells:['客户数据保护','导出审批 + 水印 + 最小必要','<span class="tag ok">通过</span>','<span class="small muted">导出记录 100% 留痕</span>',`<button class="btn sm" data-act="drawer" data-drawer="compDetail">查看</button>`]},
+      {cells:['授权链核验','客户授权链完整方可开通服务','<span class="tag ok">通过</span>','<span class="small muted">核验率 100%</span>',`<button class="btn sm" data-act="drawer" data-drawer="compDetail">查看</button>`]},
+      {cells:['肖像与声音授权','含他人素材须授权或打码','<span class="tag ok">通过</span>','<span class="small muted">拦截 12 处</span>',`<button class="btn sm" data-act="drawer" data-drawer="compDetail">查看</button>`]},
+      {cells:['追思场景话术','禁用情绪施压与催收话术','<span class="tag ok">通过</span>','<span class="small muted">话术库已下线 8 条</span>',`<button class="btn sm" data-act="drawer" data-drawer="compDetail">查看</button>`]},
+      {cells:['未成年人保护','默认关闭高风险功能','<span class="tag ok">通过</span>','<span class="small muted">策略已强制</span>',`<button class="btn sm" data-act="drawer" data-drawer="compDetail">查看</button>`]}
+    ]), null)}
+
+    <div class="sec-title"><b>合规红线（企业侧必读）</b></div>
+    <div class="grid3">
+      ${C.panel('红线规则', C.tl([
+        {t:'R07 不越科学边界',d:'禁用"完整意识上传""复活""量子转移思维"等表述',k:'bad'},
+        {t:'R11 肖像声音须授权',d:'未授权素材即侵权，平台与企业共同担责',k:'bad'},
+        {t:'R10 追思须克制',d:'禁止以逝者服务施压续费或情绪催收',k:'bad'},
+        {t:'R01 数据主权属用户',d:'企业不得交易或私自留存客户神经数据',k:'bad'}
+      ]), null)}
+      ${C.panel('整改记录', C.tl([
+        {t:'西北慈安 · 超范围宣传',d:'在宣传中使用"复活"表述，处置：暂停新增客户 + 全员合规培训',k:'bad'},
+        {t:'某保险集团 · 物料越界',d:'落地页命中 2 处禁用语，处置：退回重写（进行中）',k:'warn'},
+        {t:'华东安宁服务 · 话术抽查',d:'抽检 20% 会话，未发现违规话术',k:'ok'}
+      ]), null)}
+      ${C.panel('合规保障机制', C.switchRow({t:'物料强制预检',d:'全部对外物料上线前送检（R07）',on:true})
+        +C.switchRow({t:'话术库平台托管',d:'渠道与代运营话术由平台统一维护',on:true})
+        +C.switchRow({t:'季度合规巡检',d:'代运营客户季度巡检并出报告',on:true})
+        +C.switchRow({t:'违规即限权',d:'触红线即暂停新增客户并整改',on:true}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 授权链核验 ---------------- */
+window.V.consent = {
+  t:'授权链核验', d:'批量授权核验 · 断点处理 · 合规留痕',
+  render(){
+    return `
+    ${C.note('warn','<b>R05 / R12 企业侧落地</b>：企业为客户开通任何服务前，必须完成授权链核验（本人授权 + 用途分次同意）。授权链不完整即不得开通账号、不得启动采集。')}
+    <div class="kpis">
+      ${C.kpi({lb:'待核验',v:'186',unit:'条',foot:'青山殡葬集团批量 180 条',hl:true,c:'var(--gold)'})}
+      ${C.kpi({lb:'已核验',v:'64,180',unit:'条',foot:'核验率 100%（已开通客户）'})}
+      ${C.kpi({lb:'授权链断点',v:'4',unit:'条',foot:'<span class="tag bad">需补正</span>',c:'var(--bad)'})}
+      ${C.kpi({lb:'批量核验能力',v:'300',unit:'个/批',foot:'<span class="tag warn">超时频发</span>'})}
+      ${C.kpi({lb:'核验留痕',v:'100',unit:'%',foot:'<span class="tag ok">全量可审计</span>',c:'var(--ok)'})}
+    </div>
+    <div class="sec-title"><b>批量核验</b><span class="sp"></span><button class="btn sm p" data-act="modal" data-modal="batchVerify">批量核验</button></div>
+    ${C.panel(false, C.table([{t:'批次'},{t:'客户 / 机构'},{t:'数量',cls:'r'},{t:'核验项'},{t:'进度'},{t:'断点',cls:'r'},{t:'状态'},{t:'操作'}],[
+      {cells:['<span class="mono">VC-2026-0186</span>','青山殡葬集团','180','本人授权 + 用途同意','<div style="width:110px">'+C.progress(72)+'</div>','<span class="mono">3</span>','<span class="tag b">进行中</span>',`<button class="btn sm" data-act="drawer" data-drawer="verifyDetail">查看</button>`]},
+      {cells:['<span class="mono">VC-2026-0184</span>','某保险集团','60','本人授权 + 用途同意 + 受益人','<div style="width:110px">'+C.progress(88)+'</div>','<span class="mono">1</span>','<span class="tag b">进行中</span>',`<button class="btn sm" data-act="drawer" data-drawer="verifyDetail">查看</button>`]},
+      {cells:['<span class="mono">VC-2026-0179</span>','康宁医院','40','本人授权 + 用途同意','<div style="width:110px">'+C.progress(100)+'</div>','<span class="mono">0</span>','<span class="tag ok">已完成</span>',`<button class="btn sm" data-act="drawer" data-drawer="verifyDetail">查看</button>`]}
+    ]), null)}
+
+    <div class="sec-title"><b>授权链构成与断点处理</b></div>
+    <div class="g3020">
+      ${C.panel('授权链三要素', C.tl([
+        {t:'① 授权人（本人或法定代理人）',d:'签署神经数据采集与使用授权，按用途分次同意',k:'brand'},
+        {t:'② 执行人（家属 / 机构）',d:'身份与关系核验，负责后续处置',k:'brand'},
+        {t:'③ 受益人',d:'按份继承，需年度确认',k:'brand'},
+        {t:'断点判定',d:'任一要素缺失或信息不一致即判定为断点，不得开通服务',k:'bad'}
+      ]), null)}
+      ${C.panel('断点处理', C.table([{t:'断点类型'},{t:'本批数量',cls:'r'},{t:'处置'}],[
+        {cells:['本人授权缺失','2','通知客户补签（电子签）']},
+        {cells:['用途同意不完整','1','补采"纪念"用途同意']},
+        {cells:['执行人信息不一致','1','核验关系证明']},
+        {cells:['受益人未登记','0','—']}
+      ]), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 企业信息 ---------------- */
+window.V.settings = {
+  t:'企业信息', d:'企业主体 · 品牌 · 偏好设置',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'企业主体',v:'1',unit:'个',foot:'青山生命科技集团'})}
+      ${C.kpi({lb:'下属机构',v:'246',unit:'个',foot:'含渠道 / 代理'})}
+      ${C.kpi({lb:'租户 ID',v:'T-8842',unit:'',foot:'数据物理隔离'})}
+      ${C.kpi({lb:'企业等级',v:'金牌',unit:'',foot:'年 GMV ≥ ¥500 万'})}
+      ${C.kpi({lb:'合同状态',v:'生效中',unit:'',foot:'框架协议至 2027-12'})}
+    </div>
+    <div class="sec-title"><b>企业主体信息</b></div>
+    <div class="grid2">
+      ${C.panel('基本信息', C.field({lb:'企业名称',v:'青山生命科技集团有限公司'})
+        + C.field({lb:'统一社会信用代码',v:'91310000MA1KXXXXXXXX'})
+        + C.field({lb:'企业等级',ctrl:'<input class="inp" value="金牌渠道商（年 GMV ≥ ¥500 万）" readonly>'})
+        + C.field({lb:'租户 ID',ctrl:'<input class="inp mono" value="T-8842" readonly>',hint:'租户数据物理隔离，跨租户访问一律拒绝'})
+        + C.field({lb:'注册地址',v:'上海市浦东新区…'}), null)}
+      ${C.panel('品牌与偏好', C.field({lb:'企业简称',v:'青山生命'})
+        + C.field({lb:'品牌主色',ctrl:'<input class="inp" value="#1FB6A6" readonly>'})
+        + C.field({lb:'默认结算币种',ctrl:'<select class="inp"><option>人民币 CNY</option><option>美元 USD</option><option>港币 HKD</option></select>'})
+        + C.field({lb:'默认账期',ctrl:'<select class="inp"><option>30 天</option><option selected>60 天</option><option>90 天</option></select>'})
+        + C.field({lb:'发票抬头',v:'青山生命科技集团有限公司'}), null)}
+    </div>
+    <div class="sec-title"><b>企业偏好</b></div>
+    <div class="grid2">
+      ${C.panel('业务偏好', C.switchRow({t:'下单自动核验授权链',d:'未通过核验的订单不进入履约',on:true})
+        +C.switchRow({t:'交付延迟自动预警',d:'提前 3 天预警资源缺口',on:true})
+        +C.switchRow({t:'返佣自动对账',d:'差异 > ¥1 万自动冻结并核查',on:true})
+        +C.switchRow({t:'合规物料强制预检',d:'全部对外物料上线前送检',on:true}), null)}
+      ${C.panel('通知偏好', C.switchRow({t:'审批待办通知',d:'即时推送至企业微信 / 钉钉',on:true})
+        +C.switchRow({t:'SLA 违约预警',d:'短信 + 站内双通道',on:true})
+        +C.switchRow({t:'结算与发票通知',d:'发送至财务组邮箱',on:true})
+        +C.switchRow({t:'周度经营简报',d:'每周一 09:00 推送',on:false}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- API 与集成 ---------------- */
+window.V.integration = {
+  t:'API 与集成', d:'开放接口 · Webhook · 系统对接',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'开放接口',v:'42',unit:'个',foot:'客户 / 订单 / 交付 / 结算 / 合规'})}
+      ${C.kpi({lb:'调用量（日）',v:'186',unit:'万次',foot:'峰值 12,400 QPS'})}
+      ${C.kpi({lb:'接口可用性',v:'99.98',unit:'%',foot:'近 30 日'})}
+      ${C.kpi({lb:'Webhook 订阅',v:'12',unit:'个',foot:'订单 / 交付 / 结算 / 告警'})}
+      ${C.kpi({lb:'密钥',v:'8',unit:'对',foot:'企业级 AppKey / Secret'})}
+    </div>
+    <div class="sec-title"><b>接口目录</b></div>
+    ${C.panel(false, C.table([{t:'模块'},{t:'接口'},{t:'方法'},{t:'限流'},{t:'状态'},{t:'说明'}],[
+      {cells:['客户','批量创建客户','POST','300 次/分','<span class="tag ok">可用</span>','需授权链参数']},
+      {cells:['客户','客户状态查询','GET','1,000 次/分','<span class="tag ok">可用</span>','—']},
+      {cells:['订单','批量下单','POST','100 次/分','<span class="tag ok">可用</span>','≤ 500 个/批']},
+      {cells:['交付','交付进度查询','GET','1,000 次/分','<span class="tag ok">可用</span>','—']},
+      {cells:['合规','授权链核验','POST','300 次/分','<span class="tag warn">超时频发</span>','建议异步模式']},
+      {cells:['结算','结算单查询','GET','500 次/分','<span class="tag ok">可用</span>','—']},
+      {cells:['客户','客户数据导出','POST','10 次/分','<span class="tag warn">需审批</span>','导出带水印']}
+    ]), `<span class="small muted">完整 42 个接口见企业 API 文档 · 全部接口需 AppKey + 签名</span>`)}
+
+    <div class="sec-title"><b>Webhook 与安全</b></div>
+    <div class="g3020">
+      ${C.panel('Webhook 订阅', C.table([{t:'事件'},{t:'触发'},{t:'状态'}],[
+        {cells:['order.created','订单创建','<span class="tag ok">已订阅</span>']},
+        {cells:['delivery.status','交付状态变更','<span class="tag ok">已订阅</span>']},
+        {cells:['sla.breach','SLA 违约预警','<span class="tag ok">已订阅</span>']},
+        {cells:['settlement.confirmed','结算确认','<span class="tag ok">已订阅</span>']},
+        {cells:['compliance.blocked','合规预检拦截','<span class="tag ok">已订阅</span>']}
+      ]), null)}
+      ${C.panel('接口安全', C.switchRow({t:'签名校验',d:'全部请求需 HMAC-SHA256 签名',on:true})
+        +C.switchRow({t:'IP 白名单',d:'仅允许白名单 IP 调用',on:true})
+        +C.switchRow({t:'敏感接口二次鉴权',d:'导出 / 核验类接口需单独授权',on:true})
+        +C.switchRow({t:'调用审计',d:'全部调用记录留存 10 年',on:true}), null)}
+    </div>
+    `;
+  }
+};
+
+/* ---------------- 操作日志 ---------------- */
+window.V.logs = {
+  t:'操作日志', d:'企业侧全量操作留痕',
+  render(){
+    return `
+    <div class="kpis">
+      ${C.kpi({lb:'今日操作条目',v:'12,480',unit:'条',foot:'全量留痕'})}
+      ${C.kpi({lb:'敏感操作',v:'42',unit:'条',foot:'导出 / 结算 / 权限变更'})}
+      ${C.kpi({lb:'异常行为',v:'2',unit:'条',foot:'批量查询 / 异地登录'})}
+      ${C.kpi({lb:'日志完整性',v:'100.00',unit:'%',foot:'<span class="tag ok">零缺失</span>',c:'var(--ok)'})}
+      ${C.kpi({lb:'留存期',v:'10',unit:'年',foot:'符合合规要求'})}
+    </div>
+    <div class="sec-title"><b>操作日志</b><span class="sp"></span><button class="btn sm" data-act="twofa">导出日志（需审批）</button></div>
+    ${C.panel(false, C.table([{t:'时间'},{t:'操作人'},{t:'角色'},{t:'动作'},{t:'对象'},{t:'详情'},{t:'IP'}],[
+      {cells:['12:41','苏明哲','渠道经理','提交合同审批','CT-2026-0186','青山殡葬集团框架协议 ¥186 万','<span class="mono">10.24.6.41</span>']},
+      {cells:['12:26','林可欣','代理商','查询客户','CU-88213417','仅可见本机构名下客户','<span class="mono">10.24.6.58</span>']},
+      {cells:['12:11','方雨薇','财务主管','生成结算单','ST-2026-H1','返佣 ¥1,020 万 · 412 家渠道商','<span class="mono">10.24.6.22</span>']},
+      {cells:['11:55','何思远','企业管理员','退回物料','某保险集团落地页','命中禁用语 2 处（R07）','<span class="mono">10.24.6.35</span>']},
+      {cells:['11:20','何思远','企业管理员','提交服务商认证','康寧心理咨询','行业资质待补','<span class="mono">10.24.6.35</span>']},
+      {cells:['10:02','郑亦然','企业主账号','确认渠道政策调整','POLICY-v3.3','金牌返佣 18% → 19%','<span class="mono">10.24.6.12</span>']},
+      {cells:['昨日','系统','自动','跨租户访问拦截','T-9911','代理商尝试查询他机构客户，已拒绝','<span class="mono">—</span>']}
+    ]), `<span class="small muted">导出需审批 + 水印 · 日志不可篡改、不可删除</span>`)}
+
+    <div class="sec-title"><b>异常行为检测</b></div>
+    <div class="grid2">
+      ${C.panel('近期异常', C.tl([
+        {t:'跨租户访问尝试',d:'账号 ag-2518 尝试查询非本机构客户，网关拒绝并告警',k:'bad'},
+        {t:'批量查询告警',d:'账号 ch-0231 短时查询 842 条客户记录，已要求说明',k:'warn'},
+        {t:'异地登录',d:'账号 fin-0006 于 02:14 非常用地区登录，已阻断并强制改密',k:'bad'}
+      ]), null)}
+      ${C.panel('检测规则', C.switchRow({t:'跨租户访问拦截',d:'网关层直接拒绝并记录',on:true})
+        +C.switchRow({t:'批量查询检测',d:'短时高频查询触发告警',on:true})
+        +C.switchRow({t:'异地登录检测',d:'非常用地登录强制二次认证',on:true})
+        +C.switchRow({t:'导出行为检测',d:'导出频次与量级异常即拦截',on:true}), null)}
+    </div>
+    `;
+  }
+};
+})();
+
+</script>
+<script>
+/* ============================================================
+   企业中心 · 抽屉库 / 模态库 / 自定义动作
+   ============================================================ */
+(function(){
+const { C, CH, esc, nf } = window.AE;
+
+window.DRAWERS = {
+  todoDetail(id){
+    const t=window.APP.state.todo.find(x=>x.id===id)||window.APP.state.todo[0];
+    return { title:`待办处理 · ${t.id}`, wide:true,
+      body:`<div class="note ${t.lv==='高'?'bad':'info'}"><span class="ni">✓</span><div><b>${esc(t.t)}</b><br>${esc(t.d)}</div></div>
+      ${C.kv([['发起人',t.by],['优先级',t.lv],['截止',t.due],['状态',t.st]])}
+      <div class="sec-title"><b>审批链</b></div>
+      ${C.stepper(['经办提交','部门主管','财务复核','主账号终审'],1)}
+      <div class="mt14">${C.rule('A01','敏感操作四眼原则','合同、结算等高危操作若单人可完成，一次内部欺诈即可造成重大损失。','≥ ¥50 万需主管 + 财务 + 主账号三级审批，且经办人不得为审批人。')}</div>
+      ${C.field({lb:'处理意见',req:true,ctrl:'<textarea class="inp" placeholder="请填写审批意见（将写入企业审计）"></textarea>'})}`,
+      foot:`<button class="btn" data-act="close-drawer">稍后处理</button><button class="btn danger" data-act="twofa">驳回</button><button class="btn p" data-act="twofa">通过</button>` };
+  },
+  memberDetail(){
+    return { title:'成员详情',
+      body:`${C.kv([['姓名','苏明哲'],['账号','<span class="mono">su@qingshan-group.cn</span>'],['所属机构','华南大区'],['角色','渠道经理'],['可见范围','华南 / 华东南大区'],['最近登录','12:26'],['2FA','<span class="tag ok">已开启</span>'],['账号状态','<span class="tag ok">正常</span>']])}
+      <div class="sec-title"><b>权限明细</b></div>
+      ${C.table([{t:'权限'},{t:'状态'}],[
+        {cells:['查看驾驶舱','<span class="tag ok">✓</span>']},{cells:['客户与订单','<span class="tag ok">✓</span>']},
+        {cells:['合同审阅','<span class="tag ok">✓</span>']},{cells:['渠道与代理','<span class="tag ok">✓</span>']},
+        {cells:['返佣与结算','<span class="tag">—</span>']},{cells:['数据导出','<span class="tag">—</span>']}
+      ])}
+      ${C.note('info','代理商与渠道成员仅可见自己名下客户与订单，越权查询在网关层拒绝并记录。')}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn warn" data-act="twofa">调整权限</button><button class="btn danger" data-act="twofa">停用账号</button>` };
+  },
+  partnerDetail(){
+    return { title:'服务商认证审核', wide:true,
+      body:`${C.kv([['机构','康寧心理咨询'],['类型','临终关怀服务商'],['营业执照','<span class="tag ok">已核验</span>'],['行业资质','<span class="tag warn">心理咨询资质待补</span>'],['团队规模','42 人'],['合规承诺书','<span class="tag ok">已签署（CL-2.1）</span>']])}
+      ${C.rule('R07','准入须签科学边界承诺书','服务商若在宣传中使用越界表述，平台承担连带责任。','全部服务商必须签署《科学边界宣传承诺书》，违规即暂停合作。')}
+      <div class="sec-title"><b>准入核验</b></div>
+      ${C.table([{t:'核验项'},{t:'结果'}],[
+        {cells:['营业执照有效性','<span class="tag ok">通过</span>']},
+        {cells:['行业资质','<span class="tag warn">心理咨询资质待补充</span>']},
+        {cells:['合规承诺书','<span class="tag ok">已签</span>']},
+        {cells:['数据安全能力','<span class="tag ok">通过</span>']},
+        {cells:['客户投诉记录','<span class="tag ok">无</span>']}
+      ])}
+      ${C.field({lb:'审核结论',req:true,ctrl:'<select class="inp"><option>附条件通过（补齐资质后生效）</option><option>通过</option><option>驳回</option></select>'})}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn warn" data-act="twofa">附条件通过</button><button class="btn p" data-act="twofa">通过认证</button>` };
+  },
+  channelDetail(id){
+    const c=window.APP.state.channels.find(x=>x.id===id)||window.APP.state.channels[0];
+    return { title:`渠道详情 · ${c.n}`, wide:true,
+      body:`<div class="kpis">${C.kpi({lb:'客户数',v:nf(c.cust),unit:'人',foot:c.region})}
+        ${C.kpi({lb:'月 GMV',v:c.gmv,unit:'',foot:'等级 '+c.lv})}
+        ${C.kpi({lb:'返佣比例',v:c.rate,unit:'',foot:'政策 v3.3'})}
+        ${C.kpi({lb:'状态',v:c.st,unit:'',foot:'对接人 '+c.coord})}</div>
+      <div class="sec-title"><b>业绩趋势</b></div>
+      ${CH.area([420,486,512,548,596,642,700,760,820],{series:[{k:'月 GMV（万元）',v:[420,486,512,548,596,642,700,760,820],c:'var(--accent)'}],xlabels:['10月','11月','12月','1月','2月','3月','4月','5月','6月'],h:180})}
+      ${C.kv([['渠道编号',`<span class="mono">${c.id}</span>`],['类型',c.type],['大区',c.region],['等级',c.lv],['对接人',c.coord]])}
+      <div class="sec-title"><b>合规状态</b></div>
+      ${c.st==='整改中'?C.rule('R07','超范围宣传已触发整改','该渠道在宣传中使用"复活"表述，已暂停新增客户。','整改完成并通过培训考核后方可恢复。'):C.note('ok','该渠道合规记录良好，近 12 个月无违规事件。')}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="toast" data-msg="已生成渠道经营报告">生成报告</button>` };
+  },
+  agentDetail(){
+    return { title:'代理商详情',
+      body:`${C.kv([['代理编号','<span class="mono">AG-2884</span>'],['名称','海西生命'],['层级','一级代理'],['上级渠道','华南生命科技'],['客户数','1,642 人'],['月 GMV','¥ 512 万'],['返佣','一级 16% / 二级 40% 分成'],['状态','<span class="tag ok">正常</span>']])}
+      ${C.note('info','<b>层级纪律</b>：分销层级上限为二级，禁止三级及以上分销（避免传销式结构风险）。')}
+      ${C.table([{t:'下级代理'},{t:'层级'},{t:'客户数',cls:'r'}],[
+        {cells:['闽南思源','二级','420']},{cells:['粤东安和','二级','386']},{cells:['潮汕memory','二级','218']}
+      ])}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="toast" data-msg="已生成代理商业绩单">生成业绩单</button>` };
+  },
+  appealDetail(){
+    return { title:'返佣申诉处理',
+      body:`${C.kv([['申诉编号','<span class="mono">AP-2026-018</span>'],['机构','海西生命'],['事由','对账差异（订单归属争议）'],['差异金额','<span class="down">¥ 4.2 万</span>'],['状态','<span class="tag b">处理中</span>']])}
+      ${C.tl([{t:'申诉提交',d:'海西生命主张 12 笔订单应归属本机构',k:'brand'},
+        {t:'系统核查',d:'其中 8 笔客户常用地址不在其代理区域',k:'warn'},
+        {t:'待裁定',d:'剩余 4 笔按签约渠道归属，需确认',k:''}])}
+      ${C.field({lb:'裁定结论',req:true,ctrl:'<select class="inp"><option>部分支持（4 笔归属海西生命）</option><option>全部支持</option><option>不予支持</option></select>'})}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="twofa">提交裁定</button>` };
+  },
+  customerDetail(){
+    return { title:'客户详情', wide:true,
+      body:`<div class="kpis">${C.kpi({lb:'套餐',v:'Eternal',unit:'',foot:'¥29/月'})}${C.kpi({lb:'阶段',v:'S2 采集',unit:'',foot:'进行中'})}
+        ${C.kpi({lb:'累计贡献',v:'¥ 6,420',unit:'',foot:'连续 21 个月'})}${C.kpi({lb:'一致性',v:'71',unit:'分',foot:'<span class="tag bad">待复核</span>'})}</div>
+      ${C.kv([['客户编号','<span class="mono">CU-88213417</span>'],['姓名','李文博'],['归属机构','华南生命科技'],['订阅','¥29/月（年付 8 折）'],['数据量','14.2 TB'],['状态','<span class="tag ok">正常</span>']])}
+      <div class="note warn"><span class="ni">⚠</span><div>该客户处于一致性复核流程且存在采集告警，请在服务与沟通中<b>优先做期望管理</b>，禁止任何情绪施压话术（R10）。</div></div>`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="toast" data-msg="已创建服务单并转遗属支持">创建服务单</button>` };
+  },
+  orderDetail(){
+    return { title:'订单详情', wide:true,
+      body:`${C.stepper(['下单 / 合同','授权链核验','账号开通','采集启动','建模交付','验收结算'],3)}
+      <div class="mt14">${C.kv([['订单号','<span class="mono">OD-20260611-0186</span>'],['客户','青山殡葬集团（企业批量）'],['套餐','Eternal 批量 × 180'],['金额','¥ 61,020'],['归属渠道','城厢服务'],['履约状态','履约中 62%']])}</div>
+      ${C.table([{t:'履约环节'},{t:'数量',cls:'r'},{t:'状态'}],[
+        {cells:['授权链核验','180','<span class="tag warn">177 / 180</span>']},
+        {cells:['账号开通','180','<span class="tag b">进行中</span>']},
+        {cells:['设备发放','180','<span class="tag">待开始</span>']},
+        {cells:['采集启动','180','<span class="tag">待开始</span>']},
+        {cells:['一致性验收','180','<span class="tag">待开始</span>']}
+      ])}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="toast" data-msg="已推进履约并通知交付团队">推进履约</button>` };
+  },
+  contractDetail(){
+    return { title:'合同审批', wide:true,
+      body:`<div class="note warn"><span class="ni">✎</span><div>青山殡葬集团框架协议 ¥ 186 万 · 2026-07 ~ 2027-06 · 待主账号终审</div></div>
+      ${C.stepper(['经办提交','法务合规','财务复核','主账号终审'],2)}
+      <div class="sec-title"><b>合规条款核验</b></div>
+      ${C.table([{t:'必备条款'},{t:'状态'}],[
+        {cells:['科学边界声明（R07）','<span class="tag ok">已含</span>']},
+        {cells:['一致性等级与赔付（R02）','<span class="tag ok">已含</span>']},
+        {cells:['数据主权条款（R01）','<span class="tag ok">已含</span>']},
+        {cells:['终止权保障（R08）','<span class="tag ok">已含</span>']},
+        {cells:['追思克制条款（R10）','<span class="tag ok">已含</span>']}
+      ])}
+      ${C.kv([['合同额','¥ 186 万'],['付款方式','3:4:3 分期'],['账期','60 天'],['违约金','0.5%/日（上限 10%）']])}`,
+      foot:`<button class="btn" data-act="close-drawer">取消</button><button class="btn danger" data-act="twofa">驳回</button><button class="btn p" data-act="twofa">终审通过</button>` };
+  },
+  serviceDetail(){
+    return { title:'服务单处理', wide:true,
+      body:`${C.kv([['服务单','<span class="mono">SV-88214</span>'],['客户','福安生命（代运营客户）'],['优先级','<span class="tag bad">高</span>'],['SLA','4 小时'],['状态','待响应']])}
+      ${C.tl([{t:'客户反馈',d:'代运营交付延迟 3 天，要求按合同核算违约金',k:'bad'},
+        {t:'系统核查',d:'建模任务因算力排队延期，属实',k:'warn'},
+        {t:'待处置',d:'需确认违约金金额并给出补救方案',k:''}])}
+      ${C.field({lb:'处置方案',req:true,ctrl:'<textarea class="inp" placeholder="填写补救方案与承诺时间（将同步客户）"></textarea>'})}
+      ${C.rule('R10','代运营在追思场景必须克制','若客户为逝者家属，沟通话术禁用"延续记忆"式情绪施压。','本工单话术库由平台统一维护。')}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="toast" data-msg="已回复客户并转交付团队">回复并转派</button>` };
+  },
+  whiteDetail(){
+    return { title:'白标项目处置', wide:true,
+      body:`${C.kv([['项目','<span class="mono">WL-2026-018</span>'],['客户','某保险集团'],['品牌定制','全套品牌 + 联名'],['交付进度','72%'],['物料预检','<span class="tag bad">1 件未通过</span>']])}
+      ${C.rule('R07','白标物料必须强制预检','白标客户常自行制作物料，一旦使用越界表述，平台承担连带责任。','未通过预检的物料无法上线。')}
+      ${C.table([{t:'物料'},{t:'预检结果'},{t:'命中'}],[
+        {cells:['落地页 V4','<span class="tag bad">未通过</span>','"完整意识上传""复活"']},
+        {cells:['宣传短视频','<span class="tag ok">通过</span>','—']},
+        {cells:['APP 内文案','<span class="tag ok">通过</span>','—']}
+      ])}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="twofa">退回重写</button>` };
+  },
+  slaDetail(){
+    return { title:'SLA 违约处置',
+      body:`${C.kv([['事件','<span class="mono">SL-2026-018</span>'],['客户','福安生命'],['类型','交付延迟'],['超出','3 天'],['违约金','¥ 18.6 万'],['状态','待结算']])}
+      ${C.table([{t:'核算口径'},{t:'值'}],[
+        {cells:['合同违约金率','0.5% / 日']},
+        {cells:['合同额','¥ 124 万']},{cells:['计罚天数','3 天']},{cells:['违约金','¥ 18.6 万']},
+        {cells:['上限','10%（¥ 12.4 万）→ 按上限执行']}
+      ])}
+      ${C.note('warn','违约金按合同上限 10% 执行，同时需提交补救方案并计入该机构 SLA 记录。')}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="twofa">确认计提并结算</button>` };
+  },
+  settleDetail(){
+    return { title:'结算批次确认', wide:true,
+      body:`<div class="kpis">${C.kpi({lb:'机构数',v:'412',unit:'家',foot:'2026 上半年'})}
+        ${C.kpi({lb:'GMV',v:'¥ 4,842 万',unit:'',foot:'结算基数'})}
+        ${C.kpi({lb:'返佣',v:'¥ 1,020 万',unit:'',foot:'占 GMV 21.0%'})}
+        ${C.kpi({lb:'差异',v:'¥ 4.2 万',unit:'',foot:'<span class="tag warn">1 笔争议</span>'})}</div>
+      ${C.note('warn','差异 ¥ 4.2 万尚未核实（海西生命订单归属争议），差异未清零前<b>不得进入打款</b>。')}
+      ${C.table([{t:'复核项'},{t:'状态'}],[
+        {cells:['结算基数核对','<span class="tag ok">已完成</span>']},
+        {cells:['返佣比例核对','<span class="tag ok">已完成</span>']},
+        {cells:['差异清零','<span class="tag warn">1 笔待裁定</span>']},
+        {cells:['财务复核','<span class="tag b">待处理</span>']},
+        {cells:['主账号确认','<span class="tag">待处理</span>']}
+      ])}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn warn" data-act="close-drawer">冻结差异笔</button><button class="btn p" data-act="twofa">确认并打款</button>` };
+  },
+  compDetail(){
+    return { title:'合规项详情',
+      body:`${C.kv([['合规项','宣传口径合规'],['要求','全部物料走平台预检，禁用越界表述'],['状态','<span class="tag bad">未通过</span>'],['证据','某保险集团落地页命中 2 处'],['责任方','企业管理员 + 白标客户']])}
+      ${C.rule('R07','对外宣传不得越过科学边界','宣称"完整意识上传""量子转移思维"会在科学界与监管面前同时破产。','未通过预检的物料无法上线，企业须承担连带责任。')}
+      ${C.field({lb:'整改措施',req:true,ctrl:'<textarea class="inp" placeholder="填写整改措施与完成时间"></textarea>'})}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="twofa">提交整改</button>` };
+  },
+  verifyDetail(){
+    return { title:'授权链核验详情', wide:true,
+      body:`${C.stepper(['本人授权','用途分次同意','执行人核验','受益人登记','核验完成'],2)}
+      <div class="mt14">${C.table([{t:'客户'},{t:'本人授权'},{t:'用途同意'},{t:'执行人'},{t:'受益人'},{t:'结论'}],[
+        {cells:['CU-88213417','<span class="tag ok">✓</span>','<span class="tag ok">建模 + 纪念</span>','<span class="tag ok">已核验</span>','<span class="tag warn">待确认</span>','<span class="tag warn">附条件通过</span>']},
+        {cells:['CU-88213398','<span class="tag ok">✓</span>','<span class="tag ok">建模</span>','<span class="tag ok">已核验</span>','<span class="tag ok">已登记</span>','<span class="tag ok">通过</span>']},
+        {cells:['CU-88213122','<span class="tag ok">✓</span>','<span class="tag warn">仅建模</span>','<span class="tag ok">已核验</span>','<span class="tag ok">已登记</span>','<span class="tag warn">用途不全</span>']},
+        {cells:['CU-88212911','<span class="tag bad">缺失</span>','<span class="tag">—</span>','<span class="tag">—</span>','<span class="tag">—</span>','<span class="tag bad">断点</span>']}
+      ])}
+      ${C.rule('R05','授权链任何一环断裂即继承失效','授权人、执行人、受益人链条单点断裂时整个身后事安排作废。','断点未补正前不得开通服务。')}`,
+      foot:`<button class="btn" data-act="close-drawer">关闭</button><button class="btn p" data-act="toast" data-msg="已通知客户补正断点">通知补正</button>` };
+  }
+};
+
+window.MODALS = {
+  invite(){
+    return { title:'邀请成员',
+      body:`${C.field({lb:'姓名',req:true,ph:'请输入成员姓名'})}
+      ${C.field({lb:'账号（企业邮箱）',req:true,ph:'name@your-company.cn'})}
+      ${C.field({lb:'所属机构',req:true,ctrl:'<select class="inp"><option>集团总部</option><option>华南大区</option><option>华东大区</option><option>海西生命（代理）</option></select>'})}
+      ${C.field({lb:'角色',req:true,ctrl:'<select class="inp"><option>渠道经理</option><option>企业管理员</option><option>代理商</option><option>财务主管</option></select>'})}
+      ${C.note('info','邀请链接 7 天有效；被邀请人首次登录须绑定 2FA 并确认可见范围。')}`,
+      foot:`<button class="btn" data-act="close-modal">取消</button><button class="btn p" data-act="close-modal" onclick="window.AE.toast('邀请已发送，7 天内有效','ok')">发送邀请</button>` };
+  },
+  batchVerify(){
+    return { title:'批量授权链核验',
+      body:`${C.note('warn','批量核验为异步任务，超时自动重试（当前接口超时频发，建议单批 ≤ 300）。')}
+      ${C.field({lb:'选择批次',req:true,ctrl:'<select class="inp"><option>青山殡葬集团 · 180 个</option><option>某保险集团 · 60 个</option></select>'})}
+      ${C.field({lb:'核验项',req:true,ctrl:'<select class="inp"><option>本人授权 + 用途分次同意</option><option>本人授权 + 用途同意 + 受益人</option></select>'})}
+      ${C.field({lb:'失败处理',ctrl:'<select class="inp"><option>标记断点并通知补正</option><option>跳过并记录</option></select>'})}`,
+      foot:`<button class="btn" data-act="close-modal">取消</button><button class="btn p" data-act="close-modal" onclick="window.AE.toast('批量核验任务已提交（异步），完成后通知','ok')">提交核验</button>` };
+  }
+};
+
+window.ACTIONS = {
+  orgPick(id){ window.AE.toast('已选择机构节点','ok'); }
+};
+})();
+
+</script>
+
+<script>
+try { window.bootAeternum(); } catch (e) { console.error('BOOT ERROR', e);
+  document.body.insertAdjacentHTML('afterbegin','<div style="padding:40px;font-family:monospace;color:#f6465d">启动失败：'+(e&&e.message)+'</div>'); }
+</script>
+</body>
+</html>
